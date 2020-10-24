@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "485506583897",
+    "firebase_url": "https://bookworm-301.firebaseio.com",
+    "project_id": "bookworm-301",
+    "storage_bucket": "bookworm-301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485506583897:android:81c14a9f11fce9b6e95048",
+        "android_client_info": {
+          "package_name": "com.example.glassesgang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485506583897-onjsoso8roalbpcjo0o5beek4rt2l9lc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDllWE-HUFLT7jd5GmnEI-pXT4nfpfZRhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485506583897-onjsoso8roalbpcjo0o5beek4rt2l9lc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
