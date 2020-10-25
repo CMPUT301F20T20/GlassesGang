@@ -44,5 +44,9 @@ dependencies {
     // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    //implementation 'com.google.firebase:quickstart-android'
+
+    // Google authentication
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
 }
