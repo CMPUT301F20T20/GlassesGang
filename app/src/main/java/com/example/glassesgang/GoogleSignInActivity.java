@@ -112,7 +112,6 @@ public class GoogleSignInActivity extends AppCompatActivity {
             // redirect to user home page
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
-            finish();
         } else {
             System.out.println("Error Signing In");
             //display error to user
