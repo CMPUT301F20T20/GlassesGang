@@ -53,5 +53,6 @@ dependencies {
 
     // Google authentication
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
 
 }
