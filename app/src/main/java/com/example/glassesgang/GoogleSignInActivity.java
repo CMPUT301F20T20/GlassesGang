@@ -4,13 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -113,7 +110,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
         // successful sign in
         if (user != null) {
             // redirect to user home page
-            Intent homeIntent = new Intent(this, HomeActivity.class);
+            Intent homeIntent = new Intent(this, BrowseFragment.class);
             startActivity(homeIntent);
         } else {
             System.out.println("Error Signing In");
