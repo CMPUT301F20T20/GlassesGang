@@ -44,7 +44,7 @@ dependencies {
     // Import the Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
 
-    // When using the BoM, you don't specify versions in Firebase browse_fragment dependencies
+    // When using the BoM, you don't specify versions in Firebase library dependencies
 
     // Declare the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics'
