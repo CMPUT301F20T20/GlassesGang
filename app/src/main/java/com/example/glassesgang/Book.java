@@ -12,8 +12,7 @@ public class Book {
     private String BID;
     private String status;
     private ArrayList<Image> images;
-    //private ArrayList<Request> requestList;
-    // Also implement a getter and setter for the requestList
+    //private ArrayList<Request> requestList; //  getter and setter currently commented out but ready to implement as soon as Request exists
 
 
     public Book(String title, String author, String ISBN, String BID, String status) {
@@ -24,6 +23,7 @@ public class Book {
         this.status = status;
     }
 
+    // Getters and Setters for the Class Objects
     /**
      * Gets the title of the book
      *
@@ -36,7 +36,7 @@ public class Book {
     /**
      * Sets the title of the book
      *
-     * @param title a string containing the title to set the book title to
+     * @param title a string of the title to set the book title to
      */
     public void setTitle(String title) {
         this.title = title;
@@ -54,7 +54,7 @@ public class Book {
     /**
      * Sets the author of the book
      *
-     * @param author a string containing the author to set the book author to
+     * @param author a string of the author to set the book author to
      */
     public void setAuthor(String author) {
         this.author = author;
@@ -72,7 +72,7 @@ public class Book {
     /**
      * Sets the ISBN of the book
      *
-     * @param ISBN a string containing the ISBN to set the book ISBN to
+     * @param ISBN a string of the ISBN to set the book ISBN to
      */
     public void setISBN(String ISBN) {
         this.ISBN = ISBN;
@@ -90,7 +90,7 @@ public class Book {
     /**
      * Sets the BID of the book
      *
-     * @param BID a string containing the BID to set the BID to
+     * @param BID a string of the BID to set the BID to
      */
     public void setBID(String BID) {
         this.BID = BID;
@@ -108,7 +108,7 @@ public class Book {
     /**
      * Sets the status of the book
      *
-     * @param status a string containing the status to set the BID to, one of available, requested, accepted, or borrowed
+     * @param status a string of the status to set the book status to, one of available, requested, accepted, or borrowed
      */
     public void setStatus(String status) {
         this.status = status;
@@ -126,11 +126,31 @@ public class Book {
     /**
      * Sets the images of the book
      *
-     * @param images a string containing the status to set the BID to, one of available, requested, accepted, or borrowed
+     * @param images an array of the images attached to a book
      */
-    /**  for the images I was curious about if rather than setImages it would be a method that would add images into the array
     public void setImages(ArrayList<Image> images) {
         this.images = images;
     }
+
+    /**
+     * Gets the requests of the book
+     *
+     * @return an array of requests that are attached to the book
      */
+    /*
+    public ArrayList<Request> getRequests() {
+        return requests;
+    }
+    */
+
+    /**
+     * Sets the requests of the book
+     *
+     * @param requests an array of the requests attached to a book
+     */
+    /*
+    public void setRequests(ArrayList<Request> requests) {
+        this.requests = requests;
+    }
+    */
 }
