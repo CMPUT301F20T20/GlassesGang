@@ -23,6 +23,11 @@ public class HomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+
+        MockBook mockBook = new MockBook();
+        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
+        bookProfileIntent.putExtra("Book", mockBook);
+        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
