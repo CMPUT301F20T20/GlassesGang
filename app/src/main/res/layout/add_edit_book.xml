@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/author_name2"
+        android:id="@+id/isbn_bar"
         android:layout_width="380dp"
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteY="241dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/show_isbn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -38,7 +38,7 @@
         tools:layout_editor_absoluteY="1dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -48,7 +48,7 @@
         tools:layout_editor_absoluteY="98dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/show_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -58,7 +58,7 @@
         tools:layout_editor_absoluteY="162dp" />
 
     <EditText
-        android:id="@+id/author_name"
+        android:id="@+id/author_name_bar"
         android:layout_width="380dp"
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
@@ -70,7 +70,7 @@
         tools:layout_editor_absoluteY="182dp" />
 
     <EditText
-        android:id="@+id/book_title"
+        android:id="@+id/book_title_bar"
         android:layout_width="380dp"
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
