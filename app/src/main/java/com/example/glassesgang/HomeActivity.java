@@ -24,10 +24,12 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        MockBook mockBook = new MockBook();
-        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
-        bookProfileIntent.putExtra("Book", mockBook);
-        startActivity(bookProfileIntent);
+        // added this, to test BookProfileActivity -Cholete
+        // automatically launches BookProfileActivity when user goes to HomeActivity.
+//        MockBook mockBook = new MockBook();
+//        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
+//        bookProfileIntent.putExtra("Book", mockBook);
+//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

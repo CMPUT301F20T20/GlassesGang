@@ -31,6 +31,7 @@ public class BookProfileActivity extends AppCompatActivity {
         findViewsById();
 
         Intent intent = getIntent();
+        // right now it is passed a MockBook object, but in the future, I will change it to a Book object
         MockBook book = (MockBook) intent.getSerializableExtra("Book");
         author = book.getAuthor();
         title = book.getTitle();
@@ -55,6 +56,7 @@ public class BookProfileActivity extends AppCompatActivity {
 
     }
 
+    // assigns each attribute to the proper textView.
     private void findViewsById() {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
@@ -65,6 +67,7 @@ public class BookProfileActivity extends AppCompatActivity {
         editButton = findViewById(R.id.edit_button);
     }
 
+    // just set each TextViews text with the appropriate text
     private void setTextViews() {
         titleTextView.setText(title);
         authorTextView.setText(author);
