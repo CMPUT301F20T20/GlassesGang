@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">BOOKWORM</string>
     <string name="screen_type">Screen Type</string>
-<!--    <string name="server_client_id">485506583897-onjsoso8roalbpcjo0o5beek4rt2l9lc.apps.googleusercontent.com</string>-->
+    <string-array name="user_type">
+        <item name="ownerSelected">Owner</item>
+        <item name="borrowerSelected">Borrower</item>
+    </string-array>
 </resources>

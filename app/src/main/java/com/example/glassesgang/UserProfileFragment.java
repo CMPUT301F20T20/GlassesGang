@@ -6,15 +6,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class UserProfileFragment extends Fragment {
+    private Spinner usertypeSpinner;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_profile_fragment, container, false);
+        View view = inflater.inflate(R.layout.user_profile_fragment, container, false);
+        usertypeSpinner = view.findViewById(R.id.user_type_spinner);
+        Log.d("SPINNER", usertypeSpinner.toString());
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getActivity().getBaseContext(),
+                R.array.user_type,
+                android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        usertypeSpinner.setAdapter(adapter);
+        return view;
     }
 }
