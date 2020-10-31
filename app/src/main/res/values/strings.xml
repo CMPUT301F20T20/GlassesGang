@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">BOOKWORM</string>
     <string name="screen_type">Screen Type</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
