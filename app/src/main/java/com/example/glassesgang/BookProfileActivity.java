@@ -32,7 +32,7 @@ public class BookProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         // right now it is passed a MockBook object, but in the future, I will change it to a Book object
-        MockBook book = (MockBook) intent.getSerializableExtra("Book");
+        Book book = (Book) intent.getSerializableExtra("Book");
         author = book.getAuthor();
         title = book.getTitle();
         isbn = book.getISBN();

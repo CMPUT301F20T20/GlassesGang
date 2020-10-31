@@ -3,9 +3,10 @@ package com.example.glassesgang;
 import android.media.Image;
 import android.provider.MediaStore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Book {
+public class Book implements Serializable {
     private String title;
     private String author;
     private String ISBN;
