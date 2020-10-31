@@ -2,7 +2,6 @@ package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -33,12 +32,14 @@ public class UserProfileFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         usertypeSpinner.setAdapter(adapter);
+        // gets current role of the user
         final String currentRole = usertypeSpinner.getSelectedItem().toString();
         usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // new role user selected
                 String newRole = adapterView.getItemAtPosition(i).toString();
-
+                // redirecting user to proper activity depending on chosen role
                 if ((newRole.equals("Owner")) && (!currentRole.equals("Owner"))) {
                     getActivity().finish();
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
@@ -47,7 +48,6 @@ public class UserProfileFragment extends Fragment {
                     Intent borrowerIntent = new Intent(getActivity(), HomeActivity.class);
                     startActivity(borrowerIntent);
                 }
-
             }
 
             @Override
