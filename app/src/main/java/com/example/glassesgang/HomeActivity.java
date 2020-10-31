@@ -26,7 +26,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // added this, to test BookProfileActivity -Cholete
         // automatically launches BookProfileActivity when user goes to HomeActivity.
-//        Book book = new Book("title", "author", "isbn", "book1", "status");
+//        Book book = new Book("title", "author", "isbn", "d2", "status");
 //        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
 //        bookProfileIntent.putExtra("Book", book);
 //        startActivity(bookProfileIntent);

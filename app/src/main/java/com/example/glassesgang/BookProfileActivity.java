@@ -1,20 +1,24 @@
 package com.example.glassesgang;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 
-public class BookProfileActivity extends AppCompatActivity {
+public class BookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
@@ -25,6 +29,7 @@ public class BookProfileActivity extends AppCompatActivity {
     private String title;
     private String isbn;
     private String status;
+    private static final String TAG = "BookProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class BookProfileActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement delete feature
+                new DeleteBookDialogFragment().show(getSupportFragmentManager(), "DELETE_BOOK");
             }
         });
 
@@ -85,7 +90,7 @@ public class BookProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // If user chose to save changes made in EditBookActivity
-        // Update the book profile upon returning
+        // Updates the book profile upon returning
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 Book newBook = (Book) data.getSerializableExtra("Book");
@@ -95,5 +100,27 @@ public class BookProfileActivity extends AppCompatActivity {
                 setTextViews();
             }
         }
+    }
+
+    // When user confirms the deletion of a book, this method is called.
+    // It deletes that book from the database.
+    @Override
+    public void onConfirmPressed() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Book bookToDelete = (Book) getIntent().getSerializableExtra("Book");
+        db.collection("books").document(bookToDelete.getBID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 }
