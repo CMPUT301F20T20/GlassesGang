@@ -31,6 +31,7 @@ public class BookProfileActivity extends AppCompatActivity {
     private String status;
     private String bookID;
     private Book book;
+    private  FirebaseFirestore db;
     private static final String TAG = "BookProfileActivity";
 
     @Override
@@ -40,9 +41,9 @@ public class BookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String reference = getIntent().getStringExtra("path");   // get the path to the book document
-        DocumentReference docRef = db.document(reference);    // get reference to the book object using path
+        db = FirebaseFirestore.getInstance();
+        final String path = getIntent().getStringExtra("path");   // get the path to the book document
+        DocumentReference docRef = db.document(path);    // get reference to the book object using path
 
         // get the book document from firestore using the document reference
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -68,7 +69,7 @@ public class BookProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent editIntent = new Intent(BookProfileActivity.this, EditBookActivity.class);
-                editIntent.putExtra("Book", book);
+                editIntent.putExtra("path", path);   // pass in the path to the book document
                 startActivityForResult(editIntent, 1);
             }
         });
@@ -102,11 +103,21 @@ public class BookProfileActivity extends AppCompatActivity {
         // Update the book profile upon returning
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                Book newBook = (Book) data.getSerializableExtra("Book");
-                title = newBook.getTitle();
-                author = newBook.getAuthor();
-                isbn = newBook.getISBN();
-                setTextViews();
+
+                String path =  data.getStringExtra("path");
+                DocumentReference docRef = db.document(path);    // get reference to the book object using path
+                // get the book document from firestore using the document reference
+                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                        author = book.getAuthor();
+                        title = book.getTitle();
+                        isbn = book.getISBN();
+                        status = book.getStatus();
+                        setTextViews();
+                    }
+                });
             }
         }
     }
