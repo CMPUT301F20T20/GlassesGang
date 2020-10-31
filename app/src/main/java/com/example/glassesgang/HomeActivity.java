@@ -6,14 +6,26 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
+    private static final String TAG = "HomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +38,15 @@ public class HomeActivity extends AppCompatActivity {
 
         // added this, to test BookProfileActivity -Cholete
         // automatically launches BookProfileActivity when user goes to HomeActivity.
-//        Book book = new Book("title", "author", "isbn", "book1", "status");
-//        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
-//        bookProfileIntent.putExtra("Book", book);
-//        startActivity(bookProfileIntent);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("books").document("book4");   // sample document reference
+        Intent bookProfileIntent = new Intent(HomeActivity.this, BookProfileActivity.class);
+        // BookProfileActivity is passed a path to the  book document
+        bookProfileIntent.putExtra("path", docRef.getPath());
+        startActivity(bookProfileIntent);
+
+
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

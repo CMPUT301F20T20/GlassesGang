@@ -1,18 +1,22 @@
 package com.example.glassesgang;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Date;
 
 public class BookProfileActivity extends AppCompatActivity {
     private TextView titleTextView;
@@ -25,6 +29,9 @@ public class BookProfileActivity extends AppCompatActivity {
     private String title;
     private String isbn;
     private String status;
+    private String bookID;
+    private Book book;
+    private static final String TAG = "BookProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +40,22 @@ public class BookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
-        Intent intent = getIntent();
-        final Book book = (Book) intent.getSerializableExtra("Book");
-        author = book.getAuthor();
-        title = book.getTitle();
-        isbn = book.getISBN();
-        status = book.getStatus();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String reference = getIntent().getStringExtra("path");   // get the path to the book document
+        DocumentReference docRef = db.document(reference);    // get reference to the book object using path
 
-        setTextViews();
+        // get the book document from firestore using the document reference
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                author = book.getAuthor();
+                title = book.getTitle();
+                isbn = book.getISBN();
+                status = book.getStatus();
+                setTextViews();
+            }
+        });
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +69,6 @@ public class BookProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent editIntent = new Intent(BookProfileActivity.this, EditBookActivity.class);
                 editIntent.putExtra("Book", book);
-//                startActivity(editIntent);
                 startActivityForResult(editIntent, 1);
             }
         });
