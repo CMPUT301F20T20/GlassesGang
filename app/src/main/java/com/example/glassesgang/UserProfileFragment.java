@@ -33,16 +33,17 @@ public class UserProfileFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         usertypeSpinner.setAdapter(adapter);
+        final String currentRole = usertypeSpinner.getSelectedItem().toString();
         usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String currentUser = adapterView.getItemAtPosition(i).toString();
+                String newRole = adapterView.getItemAtPosition(i).toString();
 
-                if (currentUser.equals("Owner")) {
+                if ((newRole.equals("Owner")) && (!currentRole.equals("Owner"))) {
                     getActivity().finish();
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
                     startActivity(ownerIntent);
-                } else if (currentUser.equals("Borrower")){
+                } else if ((newRole.equals("Borrower")) && (!currentRole.equals("Borrower"))){
                     Intent borrowerIntent = new Intent(getActivity(), HomeActivity.class);
                     startActivity(borrowerIntent);
                 }
