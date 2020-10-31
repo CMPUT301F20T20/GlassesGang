@@ -18,9 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GoogleSignInActivity" />
-        <activity android:name=".HomeActivity"
-            android:exported="true"></activity>  <!--Added this so I can launch HomeActivity without having to launch Main Activity-->
+
+        <activity android:name=".GoogleSignInActivity"></activity>
+        <activity android:name=".BorrowerHomeActivity"></activity>
+        <activity android:name=".OwnerHomeActivity"></activity>
         <activity android:name=".AddBookActivity"></activity>
         <activity android:name=".EditBookActivity"></activity>
     </application>
