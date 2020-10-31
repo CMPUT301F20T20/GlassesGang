@@ -29,7 +29,7 @@ public class EditBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         // implementation of book stats from Cholete
-        MockBook book = (MockBook) intent.getSerializableExtra("Book");
+        final Book book = (Book) intent.getSerializableExtra("Book");
         author = book.getAuthor();
         title = book.getTitle();
         isbn = book.getISBN();
@@ -54,9 +54,9 @@ public class EditBookActivity extends AppCompatActivity {
                 isbn = isbnEditText.getText().toString();
 
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
-                    // book.setTitle(title)
-                    // book.setAuthor(author)
-                    // book.setISBN(isbn)
+//                     book.setTitle(title);
+//                     book.setAuthor(author);
+//                     book.setISBN(isbn);
                     // somehow add to the system and make sure photos are attached
                     finish();
                 }

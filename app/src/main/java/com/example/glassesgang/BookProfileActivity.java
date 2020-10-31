@@ -32,7 +32,7 @@ public class BookProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         // right now it is passed a MockBook object, but in the future, I will change it to a Book object
-        Book book = (Book) intent.getSerializableExtra("Book");
+        final Book book = (Book) intent.getSerializableExtra("Book");
         author = book.getAuthor();
         title = book.getTitle();
         isbn = book.getISBN();
@@ -50,7 +50,9 @@ public class BookProfileActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement edit feature
+                Intent editIntent = new Intent(BookProfileActivity.this, EditBookActivity.class);
+                editIntent.putExtra("Book", book);
+                startActivity(editIntent);
             }
         });
 
