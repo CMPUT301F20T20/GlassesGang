@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +36,16 @@ public class UserProfileFragment extends Fragment {
         usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                System.out.println("i WORKED");
+                Object currentUser = adapterView.getItemAtPosition(i);
+
+                if (currentUser == "Owner") {
+                    Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
+                    startActivity(ownerIntent);
+                } else if (currentUser == "Borrower"){
+                    Intent borrowerIntent = new Intent(getActivity(), HomeActivity.class);
+                    startActivity(borrowerIntent);
+                }
+
             }
 
             @Override

@@ -2,6 +2,7 @@
     <string name="app_name">BOOKWORM</string>
     <string name="screen_type">Screen Type</string>
     <string-array name="user_type">
+        <item name="testSelected">Test</item>
         <item name="ownerSelected">Owner</item>
         <item name="borrowerSelected">Borrower</item>
     </string-array>
