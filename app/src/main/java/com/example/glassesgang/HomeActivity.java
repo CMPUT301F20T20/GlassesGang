@@ -42,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_user:
                     //implement fragment:
+                    selectedFragment = new UserProfileFragment();
                     break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit(); //displays fragment
