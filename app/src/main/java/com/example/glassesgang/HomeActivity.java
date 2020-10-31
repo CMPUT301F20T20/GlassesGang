@@ -26,13 +26,10 @@ public class HomeActivity extends AppCompatActivity {
 
         // added this, to test BookProfileActivity -Cholete
         // automatically launches BookProfileActivity when user goes to HomeActivity.
-//        MockBook mockBook = new MockBook();
-        Book book = new Book("title", "author", "isbn", "book1", "status");
-        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
-//        bookProfileIntent.putExtra("Book", mockBook);
-        bookProfileIntent = new Intent(this, BookProfileActivity.class);
-        bookProfileIntent.putExtra("Book", book);
-        startActivity(bookProfileIntent);
+//        Book book = new Book("title", "author", "isbn", "book1", "status");
+//        Intent bookProfileIntent = new Intent(this, BookProfileActivity.class);
+//        bookProfileIntent.putExtra("Book", book);
+//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
