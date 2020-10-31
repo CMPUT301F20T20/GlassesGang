@@ -20,7 +20,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_profile_fragment, container, false);
-        usertypeSpinner = view.findViewById(R.id.user_type_spinner);
+        usertypeSpinner = view.findViewById(R.id.user_type);
         Log.d("SPINNER", usertypeSpinner.toString());
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
