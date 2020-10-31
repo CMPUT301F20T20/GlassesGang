@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GoogleSignInActivity"></activity>
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".BorrowerHomeActivity"></activity>
         <activity android:name=".OwnerHomeActivity"></activity>
     </application>
 

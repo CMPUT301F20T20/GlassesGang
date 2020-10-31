@@ -5,9 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +54,7 @@ public class UserProfileFragment extends Fragment {
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
                     startActivity(ownerIntent);
                 } else if ((newRole.equals("Borrower")) && (!currentRole.equals("Borrower"))){
-                    Intent borrowerIntent = new Intent(getActivity(), HomeActivity.class);
+                    Intent borrowerIntent = new Intent(getActivity(), BorrowerHomeActivity.class);
                     startActivity(borrowerIntent);
                 }
             }
