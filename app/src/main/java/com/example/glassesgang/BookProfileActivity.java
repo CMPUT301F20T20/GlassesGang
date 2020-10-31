@@ -2,6 +2,7 @@ package com.example.glassesgang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
 
 public class BookProfileActivity extends AppCompatActivity {
     private TextView titleTextView;
@@ -31,7 +34,6 @@ public class BookProfileActivity extends AppCompatActivity {
         findViewsById();
 
         Intent intent = getIntent();
-        // right now it is passed a MockBook object, but in the future, I will change it to a Book object
         final Book book = (Book) intent.getSerializableExtra("Book");
         author = book.getAuthor();
         title = book.getTitle();
@@ -52,7 +54,8 @@ public class BookProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent editIntent = new Intent(BookProfileActivity.this, EditBookActivity.class);
                 editIntent.putExtra("Book", book);
-                startActivity(editIntent);
+//                startActivity(editIntent);
+                startActivityForResult(editIntent, 1);
             }
         });
 
@@ -75,5 +78,22 @@ public class BookProfileActivity extends AppCompatActivity {
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
         statusTextView.setText(status);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If user chose to save changes made in EditBookActivity
+        // Update the book profile upon returning
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                Book newBook = (Book) data.getSerializableExtra("Book");
+                title = newBook.getTitle();
+                author = newBook.getAuthor();
+                isbn = newBook.getISBN();
+                setTextViews();
+            }
+        }
     }
 }
