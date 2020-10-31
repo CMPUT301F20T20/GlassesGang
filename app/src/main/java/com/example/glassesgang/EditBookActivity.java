@@ -1,12 +1,21 @@
 package com.example.glassesgang;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class EditBookActivity extends AppCompatActivity {
     private Button backButton;
@@ -18,7 +27,9 @@ public class EditBookActivity extends AppCompatActivity {
     private String author;
     private String title;
     private String isbn;
+    private String bid;
     private String status;
+    private static final String TAG = "EditBookActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +44,7 @@ public class EditBookActivity extends AppCompatActivity {
         author = book.getAuthor();
         title = book.getTitle();
         isbn = book.getISBN();
+        bid = book.getBID();
 
         titleEditText.setText(title);
         authorEditText.setText(author);
@@ -49,6 +61,9 @@ public class EditBookActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference bookRef = db.collection("books").document(bid);
+
                 title = titleEditText.getText().toString();
                 author = authorEditText.getText().toString();
                 isbn = isbnEditText.getText().toString();
@@ -57,7 +72,28 @@ public class EditBookActivity extends AppCompatActivity {
 //                     book.setTitle(title);
 //                     book.setAuthor(author);
 //                     book.setISBN(isbn);
+                    HashMap<String, Object> newBookInfo = new HashMap<>();
+                    newBookInfo.put("title", title);
+                    newBookInfo.put("author", author);
+                    newBookInfo.put("isbn", isbn);
                     // somehow add to the system and make sure photos are attached
+
+                    // update the database
+                    bookRef
+                            .update(newBookInfo)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+
                     finish();
                 }
 
