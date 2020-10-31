@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,6 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_profile_fragment, container, false);
         usertypeSpinner = view.findViewById(R.id.user_type);
-        Log.d("SPINNER", usertypeSpinner.toString());
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 getActivity().getBaseContext(),
@@ -33,6 +33,17 @@ public class UserProfileFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         usertypeSpinner.setAdapter(adapter);
+
+        // get currentUser passed from HomeActivity
+        Bundle args = getArguments();
+        int currentUserTypeSelection;
+        if (args != null) {
+            currentUserTypeSelection = args.getInt("currentUser");
+        } else {
+            currentUserTypeSelection = 0;
+        }
+        usertypeSpinner.setSelection(currentUserTypeSelection);
+
         final String currentRole = usertypeSpinner.getSelectedItem().toString();
         usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

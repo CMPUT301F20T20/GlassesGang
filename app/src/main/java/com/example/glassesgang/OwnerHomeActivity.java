@@ -37,8 +37,11 @@ public class OwnerHomeActivity extends AppCompatActivity {
                         //implement fragment:
                         break;
                     case R.id.nav_user:
-                        //implement fragment:
+                        // send current user to position 0 (Owner) to fragment
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("currentUser", 0);
                         selectedFragment = new UserProfileFragment();
+                        selectedFragment.setArguments(bundle);
                         break;
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit(); //displays fragment
