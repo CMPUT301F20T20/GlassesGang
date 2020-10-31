@@ -36,12 +36,13 @@ public class UserProfileFragment extends Fragment {
         usertypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Object currentUser = adapterView.getItemAtPosition(i);
+                String currentUser = adapterView.getItemAtPosition(i).toString();
 
-                if (currentUser == "Owner") {
+                if (currentUser.equals("Owner")) {
+                    getActivity().finish();
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
                     startActivity(ownerIntent);
-                } else if (currentUser == "Borrower"){
+                } else if (currentUser.equals("Borrower")){
                     Intent borrowerIntent = new Intent(getActivity(), HomeActivity.class);
                     startActivity(borrowerIntent);
                 }
