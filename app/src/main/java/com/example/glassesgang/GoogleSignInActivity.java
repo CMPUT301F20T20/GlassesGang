@@ -27,13 +27,13 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private String TAG = "GoogleSignInActivity";
     private int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
-    private int DarkGreyBackground = 282828;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        getWindow().getDecorView().setBackgroundColor(DarkGreyBackground);
+        int darkGreyBackground = 282828;
+        getWindow().getDecorView().setBackgroundColor(darkGreyBackground);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
