@@ -22,7 +22,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private String isbn;
     private String status;
     private String bookID;
-    private String borrower;
+    private String owner;
     private Book book;
     private FirebaseFirestore db;
 
@@ -46,7 +46,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 title = book.getTitle();
                 isbn = book.getISBN();
                 status = book.getStatus();
-                borrower = book.getBorrower();
+                owner = book.getOwner();
                 setTextViews();
             }
         });
@@ -67,6 +67,6 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
         statusTextView.setText(status);
-        ownerTextView.setText(borrower);
+        ownerTextView.setText(owner);
     }
 }
