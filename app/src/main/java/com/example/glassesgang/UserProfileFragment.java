@@ -54,6 +54,7 @@ public class UserProfileFragment extends Fragment {
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
                     startActivity(ownerIntent);
                 } else if ((newRole.equals("Borrower")) && (!currentRole.equals("Borrower"))){
+                    getActivity().finish();
                     Intent borrowerIntent = new Intent(getActivity(), BorrowerHomeActivity.class);
                     startActivity(borrowerIntent);
                 }
