@@ -59,4 +59,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
 
+    // Implements barcode scanner
+    implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+
 }
