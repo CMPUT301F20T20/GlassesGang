@@ -50,9 +50,11 @@ public class LibraryFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
+//        String user = getActivity().getIntent().getStringExtra("user");
+        String user = "someone@ualberta.ca";
         // if fragment started from OwnerHomeActivity, get owner catalogue
         if (getActivity() instanceof OwnerHomeActivity) {
-            DocumentReference ownerRef = db.collection("users").document("someone@ualberta.ca");
+            DocumentReference ownerRef = db.collection("users").document(user);
             ownerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

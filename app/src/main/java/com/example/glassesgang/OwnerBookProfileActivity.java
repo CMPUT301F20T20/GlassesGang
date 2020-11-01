@@ -39,6 +39,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
+        getIntent().putExtra("user", "someone@ualberta.ca");
+
         db = FirebaseFirestore.getInstance();
         final String path = getIntent().getStringExtra("path");   // get the path to the book document
         DocumentReference docRef = db.document(path);    // get reference to the book object using path
