@@ -62,14 +62,14 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="Book ISBN"
-        app:layout_constraintBottom_toTopOf="@+id/book_owner"
+        app:layout_constraintBottom_toTopOf="@+id/book_borrower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/book_author" />
 
     <TextView
-        android:id="@+id/book_owner"
+        android:id="@+id/book_borrower"
         android:layout_width="240dp"
         android:layout_height="30dp"
         android:layout_marginStart="16dp"
@@ -77,7 +77,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Book Owner"
+        android:text="Book Borrower"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -90,7 +90,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/book_owner"
+        app:layout_constraintTop_toBottomOf="@+id/book_borrower"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         tools:srcCompat="@color/colorAccent" />

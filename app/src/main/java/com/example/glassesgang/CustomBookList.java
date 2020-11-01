@@ -30,16 +30,23 @@ public class CustomBookList extends ArrayAdapter<Book> {
         }
 
         Book book = bookList.get(position);
-        TextView title = view.findViewById(R.id.book_title);
-        TextView author = view.findViewById(R.id.book_author);
-        TextView isbn = view.findViewById(R.id.book_isbn);
-        TextView owner = view.findViewById(R.id.book_owner);
+        TextView titleTexView = view.findViewById(R.id.book_title);
+        TextView authorTexView = view.findViewById(R.id.book_author);
+        TextView isbnTextView = view.findViewById(R.id.book_isbn);
+        TextView borrowerTextView = view.findViewById(R.id.book_borrower);
 
 
-        title.setText(book.getTitle());
-        author.setText(book.getAuthor());
-        isbn.setText(book.getISBN());
-        owner.setText(book.getOwner());
+        titleTexView.setText(book.getTitle());
+        authorTexView.setText(book.getAuthor());
+        isbnTextView.setText(book.getISBN());
+
+        String borrower = book.getBorrower();
+        if (borrower != "") {
+            borrowerTextView.setText("Borrower: " + book.getBorrower());
+        }
+        else {
+            borrowerTextView.setText("Borrower: None");
+        }
 
 
         return view;
