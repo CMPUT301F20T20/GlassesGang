@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BorrowerBookProfileActivity"></activity>
-        <activity android:name=".OwnerBookProfileActivity" />
+        <activity android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity"></activity>
+        <activity android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
