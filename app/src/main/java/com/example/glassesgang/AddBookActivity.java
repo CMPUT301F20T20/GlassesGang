@@ -3,11 +3,8 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,18 +12,8 @@ import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.core.OrderBy;
-import com.google.firebase.firestore.core.OrderBy.Direction;
-
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.UUID;
-
-import static com.google.firebase.firestore.core.OrderBy.Direction.*;
 
 public class AddBookActivity extends AppCompatActivity {
     private Button backButton;
@@ -44,41 +31,32 @@ public class AddBookActivity extends AppCompatActivity {
 
         findViewsById();
 
-        //final Intent intent = getIntent();
-
+        // finish activity without adding a book
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // meant to return to the previous activity without adding a book
+                finish();
             }
         });
 
-
+        // if given all the correct information, add the book to the database
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // get the values for title, author, and isbn from the EditTexts
                 final String title = titleEditText.getText().toString();
                 final String author = authorEditText.getText().toString();
                 final String isbn = isbnEditText.getText().toString();
 
+                // if all three EditTexts have contents then add the book
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
-
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    final String bid = java.util.UUID.randomUUID().toString(); // used a randomly generated UUID
+                    final String owner = getIntent().getStringExtra("ownerName");
+                    Book newBookInfo = new Book(title, author, isbn, bid, owner);  // the newly created book
 
-                    HashMap<String, Object> newBookInfo = new HashMap<>();
-                    newBookInfo.put("title", title);
-                    newBookInfo.put("author", author);
-                    newBookInfo.put("isbn", isbn);
-                    newBookInfo.put("status", "available");
-                    newBookInfo.put("borrower", "");
-                    newBookInfo.put("images", new ArrayList<String>());
-                    newBookInfo.put("requestList", new ArrayList<String>());
-                    //newBookInfo.put("owner", ownername) figure out owner name situation
-
-                    final String newBID = java.util.UUID.randomUUID().toString(); // tired to implement it using the title as a base, but kept failing so now its a random UUID
-                    CollectionReference books = db.collection("books");
-                    books
-                            .document(newBID)
+                    // add the book to the list of total books
+                    db.collection("books").document(bid)
                             .set(newBookInfo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -93,12 +71,27 @@ public class AddBookActivity extends AppCompatActivity {
                                 }
                             });
 
-                    // add to book catalogue
-                    finish();
+                    // add the book to the owner's catalogue of owned books
+                    db.collection("users").document(owner)
+                            .update("ownerCatalogue", FieldValue.arrayUnion(bid))
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                    finish();  // the book has been added and we return to the previous activity
                 }
             }
         });
 
+        // scans a barcode, returns the ISBN and adds it to the EditText
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
