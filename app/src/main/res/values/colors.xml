@@ -6,4 +6,5 @@
     <color name="ownerDarkGrey">#282828</color>
     <color name="ownerLightGrey">#747474</color>
     <color name="colorDefault">#C8C8C8</color>
+    <color name="requestGrey">#BFBFBF</color>
 </resources>
