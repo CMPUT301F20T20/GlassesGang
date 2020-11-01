@@ -5,32 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".BookProfileActivity">
+    tools:context=".OwnerBookProfileActivity">
 
-    <TextView
-        android:id="@+id/title_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize = "30sp"
-        android:text="Title Goes Here" />
+    <include layout="@layout/book_profile"/>
 
-    <TextView
-        android:id="@+id/author_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="FirstName LastName" />
 
-    <TextView
-        android:id="@+id/isbn_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0123456789" />
-
-    <TextView
-        android:id="@+id/status_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="status" />
 
     <LinearLayout
         android:layout_width="match_parent"

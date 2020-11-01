@@ -1,24 +1,20 @@
 package com.example.glassesgang;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class BookProfileActivity extends AppCompatActivity {
+public class OwnerBookProfileActivity extends AppCompatActivity {
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
@@ -32,12 +28,12 @@ public class BookProfileActivity extends AppCompatActivity {
     private String bookID;
     private Book book;
     private  FirebaseFirestore db;
-    private static final String TAG = "BookProfileActivity";
+    private static final String TAG = "OwnerBookProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_profile);
+        setContentView(R.layout.activity_owner_book_profile);
 
         findViewsById();
 
@@ -68,7 +64,7 @@ public class BookProfileActivity extends AppCompatActivity {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent editIntent = new Intent(BookProfileActivity.this, EditBookActivity.class);
+                Intent editIntent = new Intent(OwnerBookProfileActivity.this, EditBookActivity.class);
                 editIntent.putExtra("path", path);   // pass in the path to the book document
                 startActivityForResult(editIntent, 1);
             }

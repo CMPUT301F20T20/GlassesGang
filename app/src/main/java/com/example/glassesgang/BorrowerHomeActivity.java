@@ -35,16 +35,6 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        // added this, to test BookProfileActivity -Cholete
-        // automatically launches BookProfileActivity when user goes to HomeActivity.
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference docRef = db.collection("books").document("book4");   // sample document reference
-        Intent bookProfileIntent = new Intent(HomeActivity.this, BookProfileActivity.class);
-        // BookProfileActivity is passed a path to the  book document
-        bookProfileIntent.putExtra("path", docRef.getPath());
-        startActivity(bookProfileIntent);
-
 
     }
 

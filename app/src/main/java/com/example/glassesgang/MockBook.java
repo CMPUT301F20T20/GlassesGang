@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * just a mock class for Book to check
  * how to use Serializable and to test
- * BookProfileActivity.
+ * OwnerBookProfileActivity.
  * Will remove in the future
  * - Cholete
  */

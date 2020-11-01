@@ -83,7 +83,7 @@ public class EditBookActivity extends AppCompatActivity {
 
                      updateDatabase(docRef);
 
-                    setResult(Activity.RESULT_OK, getIntent());   // so when we go back to BookProfileActivity, it knows that it must update itself.
+                    setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
                     finish();
                 }
 
