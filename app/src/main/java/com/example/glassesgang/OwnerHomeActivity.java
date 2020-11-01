@@ -30,7 +30,8 @@ public class OwnerHomeActivity extends AppCompatActivity {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
         Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
-        bookProfileIntent.putExtra("bid", "book3");  // pass book id
+        bookProfileIntent.putExtra("bid", "d3");  // pass book id
+        bookProfileIntent.putExtra("owner", "someone@ualberta.ca");
         startActivity(bookProfileIntent);
     }
 

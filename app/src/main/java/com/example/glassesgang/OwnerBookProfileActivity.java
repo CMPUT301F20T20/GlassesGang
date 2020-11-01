@@ -130,7 +130,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     // It deletes that book from the database.
     @Override
     public void onConfirmPressed() {
-        DocumentReference bookRef = db.document(getIntent().getStringExtra("path"));
+        DocumentReference bookRef = db.collection("books").document(getIntent().getStringExtra("bid"));
         String owner = getIntent().getStringExtra("owner");
 
         // delete the book from the owner catalogue
