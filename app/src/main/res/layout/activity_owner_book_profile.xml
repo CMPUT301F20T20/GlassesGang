@@ -10,6 +10,16 @@
     <include layout="@layout/book_profile"/>
 
 
+    <TextView
+        android:id="@+id/borrowerTitle_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Borrower:" />
+
+    <TextView
+        android:id="@+id/borrower_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

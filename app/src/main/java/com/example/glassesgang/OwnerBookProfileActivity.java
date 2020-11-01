@@ -19,6 +19,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
     private TextView authorTextView;
     private TextView isbnTextView;
     private TextView statusTextView;
+    private TextView borrowerTextView;
     private Button deleteButton;
     private Button editButton;
     private String author;
@@ -26,6 +27,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
     private String isbn;
     private String status;
     private String bookID;
+    private String borrower;
     private Book book;
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBookProfileActivity";
@@ -50,6 +52,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                 title = book.getTitle();
                 isbn = book.getISBN();
                 status = book.getStatus();
+                borrower = book.getBorrower();
                 setTextViews();
             }
         });
@@ -78,7 +81,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
         statusTextView = findViewById(R.id.status_textView);
-
+        borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
     }
@@ -89,6 +92,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
         statusTextView.setText(status);
+        borrowerTextView.setText(borrower);
     }
 
     @Override
