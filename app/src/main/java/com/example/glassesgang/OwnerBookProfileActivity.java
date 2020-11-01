@@ -1,20 +1,23 @@
 package com.example.glassesgang;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class OwnerBookProfileActivity extends AppCompatActivity {
+public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
@@ -30,7 +33,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
     private String borrower;
     private Book book;
     private  FirebaseFirestore db;
-    private static final String TAG = "OwnerBookProfileActivity";
+    private static final String TAG = "OwnerBkProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement delete feature
+                new DeleteBookDialogFragment().show(getSupportFragmentManager(), "DELETE_BOOK");
             }
         });
 
@@ -120,5 +123,26 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    // When user confirms the deletion of a book, this method is called.
+    // It deletes that book from the database.
+    @Override
+    public void onConfirmPressed() {
+        DocumentReference docRef = db.document(getIntent().getStringExtra("path"));
+        docRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 }
