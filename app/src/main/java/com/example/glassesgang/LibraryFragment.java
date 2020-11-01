@@ -1,10 +1,12 @@
 package com.example.glassesgang;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -98,6 +100,7 @@ public class LibraryFragment extends Fragment {
 
         DocumentReference userRef = db.collection("users").document(user);   // get user reference from db
 
+        // display either owner or borrower catalogue
         if (userType.equals("o")) {
             // display owner catalogue
             userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -140,6 +143,31 @@ public class LibraryFragment extends Fragment {
                 }
             });
         }
+
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // get the book id of the book that was pressed
+                Book book = (Book) adapterView.getItemAtPosition(i);
+                String bid = book.getBID();
+
+                // get book reference from db
+                DocumentReference bookRef= db.collection("books").document(bid);
+
+                // open up the appropriate book profile
+                Intent bookProfileIntent;
+                if (userType.equals("o")) {
+                    bookProfileIntent = new Intent(getActivity(), OwnerBookProfileActivity.class);
+                    bookProfileIntent.putExtra("bid", bid);
+                    startActivity(bookProfileIntent);
+                }
+                if (userType.equals("b")) {
+                    bookProfileIntent = new Intent(getActivity(), BorrowerBookProfileActivity.class);
+                    bookProfileIntent.putExtra("bid", bid);
+                    startActivity(bookProfileIntent);
+                }
+            }
+        });
         
 
     }
