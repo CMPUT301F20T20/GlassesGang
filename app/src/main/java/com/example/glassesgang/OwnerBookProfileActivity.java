@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
@@ -129,8 +130,15 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     // It deletes that book from the database.
     @Override
     public void onConfirmPressed() {
-        DocumentReference docRef = db.document(getIntent().getStringExtra("path"));
-        docRef
+        DocumentReference bookRef = db.document(getIntent().getStringExtra("path"));
+        String owner = getIntent().getStringExtra("owner");
+
+        // delete the book from the owner catalogue
+        DocumentReference ownerRef = db.collection("users").document(owner);
+        ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bookRef.getId()));
+
+        // delete the book from the data base
+        bookRef
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
