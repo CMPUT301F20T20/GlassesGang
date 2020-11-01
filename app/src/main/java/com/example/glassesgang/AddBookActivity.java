@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText authorEditText;
     private EditText isbnEditText;
     private static final String TAG = "AddBookActivity";
+    private static final int SCAN_BOOK_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +93,27 @@ public class AddBookActivity extends AppCompatActivity {
             }
         });
 
-        // scans a barcode, returns the ISBN and adds it to the EditText
+        // opens activity to scan a barcode
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement scanning
+                Intent scanBookIntent = new Intent(AddBookActivity.this, ISBNScanner.class);
+                startActivityForResult(scanBookIntent, SCAN_BOOK_REQUEST_CODE);
             }
         });
+    }
+
+    // takes the result from the barcode scanner and sets the isbn edittext to that value
+    @Override
+    protected void onActivityResult(int RequestCode, int ResultCode, Intent data) {
+        super.onActivityResult(RequestCode, ResultCode, data);
+        if (RequestCode == SCAN_BOOK_REQUEST_CODE) {
+            if (ResultCode == RESULT_OK) {
+                String returnString = data.getStringExtra("isbn");
+                isbnEditText.setText(returnString);
+            }
+        }
+
     }
 
     private void findViewsById() {
