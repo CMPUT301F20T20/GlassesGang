@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".OwnerBookProfileActivity"></activity>
+        <activity android:name=".BorrowerBookProfileActivity"></activity>
+        <activity android:name=".OwnerBookProfileActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".GoogleSignInActivity"></activity>
-        <activity android:name=".BorrowerHomeActivity"></activity>
-        <activity android:name=".OwnerHomeActivity"
-            android:exported="true"></activity>
-        <activity android:name=".AddBookActivity"></activity>
-        <activity android:name=".EditBookActivity"></activity>
+        <activity android:name=".GoogleSignInActivity" />
+        <activity android:name=".BorrowerHomeActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".OwnerHomeActivity"
+            android:exported="true" />
+        <activity android:name=".AddBookActivity" />
+        <activity android:name=".EditBookActivity" />
     </application>
 
 </manifest>
