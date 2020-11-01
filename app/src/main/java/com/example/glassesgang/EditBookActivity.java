@@ -43,14 +43,14 @@ public class EditBookActivity extends AppCompatActivity {
         findViewsById();
 
         db = FirebaseFirestore.getInstance();
-        String path = getIntent().getStringExtra("path");   // get the path to the book document
-        final DocumentReference docRef = db.document(path);    // get reference to the book object using path
+        bid = getIntent().getStringExtra("bid");   // get the bid
+        final DocumentReference docRef = db.collection("books").document(bid);    // get reference to the book object using bid
 
-        // get the book document from firestore using the document reference
+        // convert book document to Book object
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                book = documentSnapshot.toObject(Book.class);
                 author = book.getAuthor();
                 title = book.getTitle();
                 isbn = book.getISBN();

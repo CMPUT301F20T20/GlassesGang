@@ -28,14 +28,10 @@ public class OwnerHomeActivity extends AppCompatActivity {
         // added this, to test OwnerBookProfileActivity -Cholete
         // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//        DocumentReference docRef = db.collection("books").document("d2");   // sample document reference
-//        String owner = "someone@ualberta.ca"; // hardcoding owner for now, because can't sign in yet.
-//        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
-//        // OwnerBookProfileActivity is passed a path to the  book document
-//        bookProfileIntent.putExtra("path", docRef.getPath());
-//        bookProfileIntent.putExtra("owner", owner);
-//        startActivity(bookProfileIntent);
+//        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
+        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
+        bookProfileIntent.putExtra("bid", "book3");  // pass book id
+        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -44,14 +44,14 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         findViewsById();
 
         db = FirebaseFirestore.getInstance();
-        final String path = getIntent().getStringExtra("path");   // get the path to the book document
-        DocumentReference docRef = db.document(path);    // get reference to the book object using path
+        final String bid = getIntent().getStringExtra("bid");
+        final DocumentReference docRef = db.collection("books").document(bid);
 
-        // get the book document from firestore using the document reference
+        // convert the book document to a Book object
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                book = documentSnapshot.toObject(Book.class);
                 author = book.getAuthor();
                 title = book.getTitle();
                 isbn = book.getISBN();
@@ -72,7 +72,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
             @Override
             public void onClick(View v) {
                 Intent editIntent = new Intent(OwnerBookProfileActivity.this, EditBookActivity.class);
-                editIntent.putExtra("path", path);   // pass in the path to the book document
+                editIntent.putExtra("bid", bid);   // pass in the bid of the book
                 startActivityForResult(editIntent, 1);
             }
         });
@@ -108,8 +108,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
 
-                String path =  data.getStringExtra("path");
-                DocumentReference docRef = db.document(path);    // get reference to the book object using path
+                String bid =  data.getStringExtra("bid");
+                DocumentReference docRef = db.collection("books").document(bid);    // get reference to the book object using path
                 // get the book document from firestore using the document reference
                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
