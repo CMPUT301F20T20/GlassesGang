@@ -1,8 +1,6 @@
 package com.example.glassesgang;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_owner);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -30,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         // checks if account signed in
         if (user != null) {
             // redirect to user home page
-            Intent homeIntent = new Intent(this, HomeActivity.class);
+            Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
+            homeIntent.putExtra("DisplayName", user.getDisplayName());
             startActivity(homeIntent);
         } else {
             // redirect to sign in page
