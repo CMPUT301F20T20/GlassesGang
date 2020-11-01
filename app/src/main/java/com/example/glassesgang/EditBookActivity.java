@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -30,6 +31,8 @@ public class EditBookActivity extends AppCompatActivity {
     private String isbn;
     private String bid;
     private String status;
+    private Book book;
+    FirebaseFirestore db;
     private static final String TAG = "EditBookActivity";
 
     @Override
@@ -39,16 +42,22 @@ public class EditBookActivity extends AppCompatActivity {
 
         findViewsById();
 
-        final Intent intent = getIntent();
-        final Book book = (Book) intent.getSerializableExtra("Book");
-        author = book.getAuthor();
-        title = book.getTitle();
-        isbn = book.getISBN();
-        bid = book.getBID();
+        db = FirebaseFirestore.getInstance();
+        String path = getIntent().getStringExtra("path");   // get the path to the book document
+        final DocumentReference docRef = db.document(path);    // get reference to the book object using path
 
-        titleEditText.setText(title);
-        authorEditText.setText(author);
-        isbnEditText.setText(isbn);
+        // get the book document from firestore using the document reference
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                author = book.getAuthor();
+                title = book.getTitle();
+                isbn = book.getISBN();
+                status = book.getStatus();
+                setTextViews();
+            }
+        });
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -61,18 +70,20 @@ public class EditBookActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // get the text from edit text fields
                 title = titleEditText.getText().toString();
                 author = authorEditText.getText().toString();
                 isbn = isbnEditText.getText().toString();
 
+                // save changes if there is no empty fields
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
                      book.setTitle(title);
                      book.setAuthor(author);
                      book.setISBN(isbn);
 
-                     updateDatabase();
+                     updateDatabase(docRef);
 
-                    setResult(Activity.RESULT_OK, intent);   // so when we go back to BookProfileActivity, it knows that it must update itself.
+                    setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
                     finish();
                 }
 
@@ -97,16 +108,15 @@ public class EditBookActivity extends AppCompatActivity {
     }
 
     // Update the title, author, and isbn fields in the database if user choses to save the changes made.
-    private void updateDatabase() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private void updateDatabase(DocumentReference docRef) {
+        // put the new info in a hash map
         HashMap<String, Object> newBookInfo = new HashMap<>();
         newBookInfo.put("title", title);
         newBookInfo.put("author", author);
         newBookInfo.put("isbn", isbn);
 
-        DocumentReference bookRef = db.collection("books").document(bid);
-        bookRef
+        // update the database
+        docRef
                 .update(newBookInfo)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -120,6 +130,12 @@ public class EditBookActivity extends AppCompatActivity {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
+    }
+
+    private void setTextViews() {
+        titleEditText.setText(title);
+        authorEditText.setText(author);
+        isbnEditText.setText(isbn);
     }
 
 }

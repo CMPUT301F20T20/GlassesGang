@@ -1,5 +1,6 @@
 package com.example.glassesgang;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OwnerHomeActivity extends AppCompatActivity {
 
@@ -21,6 +24,16 @@ public class OwnerHomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+
+        // added this, to test OwnerBookProfileActivity -Cholete
+        // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
+//        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
+//        // OwnerBookProfileActivity is passed a path to the  book document
+//        bookProfileIntent.putExtra("path", docRef.getPath());
+//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
