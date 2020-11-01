@@ -21,7 +21,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private String title;
     private String isbn;
     private String status;
-    private String bookID;
+    private String bid;
     private String owner;
     private Book book;
     private FirebaseFirestore db;
@@ -34,8 +34,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         findViewsById();
 
         db = FirebaseFirestore.getInstance();
-        final String path = getIntent().getStringExtra("path");   // get the path to the book document
-        DocumentReference docRef = db.document(path);    // get reference to the book object using path
+        bid = getIntent().getStringExtra("bid");
+        DocumentReference docRef = db.collection("books").document(bid);
 
         // get the book document from firestore using the document reference
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
