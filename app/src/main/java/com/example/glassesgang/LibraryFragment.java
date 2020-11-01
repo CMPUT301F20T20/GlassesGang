@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ public class LibraryFragment extends Fragment {
     private ArrayAdapter<Book> bookArrayAdapter;
     private ArrayList<Book> bookArrayList;
     private String user;
+    private String userType; // "o" = owner ; "b" = borrower
     final String TAG = "LibraryFragment";
     private FirebaseFirestore db;
 
@@ -44,10 +46,26 @@ public class LibraryFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v =  inflater.inflate(R.layout.library_fragment, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // set the user type
+        if (getActivity() instanceof OwnerHomeActivity) {
+            userType = "o";
+        } else if (getActivity() instanceof BorrowerHomeActivity) {
+            userType = "b";
+        } else {
+            // clean this up later
+            try {
+                throw new Exception("library fragment can only be launched by Owner or Borrower HomeActivity");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // connect to the database
+        db = FirebaseFirestore.getInstance();
 
         // get the user email
         Bundle args = getArguments();
@@ -55,26 +73,41 @@ public class LibraryFragment extends Fragment {
             user = args.getString("user");
         }
 
-        // set up the array adapter for the listview
-        bookListView = v.findViewById(R.id.library_list_view);
+        // setting up the array adapter
         bookArrayList = new ArrayList<Book>();
-        bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList);
+        bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, userType);
+
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View v =  inflater.inflate(R.layout.library_fragment, container, false);
+
+        return v;
+    }
+
+
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // setting up the bookList view
+        bookListView = (ListView) view.findViewById(R.id.library_list_view);
         bookListView.setAdapter(bookArrayAdapter);
 
-        // connect to the database
-        db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(user);   // get user reference from db
 
-        if (getActivity() instanceof OwnerHomeActivity) {
+        if (userType.equals("o")) {
             // display owner catalogue
-            DocumentReference ownerRef = db.collection("users").document(user);   // get owner reference from db
-            ownerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         // get owner catalogue and update list view using books from the catalogue
                         DocumentSnapshot document = task.getResult();
                         ArrayList<String> catalogue = (ArrayList<String>) document.get("ownerCatalogue");
-                        updateListView(catalogue, v);
+                        updateListView(catalogue, view);
                         if (document.exists()) {
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         } else {
@@ -86,19 +119,10 @@ public class LibraryFragment extends Fragment {
                 }
             });
         }
-        if (getActivity() instanceof BorrowerHomeActivity) {
+        if (userType.equals("b")) {
             // display borrower catalogue
         }
-        else {
-            // shouldn't be launched
-            try {
-                throw new Exception("library fragment must be started by only Owner or Borrower HomeActivity");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
-        return v;
     }
 
     private void updateListView(final ArrayList<String> catalogue, View v) {

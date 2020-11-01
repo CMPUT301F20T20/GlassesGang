@@ -15,11 +15,13 @@ import java.util.ArrayList;
 public class CustomBookList extends ArrayAdapter<Book> {
     private ArrayList<Book> bookList;
     private Context context;
+    private String userType;  // "o" = owner ; "b" = borrower
 
-    public CustomBookList(Context context, ArrayList<Book> bookList) {
+    public CustomBookList(Context context, ArrayList<Book> bookList, String userType) {
         super(context, 0, bookList);
         this.bookList = bookList;
         this.context = context;
+        this.userType = userType;
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -33,21 +35,30 @@ public class CustomBookList extends ArrayAdapter<Book> {
         TextView titleTexView = view.findViewById(R.id.book_title);
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
-        TextView borrowerTextView = view.findViewById(R.id.book_borrower);
+        TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
 
 
         titleTexView.setText(book.getTitle());
         authorTexView.setText(book.getAuthor());
         isbnTextView.setText(book.getISBN());
 
-        String borrower = book.getBorrower();
-        if (borrower != "") {
-            borrowerTextView.setText("Borrower: " + book.getBorrower());
+        // if user is an owner, display the borrower of a book
+        // if user is a borrower, display the owner of a book
+        if (userType.equals("o")) {
+            String borrower = book.getBorrower();
+            if (borrower == null || borrower.equals("")) {
+                borrowerOwnerTextView.setText("Borrower: None");
+            }
+            else {
+                borrowerOwnerTextView.setText("Borrower: " + borrower);
+            }
+        } else {
+            String owner = book.getOwner();
+            if (owner != null) {
+                borrowerOwnerTextView.setText("Owner: " + owner);
+            }
         }
-        else {
-            borrowerTextView.setText("Borrower: None");
-        }
-
+        
 
         return view;
     }
