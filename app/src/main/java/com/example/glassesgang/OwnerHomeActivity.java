@@ -29,9 +29,9 @@ public class OwnerHomeActivity extends AppCompatActivity {
         // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
-        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
-        bookProfileIntent.putExtra("bid", "book3");  // pass book id
-        startActivity(bookProfileIntent);
+//        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
+//        bookProfileIntent.putExtra("bid", "book3");  // pass book id
+//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,7 +42,8 @@ public class OwnerHomeActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_books:
                         //implement fragment, random fragment for testing purposes
-                        selectedFragment = new LibraryFragment();
+                        String user = "someone@ualberta.ca"; // pass a mock user for now
+                        selectedFragment = new LibraryFragment().newInstance(user);
                         break;
                     case R.id.nav_notifications:
                         //implement fragment:
