@@ -121,7 +121,26 @@ public class LibraryFragment extends Fragment {
         }
         if (userType.equals("b")) {
             // display borrower catalogue
+            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        // get borrower catalogue and update list view using books from the catalogue
+                        DocumentSnapshot document = task.getResult();
+                        ArrayList<String> catalogue = (ArrayList<String>) document.get("borrowerCatalogue");
+                        updateListView(catalogue, view);
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
         }
+        
 
     }
 
