@@ -97,42 +97,42 @@ public class LibraryFragment extends Fragment {
         // display either owner or borrower catalogue
         if (userType.equals("o")) {
             // display owner catalogue
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        // get owner catalogue and update list view using books from the catalogue
-                        DocumentSnapshot document = task.getResult();
-                        ArrayList<String> catalogue = (ArrayList<String>) document.get("ownerCatalogue");
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists()) {
+                        Log.d(TAG, "Current data: " + snapshot.getData());
+                        ArrayList<String> catalogue = (ArrayList<String>) snapshot.get("ownerCatalogue");
                         updateListView(catalogue, view);
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
                     } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+                        Log.d(TAG, "Current data: null");
                     }
                 }
             });
         }
         if (userType.equals("b")) {
             // display borrower catalogue
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        // get borrower catalogue and update list view using books from the catalogue
-                        DocumentSnapshot document = task.getResult();
-                        ArrayList<String> catalogue = (ArrayList<String>) document.get("borrowerCatalogue");
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists()) {
+                        Log.d(TAG, "Current data: " + snapshot.getData());
+                        ArrayList<String> catalogue = (ArrayList<String>) snapshot.get("borrowerCatalogue");
                         updateListView(catalogue, view);
-                        if (document.exists()) {
-                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
                     } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+                        Log.d(TAG, "Current data: null");
                     }
                 }
             });
