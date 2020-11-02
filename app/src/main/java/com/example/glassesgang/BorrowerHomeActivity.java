@@ -39,10 +39,10 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         // automatically launches BorrowerBookProfileActivity when user goes to BorrowerHomeActivity.
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        DocumentReference docRef = db.collection("books").document("book2");   // sample document reference
-        Intent bookProfileIntent = new Intent(BorrowerHomeActivity.this, BorrowerBookProfileActivity.class);
-        // OwnerBookProfileActivity is passed a path to the  book document
-        bookProfileIntent.putExtra("bid", "book2");
-        startActivity(bookProfileIntent);
+//        Intent bookProfileIntent = new Intent(BorrowerHomeActivity.this, BorrowerBookProfileActivity.class);
+//        // OwnerBookProfileActivity is passed a path to the  book document
+//        bookProfileIntent.putExtra("bid", "book2");
+//        startActivity(bookProfileIntent);
 
 
     }

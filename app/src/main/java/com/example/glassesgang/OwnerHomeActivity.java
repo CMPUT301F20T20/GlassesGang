@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,6 +22,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_owner);
 
+
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
@@ -29,10 +31,9 @@ public class OwnerHomeActivity extends AppCompatActivity {
         // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
-        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
-        bookProfileIntent.putExtra("bid", "d3");  // pass book id
-        bookProfileIntent.putExtra("owner", "someone@ualberta.ca");
-        startActivity(bookProfileIntent);
+//        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
+//        bookProfileIntent.putExtra("bid", "book3");  // pass book id
+//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,7 +43,6 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.nav_books:
-                        //implement fragment, random fragment for testing purposes
                         selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:

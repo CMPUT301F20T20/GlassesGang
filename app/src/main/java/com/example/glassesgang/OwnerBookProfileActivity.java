@@ -30,7 +30,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String title;
     private String isbn;
     private String status;
-    private String bookID;
+    private String bid;
     private String borrower;
     private Book book;
     private  FirebaseFirestore db;
@@ -42,10 +42,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         setContentView(R.layout.activity_owner_book_profile);
 
         findViewsById();
-
+        
         db = FirebaseFirestore.getInstance();
-        final String bid = getIntent().getStringExtra("bid");
-        final DocumentReference docRef = db.collection("books").document(bid);
+        bid = getIntent().getStringExtra("bid");  // get book id of the book clicked
+        DocumentReference docRef = db.collection("books").document(bid);
 
         // convert the book document to a Book object
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -57,7 +57,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 isbn = book.getISBN();
                 status = book.getStatus();
                 borrower = book.getBorrower();
-                setTextViews();
+                if (borrower == null || borrower.equals("")) {
+                    borrower = "None";
+                }
+                updateTextViews();
             }
         });
 
@@ -91,7 +94,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
 
     // just set each TextViews text with the appropriate text
-    private void setTextViews() {
+    private void updateTextViews() {
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
@@ -104,12 +107,12 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         super.onActivityResult(requestCode, resultCode, data);
 
         // If user chose to save changes made in EditBookActivity
-        // Update the book profile upon returning
+        // update the book profile upon returning
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
 
                 String bid =  data.getStringExtra("bid");
-                DocumentReference docRef = db.collection("books").document(bid);    // get reference to the book object using path
+                DocumentReference docRef = db.collection("books").document(bid);
                 // get the book document from firestore using the document reference
                 docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -119,7 +122,11 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         title = book.getTitle();
                         isbn = book.getISBN();
                         status = book.getStatus();
-                        setTextViews();
+                        borrower = book.getBorrower();
+                        if (borrower == null || borrower.equals("")) {
+                            borrower = "None";
+                        }
+                        updateTextViews();
                     }
                 });
             }
