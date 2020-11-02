@@ -26,7 +26,8 @@
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
-        <activity android:name=".AddBookActivity" />
+        <activity android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustNothing"/>   <!--So keyboard doesn't push up the save button-->
         <activity android:name=".EditBookActivity"
             android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
     </application>

@@ -3,6 +3,8 @@ package com.example.glassesgang;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OwnerHomeActivity extends AppCompatActivity {
+    private Button addButton;
 
     private BottomNavigationView bottomNavigation;
 
@@ -26,6 +29,17 @@ public class OwnerHomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+
+        addButton = findViewById(R.id.add_button);
+
+        // go to add screen once user presses the add button
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addBookIntent = new Intent(OwnerHomeActivity.this, AddBookActivity.class);
+                startActivity(addBookIntent);
+            }
+        });
 
         // added this, to test OwnerBookProfileActivity -Cholete
         // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.

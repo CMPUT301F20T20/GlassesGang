@@ -31,6 +31,14 @@ public class Book implements Serializable {
         this.status = "available";
     }
 
+    public Book(String title, String author, String ISBN, String owner) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.owner = owner;
+        this.status = "available";
+    }
+
     // Getters and Setters for the Class Objects
     /**
      * Gets the title of the book
