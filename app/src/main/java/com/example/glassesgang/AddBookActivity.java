@@ -57,7 +57,7 @@ public class AddBookActivity extends AppCompatActivity {
                 final String isbn = isbnEditText.getText().toString();
 
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
-                    Book newBook = new Book(title, author, isbn, "AVAILABLE");
+                    Book newBook = new Book(title, author, isbn, user);
                     db = FirebaseFirestore.getInstance();
                     addBook(newBook);
 
