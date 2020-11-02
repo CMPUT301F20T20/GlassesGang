@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -20,6 +21,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_owner);
+
 
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -41,9 +43,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.nav_books:
-                        //implement fragment, random fragment for testing purposes
-                        String user = "ataupill@ualberta.ca"; // pass a mock user for now
-                        selectedFragment = new LibraryFragment().newInstance(user);
+                        selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:
                         //implement fragment:

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,17 +37,8 @@ public class LibraryFragment extends Fragment {
     private String userType; // "o" = owner ; "b" = borrower
     final String TAG = "LibraryFragment";
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
-
-    // used for passing the user email from the calling activity
-    static LibraryFragment newInstance(String user) {
-        Bundle args = new Bundle();
-        args.putString("user", user);
-
-        LibraryFragment fragment = new LibraryFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,14 +58,13 @@ public class LibraryFragment extends Fragment {
             }
         }
 
+        // get user, will change how to get it in the future
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser().getEmail();
+//        Log.d("user-email", user);
+
         // connect to the database
         db = FirebaseFirestore.getInstance();
-
-        // get the user email
-        Bundle args = getArguments();
-        if (args != null) {
-            user = args.getString("user");
-        }
 
         // setting up the array adapter
         bookArrayList = new ArrayList<Book>();
@@ -152,7 +143,7 @@ public class LibraryFragment extends Fragment {
                 String bid = book.getBID();
 
                 // get book reference from db
-                DocumentReference bookRef= db.collection("books").document(bid);
+                DocumentReference bookRef = db.collection("books").document(bid);
 
                 // open up the appropriate book profile
                 Intent bookProfileIntent;

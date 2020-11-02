@@ -58,8 +58,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_books:
                     //implement fragment, random fragment for testing purposes
-                    String user = "ataupill@ualberta.ca"; // pass a mock user for now
-                    selectedFragment = new LibraryFragment().newInstance(user);
+                    selectedFragment = new LibraryFragment();
                     break;
                 case R.id.nav_notifications:
                     //implement fragment:

@@ -1,6 +1,7 @@
 package com.example.glassesgang;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,17 +37,19 @@ public class CustomBookList extends ArrayAdapter<Book> {
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
         TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
+        TextView statusTextView = view.findViewById(R.id.book_temp_status);   // implementing status as a text view for now, might change to image view in the future
 
 
         titleTexView.setText(book.getTitle());
         authorTexView.setText(book.getAuthor());
         isbnTextView.setText(book.getISBN());
+        statusTextView.setText(book.getStatus());
 
         // if user is an owner, display the borrower of a book
         // if user is a borrower, display the owner of a book
         if (userType.equals("o")) {
             String borrower = book.getBorrower();
-            if (borrower == null || borrower.equals("")) {
+            if (borrower == null || borrower == "") {
                 borrowerOwnerTextView.setText("Borrower: None");
             }
             else {
