@@ -53,7 +53,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                 isbn = book.getISBN();
                 status = book.getStatus();
                 borrower = book.getBorrower();
-                if (borrower.equals("")) {
+                if (borrower == null || borrower.equals("")) {
                     borrower = "None";
                 }
                 updateTextViews();
@@ -119,7 +119,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                         isbn = book.getISBN();
                         status = book.getStatus();
                         borrower = book.getBorrower();
-                        if (borrower.equals("")) {
+                        if (borrower == null || borrower.equals("")) {
                             borrower = "None";
                         }
                         updateTextViews();
