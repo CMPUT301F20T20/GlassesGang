@@ -57,13 +57,16 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.nav_books:
+                        addButton.setVisibility(View.VISIBLE);
                         selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:
+                        addButton.setVisibility(View.GONE);
                         //implement fragment:
                         break;
                     case R.id.nav_user:
                         // send current user to position 0 (Owner) to fragment
+                        addButton.setVisibility(View.GONE);
                         Bundle bundle = new Bundle();
                         bundle.putInt("currentUser", 0);
                         selectedFragment = new UserProfileFragment();
