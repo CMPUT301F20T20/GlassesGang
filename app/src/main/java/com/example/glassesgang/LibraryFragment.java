@@ -1,6 +1,8 @@
 package com.example.glassesgang;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,9 +61,12 @@ public class LibraryFragment extends Fragment {
         }
 
         // get user, will change how to get it in the future
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser().getEmail();
-//        Log.d("user-email", user);
+//        mAuth = FirebaseAuth.getInstance();
+//        user = mAuth.getCurrentUser().getEmail();
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
+        user = sharedPref.getString("email", "default value");
+        Log.d("user-email", user);
 
         // connect to the database
         db = FirebaseFirestore.getInstance();
