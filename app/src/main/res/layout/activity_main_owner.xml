@@ -28,6 +28,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="265dp"
+            android:layout_height="214dp"
+            android:text="WORKING"
+            android:textColor="#450606"
+            android:textSize="24sp" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -36,7 +43,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_container"
-        app:menu="@menu/bottom_navigation"
+        app:menu="@menu/owner_bottom_navigation"
         app:itemTextColor="@color/ownerDarkGrey"
         android:background="?android:attr/windowBackground" />
 

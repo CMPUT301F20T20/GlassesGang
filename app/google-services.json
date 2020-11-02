@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "485506583897-5ell5rubira74n2vmhtskfe22ho8soka.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.glassesgang",
+            "certificate_hash": "fa80770e7c4444c3ac08bd9df6767c21de2a714d"
+          }
+        },
+        {
+          "client_id": "485506583897-j34ktdoa9m2i0q32oc7gv3ij7qksshku.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.glassesgang",
+            "certificate_hash": "69461913d11a31d3c1d57c42ff27ab96227ddd9c"
+          }
+        },
+        {
           "client_id": "485506583897-onjsoso8roalbpcjo0o5beek4rt2l9lc.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -28,7 +44,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "485506583897-onjsoso8roalbpcjo0o5beek4rt2l9lc.apps.googleusercontent.com",
+              "client_id": "485506583897-jsfjccol89pis1qll9536afpg7cnpcgp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
