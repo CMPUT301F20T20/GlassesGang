@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +35,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String bid;
     private String borrower;
     private Book book;
+    private String owner;
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBkProfileActivity";
 
@@ -40,6 +43,11 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_book_profile);
+
+        // get email of owner
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        owner = sharedPref.getString("email", "default value");
 
         findViewsById();
         
@@ -137,8 +145,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     // It deletes that book from the database.
     @Override
     public void onConfirmPressed() {
-        DocumentReference bookRef = db.collection("books").document(getIntent().getStringExtra("bid"));
-        String owner = getIntent().getStringExtra("owner");
+        DocumentReference bookRef = db.collection("books").document(bid);
 
         // delete the book from the owner catalogue
         DocumentReference ownerRef = db.collection("users").document(owner);
