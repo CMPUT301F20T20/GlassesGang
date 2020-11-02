@@ -3,7 +3,9 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -109,6 +111,13 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         // successful sign in
         if (user != null) {
+            // save email to sharedPreferences
+            String filename = getResources().getString(R.string.email_account);
+            SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("email", user.getEmail());
+            editor.apply();
+
             // redirect to user home page
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
