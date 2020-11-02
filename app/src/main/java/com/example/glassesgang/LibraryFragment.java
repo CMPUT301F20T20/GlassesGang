@@ -60,9 +60,7 @@ public class LibraryFragment extends Fragment {
             }
         }
 
-        // get user, will change how to get it in the future
-//        mAuth = FirebaseAuth.getInstance();
-//        user = mAuth.getCurrentUser().getEmail();
+        // get user
         String filename = getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
         user = sharedPref.getString("email", "default value");
