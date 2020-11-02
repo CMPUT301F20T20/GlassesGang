@@ -1,5 +1,8 @@
 package com.example.glassesgang;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,25 +24,17 @@ public abstract class User {
     public String userName;
     public String email;
     private Object notifications;
-    public FirebaseUser googleUserAccount;
     private FirebaseFirestore db;
     CollectionReference userDatabase = db.collection("users");
 
-    public User(FirebaseUser googleUserAccount) {
-        this.googleUserAccount = googleUserAccount;
-        this.userName = googleUserAccount.getEmail();
-        this.email = googleUserAccount.getEmail();
-        addUserToDatabase();
-
+    public User(Context context) {
+        String filename = context.getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        this.email = sharedPref.getString("email", "False");
     }
 
-    public void addUserToDatabase(){
-        Map<String, Object> data1 = new HashMap<>();
-        data1.put("borrowerID", this.email);
-        data1.put("ownerID", this.email);
-        data1.put("email", this.email);
-        // data1.put("regions", Arrays.asList("west_coast", "norcal"));
-        userDatabase.document(this.email).set(data1);
+    public User(){
+        // empty constructor for database access
     }
 
     public void editContactInfo(String currentEmail, String newEmail){
@@ -57,6 +53,29 @@ public abstract class User {
                 });
     }
 
+    public String getTAG() {
+        return TAG;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Object getNotifications() {
+        return notifications;
+    }
+
+    public FirebaseFirestore getDb() {
+        return db;
+    }
+
+    public CollectionReference getUserDatabase() {
+        return userDatabase;
+    }
     /*
     public void editUsername(String newUserName) {
         if (userName.equals(this.userName)) {
