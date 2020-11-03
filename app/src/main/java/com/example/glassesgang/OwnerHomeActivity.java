@@ -30,6 +30,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+        bottomNavigation.setSelectedItemId(R.id.nav_books);
 
         addButton = findViewById(R.id.add_button);
 
@@ -41,14 +42,6 @@ public class OwnerHomeActivity extends AppCompatActivity {
                 startActivity(addBookIntent);
             }
         });
-
-        // added this, to test OwnerBookProfileActivity -Cholete
-        // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef = db.collection("books").document("book3");   // sample document reference
-//        Intent bookProfileIntent = new Intent(OwnerHomeActivity.this, OwnerBookProfileActivity.class);
-//        bookProfileIntent.putExtra("bid", "book3");  // pass book id
-//        startActivity(bookProfileIntent);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

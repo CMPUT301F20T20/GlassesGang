@@ -63,7 +63,12 @@ public class LibraryFragment extends Fragment {
         // get user
         String filename = getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
-        user = sharedPref.getString("email", "default value");
+        user = sharedPref.getString("email", null);
+
+        if (user == null) {
+            Log.e("Email","No user email recorded");
+        }
+
         Log.d("user-email", user);
 
         // connect to the database
