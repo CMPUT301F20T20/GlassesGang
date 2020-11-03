@@ -26,6 +26,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+        bottomNavigation.setSelectedItemId(R.id.nav_books);
 
         // added this, to test OwnerBookProfileActivity -Cholete
         // automatically launches OwnerBookProfileActivity when user goes to OwnerHomeActivity.
