@@ -1,5 +1,6 @@
 package com.example.glassesgang;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OwnerHomeActivity extends AppCompatActivity {
 
@@ -18,9 +22,11 @@ public class OwnerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_owner);
 
+
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+        bottomNavigation.setSelectedItemId(R.id.nav_books);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -30,7 +36,6 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.nav_books:
-                        //implement fragment, random fragment for testing purposes
                         selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:
