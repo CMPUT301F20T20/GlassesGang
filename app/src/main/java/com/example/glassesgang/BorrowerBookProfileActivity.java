@@ -1,11 +1,14 @@
 package com.example.glassesgang;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,6 +28,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private String owner;
     private Book book;
     private FirebaseFirestore db;
+    final String TAG = "Database error";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +42,25 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         DocumentReference docRef = db.collection("books").document(bid);
 
         // get the book document from firestore using the document reference
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
-                author = book.getAuthor();
-                title = book.getTitle();
-                isbn = book.getISBN();
-                status = book.getStatus();
-                owner = book.getOwner();
-                setTextViews();
-            }
-        });
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        book = documentSnapshot.toObject(Book.class);   // convert the book document to Book Object
+                        author = book.getAuthor();
+                        title = book.getTitle();
+                        isbn = book.getISBN();
+                        status = book.getStatus();
+                        owner = book.getOwner();
+                        setTextViews();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "Data could not be fetched " + e.toString());
+                    }
+                });
     }
 
     // assigns each attribute to the proper textView.
