@@ -14,4 +14,12 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown" />
 
+    <Button
+        android:id="@+id/signoutbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="signOut"
+        android:text="Sign Out" />
+
+
 </LinearLayout>

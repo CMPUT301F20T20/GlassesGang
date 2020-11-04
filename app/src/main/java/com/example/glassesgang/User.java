@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +25,8 @@ public abstract class User {
     public String userName;
     public String email;
     private Object notifications;
-    private FirebaseFirestore db;
-    CollectionReference userDatabase = db.collection("users");
+    // private FirebaseFirestore db;
+    CollectionReference userDatabase = FirebaseFirestore.getInstance().collection("users");
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
@@ -69,9 +70,6 @@ public abstract class User {
         return notifications;
     }
 
-    public FirebaseFirestore getDb() {
-        return db;
-    }
 
     public CollectionReference getUserDatabase() {
         return userDatabase;

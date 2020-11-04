@@ -6,15 +6,23 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
-public class UserProfileFragment extends Fragment {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class UserProfileFragment extends Fragment{
     private Spinner usertypeSpinner;
+    private Button signOutButton;
+    private String TAG = "USER FRAGMENT";
 
     @Nullable
     @Override
@@ -30,7 +38,7 @@ public class UserProfileFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         usertypeSpinner.setAdapter(adapter);
-
+        Log.d(TAG, "inside on create");
         // get currentUser passed from HomeActivity
         Bundle args = getArguments();
         int currentUserTypeSelection;
@@ -39,6 +47,19 @@ public class UserProfileFragment extends Fragment {
         } else {
             currentUserTypeSelection = 0;
         }
+
+        signOutButton = view.findViewById(R.id.signoutbutton);
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Do something in response to button click
+                Log.d(TAG, "please help me");
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(getContext(), GoogleSignInActivity.class);
+                startActivity(i);
+
+            }
+        });
+
         usertypeSpinner.setSelection(currentUserTypeSelection);
 
         // gets current role of the user
@@ -50,7 +71,9 @@ public class UserProfileFragment extends Fragment {
                 String newRole = adapterView.getItemAtPosition(i).toString();
                 // redirecting user to proper activity depending on chosen role
                 if ((newRole.equals("Owner")) && (!currentRole.equals("Owner"))) {
+                    Log.d(TAG, "before activity finishes");
                     getActivity().finish();
+                    Log.d(TAG, "after activity finishes");
                     Intent ownerIntent = new Intent(getActivity(), OwnerHomeActivity.class);
                     startActivity(ownerIntent);
                 } else if ((newRole.equals("Borrower")) && (!currentRole.equals("Borrower"))){
@@ -60,11 +83,19 @@ public class UserProfileFragment extends Fragment {
                 }
             }
 
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
+
+
         });
+
         return view;
-    }
+
+    } // on create class ends
+
+
+
 }

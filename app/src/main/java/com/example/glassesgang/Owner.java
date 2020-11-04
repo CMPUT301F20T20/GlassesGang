@@ -23,13 +23,15 @@ import java.util.Map;
 public class Owner extends User {
     // Once book object is implemented
     //public ArrayList<Books> catalogue;
-    public ArrayList<Book> catalogue;
-    private FirebaseFirestore db;
-    DocumentReference ownerDatabase = db.collection("users").document(this.email);
+    public ArrayList<String> catalogue;
+    //private FirebaseFirestore db;
+    //DocumentReference ownerDatabase = FirebaseFirestore.getInstance().collection("users").document(this.email);
+    DocumentReference ownerDatabase = this.userDatabase.document(this.email)
+            .collection("owners").document("ownerObject");
 
     public Owner(Context context) {
         super(context);
-        this.catalogue = new ArrayList<Book>();
+        this.catalogue = new ArrayList<String>();
         addOwnerToDatabase();
     }
 
@@ -38,19 +40,32 @@ public class Owner extends User {
         this.catalogue = new ArrayList<>();
     }
 
-    public ArrayList<Book> getCatalogue() {
+    public ArrayList<String> getCatalogue() {
         return catalogue;
     }
 
-    @Override
-    public FirebaseFirestore getDb() {
-        return db;
-    }
 
-    public DocumentReference getOwnerDatabase() {
+    /*public DocumentReference getOwnerDatabase() {
         return ownerDatabase;
+    }*/
+
+
+    public void addBooktoCatalogue(String newBook){
+        this.catalogue.add(newBook);
+        ownerDatabase.update("owners", this);
     }
 
+    public void deleteBookFromCatalogue(String delBook){
+        // I'm not sure which to use, this.catalogue or this.getCatalogue...
+        this.getCatalogue().remove(delBook);
+        ownerDatabase.update("owners", this);
+    }
+
+    public void addOwnerToDatabase(){
+        ownerDatabase.update("owners", this);
+    }
+
+    /* Originally had method to update book objects within catalog
     public boolean editCatalogue(Book updatedbook){
         for(Book bookItem : getCatalogue()) {
             if(bookItem.getBID().equals(updatedbook.getBID())) {
@@ -66,20 +81,5 @@ public class Owner extends User {
         }
         return true;
     }
-
-    public void addBooktoCatalogue(Book newBook){
-        this.catalogue.add(newBook);
-        ownerDatabase.update("owners", this);
-    }
-
-    public void deleteBookFromCatalogue(Book delBook){
-        // I'm not sure which to use, this.catalogue or this.getCatalogue...
-        this.getCatalogue().remove(delBook);
-        ownerDatabase.update("owners", this);
-    }
-
-    public void addOwnerToDatabase(){
-        ownerDatabase.update("owners", this);
-    }
-
+    */
 }

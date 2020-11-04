@@ -34,7 +34,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private String TAG = "GoogleSignInActivity";
     private int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
+    // private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +123,8 @@ public class GoogleSignInActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("email", user.getEmail());
             editor.apply();
-            // create user
-            createUser();
+            // create user - need to fix bug, therefore commented out
+            //createUser();
             // redirect to user home page
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
@@ -136,7 +136,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
 
     private void createUser(){
         // creates the user if user not in database
-        CollectionReference usersDatabase = db.collection("users");
+        CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         String filename = getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
         String email = sharedPref.getString("email", "False");
@@ -157,7 +157,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
                             Log.d(TAG, "creating user");
                         }
                     } else {
-                        Log.d(TAG, "get failed with ", task.getException());
+                        Log.d(TAG, "Error get failed with ", task.getException());
                     }
                 }
             });
