@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +26,7 @@ public class UserProfileFragment extends Fragment{
     private Spinner usertypeSpinner;
     private Button signOutButton;
     private String TAG = "USER FRAGMENT";
+    private TextView contactInfo;
 
     @Nullable
     @Override
@@ -60,6 +64,9 @@ public class UserProfileFragment extends Fragment{
             }
         });
 
+        contactInfo = view.findViewById(R.id.ContactInfo);
+        contactInfo.setText(getEmail());
+
         usertypeSpinner.setSelection(currentUserTypeSelection);
 
         // gets current role of the user
@@ -96,6 +103,11 @@ public class UserProfileFragment extends Fragment{
 
     } // on create class ends
 
-
+    public String getEmail(){
+        Context context = getContext();
+        String filename = context.getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        return sharedPref.getString("email", "False");
+    }
 
 }
