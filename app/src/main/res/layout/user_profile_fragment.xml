@@ -4,14 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorDefault"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background="@color/colorAccent">
+    tools:context=".MainActivity">
 
     <Spinner
         android:id="@+id/user_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown" />
+
+    <TextView
+        android:id="@+id/ContactTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/email"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/ContactInfo"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/signoutbutton"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:background="#E15454"
+        android:text="@string/sign_out" />
+
 
 </LinearLayout>
