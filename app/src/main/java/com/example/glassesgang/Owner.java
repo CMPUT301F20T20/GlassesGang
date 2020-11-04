@@ -35,10 +35,11 @@ public class Owner extends User {
         addOwnerToDatabase();
     }
 
-    public Owner(){
+    public Owner() {
         super();
         this.catalogue = new ArrayList<>();
     }
+
 
     public ArrayList<String> getCatalogue() {
         return catalogue;
@@ -50,22 +51,37 @@ public class Owner extends User {
     }*/
 
 
-    public void addBooktoCatalogue(String newBook){
+    public void addBooktoCatalogue(String newBook) {
         this.catalogue.add(newBook);
         ownerDatabase.update("owners", this);
     }
 
-    public void deleteBookFromCatalogue(String delBook){
+    public void deleteBookFromCatalogue(String delBook) {
         // I'm not sure which to use, this.catalogue or this.getCatalogue...
         this.getCatalogue().remove(delBook);
         ownerDatabase.update("owners", this);
     }
 
-    public void addOwnerToDatabase(){
+    public void addOwnerToDatabase() {
         ownerDatabase.update("owners", this);
     }
+}
 
     /* Originally had method to update book objects within catalog
+
+    public ArrayList<Book> getCatalogue() {
+        return catalogue;
+    }
+
+    @Override
+    public FirebaseFirestore getDb() {
+        return db;
+    }
+
+    public DocumentReference getOwnerDatabase() {
+        return ownerDatabase;
+    }
+
     public boolean editCatalogue(Book updatedbook){
         for(Book bookItem : getCatalogue()) {
             if(bookItem.getBID().equals(updatedbook.getBID())) {
@@ -82,4 +98,4 @@ public class Owner extends User {
         return true;
     }
     */
-}
+

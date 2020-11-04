@@ -34,7 +34,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private String TAG = "GoogleSignInActivity";
     private int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
-    // private FirebaseFirestore db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +158,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
                         }
                     } else {
                         Log.d(TAG, "Error get failed with ", task.getException());
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
                 }
             });
