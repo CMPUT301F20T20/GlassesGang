@@ -1,6 +1,5 @@
 package com.example.glassesgang;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -9,23 +8,18 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public abstract class User {
-    private String TAG;
+    //private String TAG;
     public String userName;
     public String email;
-    private Object notifications;
+    //public Object notifications;
     // private FirebaseFirestore db;
     CollectionReference userDatabase = FirebaseFirestore.getInstance().collection("users");
+    String tag = "User";
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
@@ -42,19 +36,19 @@ public abstract class User {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "contact information successfully updated!");
+                        Log.d(tag, "contact information successfully updated!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating contact information", e);
+                        Log.w(tag, "Error updating contact information", e);
                     }
                 });
     }
 
-    public String getTAG() {
-        return TAG;
+    public String getTag() {
+        return tag;
     }
 
     public String getUserName() {
@@ -65,13 +59,27 @@ public abstract class User {
         return email;
     }
 
-    public Object getNotifications() {
-        return notifications;
-    }
 
 
     public CollectionReference getUserDatabase() {
         return userDatabase;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public void setUserDatabase(CollectionReference userDatabase) {
+        this.userDatabase = userDatabase;
     }
     /*
     public void editUsername(String newUserName) {

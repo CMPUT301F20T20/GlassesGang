@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,44 +28,62 @@ public class Owner extends User {
     public ArrayList<String> catalogue;
     //private FirebaseFirestore db;
     //DocumentReference ownerDatabase = FirebaseFirestore.getInstance().collection("users").document(this.email);
-    DocumentReference ownerDatabase = this.userDatabase.document(this.email)
-            .collection("owners").document("ownerObject");
+    CollectionReference ownerDatabase = this.userDatabase.document(this.email)
+            .collection("owners");
 
     public Owner(Context context) {
         super(context);
         this.catalogue = new ArrayList<String>();
-        addOwnerToDatabase();
+        //addOwnerToDatabase();
     }
 
     public Owner() {
-        super();
-        this.catalogue = new ArrayList<>();
     }
 
+    public void setCatalogue(ArrayList<String> catalogue) {
+        this.catalogue = catalogue;
+    }
+
+    public void setOwnerDatabase(CollectionReference ownerDatabase) {
+        this.ownerDatabase = ownerDatabase;
+    }
 
     public ArrayList<String> getCatalogue() {
         return catalogue;
     }
 
-
-    /*public DocumentReference getOwnerDatabase() {
+    public CollectionReference getOwnerDatabase() {
         return ownerDatabase;
-    }*/
+    }
 
 
     public void addBooktoCatalogue(String newBook) {
         this.catalogue.add(newBook);
-        ownerDatabase.update("owners", this);
+        ownerDatabase.document().update("owners", this);
     }
 
     public void deleteBookFromCatalogue(String delBook) {
         // I'm not sure which to use, this.catalogue or this.getCatalogue...
         this.getCatalogue().remove(delBook);
-        ownerDatabase.update("owners", this);
+        ownerDatabase.document().update("owners", this);
     }
 
     public void addOwnerToDatabase() {
-        ownerDatabase.update("owners", this);
+        ownerDatabase.document().set(this)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("help12", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("help 13", "Error writing document", e);
+                    }
+                });
+        Log.d("HELP", "add owner to Database");
+
     }
 }
 

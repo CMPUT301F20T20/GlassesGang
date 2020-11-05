@@ -123,8 +123,10 @@ public class GoogleSignInActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("email", user.getEmail());
             editor.apply();
-            // create user - need to fix bug, therefore commented out
-            //createUser();
+            createUser();
+            Owner owner = new Owner(getApplicationContext());
+            FirebaseFirestore.getInstance().collection("users").document(owner.getEmail())
+                    .collection("owners").document("ownerobject").set(owner);
             // redirect to user home page
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
@@ -141,19 +143,20 @@ public class GoogleSignInActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
         String email = sharedPref.getString("email", "False");
         if (!email.equals("False")){
-            usersDatabase.document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            usersDatabase.document(email).collection("owners").document().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Owner owner = (Owner) document.get("owner");
-                            Borrower borrower = (Borrower) document.get("borrower");
+                            Owner owner = (Owner) document.get("ownerObject");
+                            Borrower borrower = (Borrower) document.get("borrowerObject");
                             //User user = document.toObject(User.class);
                             Log.d(TAG, "User is: " + document.getData());
                         } else {
                             Owner owner = new Owner(getApplicationContext());
-                            Borrower borrower = new Borrower(getApplicationContext());
+                            //owner.addOwnerToDatabase();
+                            //Borrower borrower = new Borrower(getApplicationContext());
                             Log.d(TAG, "creating user");
                         }
                     } else {
