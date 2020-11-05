@@ -17,6 +17,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -25,8 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GoogleSignInActivity extends AppCompatActivity {
 
@@ -126,6 +131,13 @@ public class GoogleSignInActivity extends AppCompatActivity {
             // create user - need to fix bug, therefore commented out
             //createUser();
             // redirect to user home page
+
+            // add user to user collections if not there already
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // get a document reference to the user
+            final DocumentReference userDocRef = db.collection("users").document(user.getEmail());
+            addUser(userDocRef);
+
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
         } else {
@@ -166,6 +178,47 @@ public class GoogleSignInActivity extends AppCompatActivity {
 
         };
 
+    }
+
+    private void addUser(final DocumentReference userDocRef) {
+        // add user to users collection if not there already.
+        // change in the future
+        // starts here
+        userDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {  // if user in the collection already, do nothing
+                        Log.d(TAG, "User in user collections already ");
+                    } else {  // if user is not in use collection, make a new user Document
+                        Log.d(TAG, "User not in user collections yet. Adding.");
+                        Log.d("sign-in","null user");
+                        // creating the ownerCatalogue and borrowerCatalogue fields
+                        HashMap userCatalogue = new HashMap<String, ArrayList<String>>();
+                        userCatalogue.put("ownerCatalogue", new ArrayList<String>());
+                        userCatalogue.put("borrowerCatalogue", new ArrayList<String>());
+                        // adding the user
+                        userDocRef
+                                .set(userCatalogue)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error writing document", e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });  // ends here
     }
 
 }
