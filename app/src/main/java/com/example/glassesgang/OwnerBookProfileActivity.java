@@ -151,6 +151,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         DocumentReference ownerRef = db.collection("users").document(owner);
         ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bookRef.getId()));
 
+        // delete the book from the borrower catalogue in the future
+
+
         // delete the book from the data base
         bookRef
                 .delete()
