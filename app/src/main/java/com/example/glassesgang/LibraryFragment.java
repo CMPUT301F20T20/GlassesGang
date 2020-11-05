@@ -94,7 +94,7 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // setting up the bookList view
-        bookListView = (ListView) view.findViewById(R.id.library_list_view);
+        bookListView = view.findViewById(R.id.library_list_view);
         bookListView.setAdapter(bookArrayAdapter);
 
         DocumentReference userRef = db.collection("users").document(user);   // get user reference from db
