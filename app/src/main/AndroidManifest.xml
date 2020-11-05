@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.glassesgang">
 
     <application
@@ -9,10 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity"></activity>
-        <activity android:name=".OwnerBookProfileActivity"
-            android:parentActivityName=".OwnerHomeActivity"/>
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity"/>
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +24,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".GoogleSignInActivity" />
-        <activity android:name=".BorrowerHomeActivity"
+        <activity
+            android:name=".BorrowerHomeActivity"
             android:exported="true"/>
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
         <activity android:name=".AddBookActivity" />
-        <activity android:name=".EditBookActivity"
-            android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
+        <activity
+            android:name=".EditBookActivity"
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>
