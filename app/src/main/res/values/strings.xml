@@ -8,4 +8,5 @@
         <item name="ownerSelected">Owner</item>
         <item name="borrowerSelected">Borrower</item>
     </string-array>
+    <string name="owner_book_profile_fragment_type">Requests or Transaction</string>
 </resources>

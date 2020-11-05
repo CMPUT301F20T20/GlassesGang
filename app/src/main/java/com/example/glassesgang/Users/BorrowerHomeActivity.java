@@ -1,25 +1,16 @@
-package com.example.glassesgang;
+package com.example.glassesgang.Users;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.glassesgang.BrowseFragment;
+import com.example.glassesgang.LibraryFragment;
+import com.example.glassesgang.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class BorrowerHomeActivity extends AppCompatActivity {
 
@@ -71,7 +62,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                     selectedFragment.setArguments(bundle);
                     break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit(); //displays fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.owner_fragment_container, selectedFragment).commit(); //displays fragment
 
             return true; //clicked item marked as selected. not selected = false
         }

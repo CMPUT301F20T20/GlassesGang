@@ -1,4 +1,4 @@
-package com.example.glassesgang;
+package com.example.glassesgang.Users;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.glassesgang.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;

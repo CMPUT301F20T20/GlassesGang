@@ -1,4 +1,4 @@
-package com.example.glassesgang;
+package com.example.glassesgang.Books;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,20 +6,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.glassesgang.R;
+import com.example.glassesgang.Requests.Request;
+import com.example.glassesgang.Requests.RequestHandlingFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class OwnerBookProfileActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class OwnerBookProfileActivity extends AppCompatActivity implements RequestHandlingFragment.OnFragmentInteractionListener {
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
     private TextView statusTextView;
-    private TextView borrowerTextView;
     private Button deleteButton;
     private Button editButton;
     private String author;
@@ -32,10 +38,15 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBookProfileActivity";
 
+    private ListView requestListView;
+    private ArrayAdapter<Request> requestArrayAdapter;
+    private ArrayList<Request> requestArrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_book_profile);
+        getSupportFragmentManager().beginTransaction().add(R.id.owner_book_profile_fragment_container, new RequestHandlingFragment()).commit();
 
         findViewsById();
         
@@ -84,7 +95,6 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
         statusTextView = findViewById(R.id.status_textView);
-        borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
     }
@@ -95,7 +105,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
         statusTextView.setText(status);
-        borrowerTextView.setText(borrower);
+        //borrowerTextView.setText(borrower); if important remember to bring back the textview for this
     }
 
     @Override
@@ -127,5 +137,15 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    @Override
+    public void onDeclineRequest() {
+        //set status of requested item to declined (or delete request)
+    }
+
+    @Override
+    public void onAcceptRequest() {
+        //set status of request to accepted and switch fragment from requestlist to transaction
     }
 }

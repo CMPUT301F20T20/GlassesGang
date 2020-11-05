@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/owner_fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_container"
+        app:layout_constraintTop_toBottomOf="@id/owner_fragment_container"
         app:menu="@menu/borrower_bottom_navigation"
         app:itemTextColor="@color/ownerDarkGrey"
         android:background="?android:attr/windowBackground" />
@@ -50,7 +50,7 @@
         android:layout_marginRight="32dp"
         android:layout_weight="1"
         android:text="Search"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+        app:layout_constraintBottom_toTopOf="@+id/owner_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

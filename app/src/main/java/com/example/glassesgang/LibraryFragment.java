@@ -10,15 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.glassesgang.Books.Book;
+import com.example.glassesgang.Books.BorrowerBookProfileActivity;
+import com.example.glassesgang.Books.CustomBookList;
+import com.example.glassesgang.Books.OwnerBookProfileActivity;
+import com.example.glassesgang.Users.BorrowerHomeActivity;
+import com.example.glassesgang.Users.OwnerHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -68,8 +71,9 @@ public class LibraryFragment extends Fragment {
         if (user == null) {
             Log.e("Email","No user email recorded");
         }
-
-        Log.d("user-email", user);
+        else {
+            Log.d("user-email", user);
+        }
 
         // connect to the database
         db = FirebaseFirestore.getInstance();

@@ -1,4 +1,4 @@
-package com.example.glassesgang;
+package com.example.glassesgang.Users;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,8 +18,10 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.glassesgang.GoogleSignInActivity;
+import com.example.glassesgang.R;
+import com.example.glassesgang.Users.BorrowerHomeActivity;
+import com.example.glassesgang.Users.OwnerHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class UserProfileFragment extends Fragment{

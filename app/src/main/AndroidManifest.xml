@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity"></activity>
-        <activity android:name=".OwnerBookProfileActivity"
-            android:parentActivityName=".OwnerHomeActivity"/>
+        <activity android:name=".Books.BorrowerBookProfileActivity"
+            android:parentActivityName=".Users.BorrowerHomeActivity"></activity>
+        <activity android:name=".Books.OwnerBookProfileActivity"
+            android:parentActivityName=".Users.OwnerHomeActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,13 +21,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".GoogleSignInActivity" />
-        <activity android:name=".BorrowerHomeActivity"
+        <activity android:name=".Users.BorrowerHomeActivity"
             android:exported="true"/>
         <activity
-            android:name=".OwnerHomeActivity"
+            android:name=".Users.OwnerHomeActivity"
             android:exported="true" />
-        <activity android:name=".AddBookActivity" />
-        <activity android:name=".EditBookActivity"
+        <activity android:name=".Books.AddBookActivity" />
+        <activity android:name=".Books.EditBookActivity"
             android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.glassesgang;
+package com.example.glassesgang.Books;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.glassesgang.Books.Book;
+import com.example.glassesgang.R;
 
 public class AddBookActivity extends AppCompatActivity {
     private Button backButton;
