@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,6 +29,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GoogleSignInActivity extends AppCompatActivity {
 
@@ -104,17 +109,25 @@ public class GoogleSignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            try {
+                                updateUI(user);
+                            } catch (JsonProcessingException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            updateUI(null);
+                            try {
+                                updateUI(null);
+                            } catch (JsonProcessingException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user) throws JsonProcessingException {
         // successful sign in
         if (user != null) {
             // save email to sharedPreferences
@@ -124,9 +137,8 @@ public class GoogleSignInActivity extends AppCompatActivity {
             editor.putString("email", user.getEmail());
             editor.apply();
             createUser();
-            Owner owner = new Owner(getApplicationContext());
-            FirebaseFirestore.getInstance().collection("users").document(owner.getEmail())
-                    .collection("owners").document("ownerobject").set(owner);
+//            FirebaseFirestore.getInstance().collection("users").document(owner.getEmail())
+//                    .collection("owners").document("ownerObject").set(owner);
             // redirect to user home page
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
@@ -143,18 +155,24 @@ public class GoogleSignInActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
         String email = sharedPref.getString("email", "False");
         if (!email.equals("False")){
-            usersDatabase.document(email).collection("owners").document().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            usersDatabase.document(email).collection("owners").document("ownerObject").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Owner owner = (Owner) document.get("ownerObject");
-                            Borrower borrower = (Borrower) document.get("borrowerObject");
+                            Map<String, Object> ownerTemp = (HashMap) document.getData();
+                            Owner owner = new ObjectMapper().convertValue(ownerTemp, Owner.class);
+                            //Borrower borrower = (Borrower) document.get("borrowerObject");
                             //User user = document.toObject(User.class);
-                            Log.d(TAG, "User is: " + document.getData());
+                            Log.d(TAG, "User is: " + owner.toString());
                         } else {
                             Owner owner = new Owner(getApplicationContext());
+                            try {
+                                owner.addOwnerToDatabase();
+                            } catch (JsonProcessingException e) {
+                                e.printStackTrace();
+                            }
                             //owner.addOwnerToDatabase();
                             //Borrower borrower = new Borrower(getApplicationContext());
                             Log.d(TAG, "creating user");
