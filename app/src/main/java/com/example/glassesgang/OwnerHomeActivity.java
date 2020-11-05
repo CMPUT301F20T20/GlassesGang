@@ -28,11 +28,11 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
 
         //setup bottom navigation
+        addButton = findViewById(R.id.add_button);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
         bottomNavigation.setSelectedItemId(R.id.nav_books);
 
-        addButton = findViewById(R.id.add_button);
 
         // go to add screen once user presses the add button
         addButton.setOnClickListener(new View.OnClickListener() {
