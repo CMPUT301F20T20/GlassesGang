@@ -36,7 +36,11 @@ public class AddBookActivity extends AppCompatActivity {
         // get the user
         String filename = getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
-        user = sharedPref.getString("email", "default value");
+        user = sharedPref.getString("email", null);
+
+        if (user == null) {
+            Log.e("Email","No user email recorded");
+        }
 
         findViewsById();
 
@@ -93,6 +97,7 @@ public class AddBookActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        documentReference.update("bid", documentReference.getId());
                         addBookInOwnerCatalogue(documentReference.getId());  // add the book to the owner's catalogue of owned books
                     }
                 })

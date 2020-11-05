@@ -49,6 +49,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
         owner = sharedPref.getString("email", "default value");
 
+        if (owner == null) {
+            Log.e("Email","No user email recorded");
+        }
+
         findViewsById();
         
         db = FirebaseFirestore.getInstance();
@@ -149,10 +153,13 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
         // delete the book from the owner catalogue
         DocumentReference ownerRef = db.collection("users").document(owner);
-        ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bookRef.getId()));
+        ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bid));
 
-        // delete the book from the borrower catalogue in the future
-
+        // delete the book from the borrower catalogue
+        if (!borrower.equals("None")) {
+            DocumentReference borrowerRef = db.collection("users").document(borrower);
+            borrowerRef.update("borrowerCatalogue", FieldValue.arrayRemove(bid));
+        }
 
         // delete the book from the data base
         bookRef
