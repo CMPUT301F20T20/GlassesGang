@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         // checks if account signed in
         if (user != null) {
             // redirect to user home page
-            Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
-            startActivity(homeIntent);
+            Intent ownerHomeIntent = new Intent(this, OwnerHomeActivity.class);
+            startActivity(ownerHomeIntent);
         } else {
             // redirect to sign in page
             Intent signInIntent = new Intent(this, GoogleSignInActivity.class);
