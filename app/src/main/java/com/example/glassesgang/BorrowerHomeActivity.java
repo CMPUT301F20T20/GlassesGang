@@ -4,22 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.glassesgang.browse.BrowseFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class BorrowerHomeActivity extends AppCompatActivity {
 
@@ -35,16 +24,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        // added this, to test BorrowerBookProfileActivity -Cholete
-        // automatically launches BorrowerBookProfileActivity when user goes to BorrowerHomeActivity.
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef = db.collection("books").document("book2");   // sample document reference
-//        Intent bookProfileIntent = new Intent(BorrowerHomeActivity.this, BorrowerBookProfileActivity.class);
-//        // OwnerBookProfileActivity is passed a path to the  book document
-//        bookProfileIntent.putExtra("bid", "book2");
-//        startActivity(bookProfileIntent);
-
-
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

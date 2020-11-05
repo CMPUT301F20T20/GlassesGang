@@ -39,7 +39,6 @@ public class LibraryFragment extends Fragment {
     private String userType; // "o" = owner ; "b" = borrower
     final String TAG = "LibraryFragment";
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
 
 
     @Override

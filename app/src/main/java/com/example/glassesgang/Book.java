@@ -28,6 +28,7 @@ public class Book implements Serializable {
         this.ISBN = ISBN;
         this.BID = BID;
         this.owner = owner;
+        // TODO: Review this
         this.status = "available";
     }
 
