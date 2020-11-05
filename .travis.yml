@@ -1,61 +1,59 @@
 language: android
 jdk: oraclejdk8
+dist: trusty
 
 env:
   global:
-    - ANDROID_TARGET=android-22
+    - ANDROID_API_LEVEL=30
+    - ANDROID_BUILD_TOOLS_VERSION=30.0.0
+    - ANDROID_EMU_API_LEVEL=22
     - ANDROID_ABI=armeabi-v7a
+    - QEMU_AUDIO_DRV=none
+    - ADB_INSTALL_TIMEOUT=8
 
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
+    # Android SDK Tools
     - tools
     - platform-tools
 
-    # The BuildTools version used by your project
-    - build-tools-23.0.3
+    # BuildTools version
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
 
-    # The SDK version used to compile your project
-    # TODO: why is this here explicitly in addition to $ANDROID_TARGET below
-    - android-23
+    - android-$ANDROID_API_LEVEL
+    - android-$ANDROID_EMU_API_LEVEL
 
     # Additional components
     - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
+    - extra-android-support
 
-    # The SDK version used to compile your project
-    - $ANDROID_TARGET
+    - sys-img-$ANDROID_ABI-google_apis-$ANDROID_EMU_API_LEVEL
 
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests.
-    # The line should look like this after interpolation:
-    # - sys-img-armeabi-v7a-android-22
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
-
-licenses:
-  - 'android-sdk-license-.+'
+  licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 before_install:
-  # Accept sdk licenses
-  - yes | sdkmanager "platforms;android-29"
+  - yes | sdkmanager "platforms;android-$ANDROID_EMU_API_LEVEL"
+  - yes | sdkmanager "platforms;android-$ANDROID_API_LEVEL"
 
-  # Get gradle
+before_script:
   - chmod +x gradlew
   - wget http://services.gradle.org/distributions/gradle-5.3-bin.zip
   - unzip -qq gradle-5.3-bin.zip
   - export GRADLE_HOME=$PWD/gradle-5.3
   - export PATH=$GRADLE_HOME/bin:$PATH
 
-  # Build the project
-  - gradle -v
-
-  # Start the emulator
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
+  # Emulator instance
+  - echo no | android create avd --force -n test -t android-$ANDROID_EMU_API_LEVEL --abi google_apis/$ANDROID_ABI # execute in your console log in your android studio locally
+  - emulator -avd test -no-skin -no-audio -no-window & #android-wait-for-emulator
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-  # The app will now automatically be installed and tested via
-  # the command `gradle connectedCheck`
+
+#script:
+#  - ./gradlew clean build
+#  - ./gradlew test
