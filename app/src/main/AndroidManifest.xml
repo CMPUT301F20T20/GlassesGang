@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.glassesgang">
 
     <application
@@ -9,6 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
         <activity android:name=".BorrowerBookProfileActivity"
             android:parentActivityName=".BorrowerHomeActivity"></activity>
         <activity android:name=".OwnerBookProfileActivity"
@@ -22,7 +27,7 @@
         </activity>
         <activity android:name=".GoogleSignInActivity" />
         <activity android:name=".BorrowerHomeActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
