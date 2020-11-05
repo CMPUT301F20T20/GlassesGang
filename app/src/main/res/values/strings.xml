@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">BOOKWORM</string>
     <string name="screen_type">Screen Type</string>
+    <string name="email_account">userEmail</string>
+    <string name="email">Email:</string>
+    <string name="sign_out">Sign Out</string>
+    <string-array name="user_type">
+        <item name="ownerSelected">Owner</item>
+        <item name="borrowerSelected">Borrower</item>
+    </string-array>
 </resources>

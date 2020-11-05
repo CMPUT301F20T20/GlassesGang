@@ -5,11 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background="@color/colorAccent">
+    tools:context=".BorrowerBookProfileActivity">
 
-    <ListView
-        android:id="@+id/library_list_view"
+    <include layout="@layout/book_profile"/>
+
+
+    <TextView
+        android:id="@+id/ownerTitle_textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="Owner:" />
+
+    <TextView
+        android:id="@+id/owner_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
