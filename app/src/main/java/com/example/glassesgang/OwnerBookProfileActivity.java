@@ -149,32 +149,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     // It deletes that book from the database.
     @Override
     public void onConfirmPressed() {
-        DocumentReference bookRef = db.collection("books").document(bid);
-
-        // delete the book from the owner catalogue
-        DocumentReference ownerRef = db.collection("users").document(owner);
-        ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bid));
-
-        // delete the book from the borrower catalogue
-        if (!borrower.equals("None")) {
-            DocumentReference borrowerRef = db.collection("users").document(borrower);
-            borrowerRef.update("borrowerCatalogue", FieldValue.arrayRemove(bid));
-        }
-
-        // delete the book from the data base
-        bookRef
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.deleteBook(book);
     }
 }

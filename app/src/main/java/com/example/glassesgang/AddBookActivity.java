@@ -62,9 +62,8 @@ public class AddBookActivity extends AppCompatActivity {
 
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
                     Book newBook = new Book(title, author, isbn, user);
-                    db = FirebaseFirestore.getInstance();
-                    addBook(newBook);
-
+                    DatabaseManager database = new DatabaseManager();
+                    database.addBook(newBook, user);
                     // somehow add to the system and make sure photos are attached
                     finish();
                 }
@@ -88,43 +87,4 @@ public class AddBookActivity extends AppCompatActivity {
         authorEditText = findViewById(R.id.author_name_bar);
         isbnEditText = findViewById(R.id.isbn_bar);
     }
-
-    private void addBook(Book newBook) {
-        // add the book to the database books collection
-        db.collection("books")
-                .add(newBook)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                        documentReference.update("bid", documentReference.getId());
-                        addBookInOwnerCatalogue(documentReference.getId());  // add the book to the owner's catalogue of owned books
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-
-    }
-
-    private void addBookInOwnerCatalogue(String bid) {
-        db.collection("users").document(user)
-                .update("ownerCatalogue", FieldValue.arrayUnion(bid))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
-    }
-
 }
