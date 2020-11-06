@@ -9,4 +9,5 @@
         <item name="borrowerSelected">Borrower</item>
     </string-array>
     <string name="owner_book_profile_fragment_type">Requests or Transaction</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

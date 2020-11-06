@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 
+import com.example.glassesgang.Notification.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -73,7 +74,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                     selectedFragment = new LibraryFragment();
                     break;
                 case R.id.nav_notifications:
-                    //implement fragment:
+                    selectedFragment = new NotificationFragment();
                     break;
                 case R.id.nav_user:
                     // send current user to position 1 (Borrower) to fragment

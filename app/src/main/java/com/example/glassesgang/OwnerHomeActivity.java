@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.glassesgang.Notification.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
@@ -61,6 +62,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
                     case R.id.nav_notifications:
                         addButton.setVisibility(View.GONE);
                         //implement fragment:
+                        selectedFragment = new NotificationFragment();
                         break;
                     case R.id.nav_user:
                         // send current user to position 0 (Owner) to fragment
