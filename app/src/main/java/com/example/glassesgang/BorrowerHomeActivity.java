@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.glassesgang.Notification.NotificationFragment;
 import com.example.glassesgang.browse.BrowseFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -41,7 +42,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                     selectedFragment = new LibraryFragment();
                     break;
                 case R.id.nav_notifications:
-                    //implement fragment:
+                    selectedFragment = new NotificationFragment();
                     break;
                 case R.id.nav_user:
                     // send current user to position 1 (Borrower) to fragment
