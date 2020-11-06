@@ -1,6 +1,5 @@
 package com.example.glassesgang;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -13,13 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Book profile for Owner View (edit book functionality)
+ */
 public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
     private TextView titleTextView;
     private TextView authorTextView;
@@ -94,7 +94,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
     }
 
-    // assigns each attribute to the proper textView.
+    /**
+     * assigns each attribute to the proper textView.
+     */
     private void findViewsById() {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
@@ -105,7 +107,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         editButton = findViewById(R.id.edit_button);
     }
 
-    // just set each TextViews text with the appropriate text
+    /**
+     * just set each TextViews text with the appropriate text
+     */
     private void updateTextViews() {
         titleTextView.setText(title);
         authorTextView.setText(author);
@@ -145,8 +149,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         }
     }
 
-    // When user confirms the deletion of a book, this method is called.
-    // It deletes that book from the database.
+    /**
+     * When user confirms the deletion of a book, this method is called.
+     * It deletes that book from the database.
+     */
     @Override
     public void onConfirmPressed() {
         DatabaseManager databaseManager = new DatabaseManager();

@@ -10,10 +10,12 @@ import android.view.MenuItem;
 import com.example.glassesgang.browse.BrowseFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Home Activity for Borrower
+ */
 public class BorrowerHomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
-    private static final String TAG = "HomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

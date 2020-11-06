@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
-
+/**
+ * TODO: Currently, database stores attributes fields not objects, will implement Object storage for submission 4
+ */
 public class User {
     private static String TAG = "User Class";
     public String userName;

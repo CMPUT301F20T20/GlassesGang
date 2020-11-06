@@ -132,18 +132,34 @@ public class Book implements Serializable {
         this.status = status;
     }
 
+    /**
+     * Get owner of the book
+     * @return owner of the book
+     */
     public String getOwner() {
         return owner;
     }
 
+    /**
+     * Sets the owner of the book
+     * @param owner of the book
+     */
     public void setOwner(String owner) {
         this.owner = owner;
     }
 
+    /**
+     * Get who is borrowing the book
+     * @return current borrower of the book
+     */
     public String getBorrower() {
         return borrower;
     }
 
+    /**
+     * Set who is borrowing the book
+     * @param borrower of the book
+     */
     public void setBorrower(String borrower) {
         this.borrower = borrower;
     }
