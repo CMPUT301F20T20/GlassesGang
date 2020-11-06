@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
+
 /**
  * TODO: Currently, database stores attributes fields not objects, will implement Object storage for submission 4
  */
@@ -12,12 +15,17 @@ public class User {
     public String userName;
     public String email;
     private Object notifications;
+    public ArrayList<String> ownerCatalogue;
+    public ArrayList<String> borrowerCatalogue;
 
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         this.email = sharedPref.getString("email", "False");
+        ownerCatalogue = new ArrayList<String>();
+        borrowerCatalogue = new ArrayList<String>();
+
     }
 
     public User(){
@@ -25,6 +33,8 @@ public class User {
     }
     public User(String email){
         this.email = email;
+        ownerCatalogue = new ArrayList<String>();
+        borrowerCatalogue = new ArrayList<String>();
     }
 
 
@@ -44,7 +54,22 @@ public class User {
         return notifications;
     }
 
-    /*
+    public ArrayList<String> getOwnerCatalogue() {
+        return ownerCatalogue;
+    }
+
+    public void setOwnerCatalogue(ArrayList<String> ownerCatalogue) {
+        this.ownerCatalogue = ownerCatalogue;
+    }
+
+    public ArrayList<String> getBorrowerCatalogue() {
+        return borrowerCatalogue;
+    }
+
+    public void setBorrowerCatalogue(ArrayList<String> borrowerCatalogue) {
+        this.borrowerCatalogue = borrowerCatalogue;
+    }
+/*
     public void editUsername(String newUserName) {
         if (userName.equals(this.userName)) {
             this.userName = newUserName;
