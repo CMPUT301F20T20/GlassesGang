@@ -1,33 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#00FFFFFF">
 
     <EditText
         android:id="@+id/isbn_bar"
-        android:layout_width="380dp"
+        android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/borrowerSecondary"
         android:ems="10"
+        android:fontFamily="@font/source_sans_pro_bold"
         android:inputType="textPersonName"
+        android:textColor="@color/borrowerText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/show_isbn" />
-
-    <TextView
-        android:id="@+id/show_isbn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:text="ISBN"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/author_name_bar" />
 
     <Button
         android:id="@+id/back_button"
@@ -35,6 +30,7 @@
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:text="BACK"
+        android:textColor="@color/borrowerText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,55 +38,90 @@
         android:id="@+id/show_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="50dp"
+        android:layout_marginEnd="353dp"
+        android:layout_marginRight="353dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
         android:text="Title"
+        android:textColor="@color/borrowerText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_button" />
+        app:layout_constraintTop_toBottomOf="@+id/back_button" />
 
     <TextView
         android:id="@+id/show_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="338dp"
+        android:layout_marginRight="338dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
         android:text="Author"
+        android:textColor="@color/borrowerText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/book_title_bar" />
 
+    <TextView
+        android:id="@+id/show_isbn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="351dp"
+        android:layout_marginRight="351dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="ISBN"
+        android:textColor="@color/borrowerText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/author_name_bar" />
+
     <EditText
         android:id="@+id/author_name_bar"
-        android:layout_width="380dp"
+        android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/borrowerSecondary"
         android:ems="10"
+        android:fontFamily="@font/source_sans_pro_bold"
         android:inputType="textPersonName"
+        android:textColor="@color/borrowerText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/show_author" />
 
     <EditText
         android:id="@+id/book_title_bar"
-        android:layout_width="380dp"
+        android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/borrowerSecondary"
         android:ems="10"
+        android:fontFamily="@font/source_sans_pro_bold"
         android:inputType="textPersonName"
+        android:textColor="@color/borrowerText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/show_title" />
+        app:layout_constraintTop_toBottomOf="@+id/show_title" />
 
     <Button
         android:id="@+id/scan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:background="@color/blue"
         android:text="SCAN"
+        android:textColor="@color/borrowerPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/isbn_bar" />
@@ -99,9 +130,10 @@
         android:id="@+id/finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
         android:layout_marginBottom="50dp"
+        android:background="@color/green"
         android:text="SAVE"
+        android:textColor="@color/borrowerPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -112,8 +144,11 @@
         android:layout_height="150dp"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/finish_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scan_button"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/scan_button"
+        app:layout_constraintVertical_bias="0.189"></ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
