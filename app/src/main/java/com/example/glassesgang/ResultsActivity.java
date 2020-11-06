@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -19,26 +23,47 @@ import java.util.ArrayList;
 
 public class ResultsActivity extends AppCompatActivity {
 
-    private ArrayAdapter<Book> bookArrayAdapter;
-    private ArrayList<Book> bookArrayList;
+    private ArrayAdapter<Book> bookAdapter;
+    private ArrayList<Book> bookList;
     private FirebaseFirestore db;
+    ListView resultList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        resultList = findViewById(R.id.result_list_view);
+
         // connect to the database
         db = FirebaseFirestore.getInstance();
 
         // setting up the array adapter
-        bookArrayList = new ArrayList<Book>();
-        bookArrayAdapter = new CustomBookList(getBaseContext(), bookArrayList, "b");
+        bookList = new ArrayList<Book>();
+        bookAdapter = new CustomBookList(getBaseContext(), bookList, "b");
+        resultList.setAdapter(bookAdapter);
 
         Intent intent = getIntent();
         String query = intent.getExtras().getString("query");
 
         firebaseSearch(query);
+
+        resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // get the book id of the book that was pressed
+                Book book = (Book) adapterView.getItemAtPosition(i);
+                String bid = book.getBID();
+
+                // get book reference from db
+                DocumentReference bookRef = db.collection("books").document(bid);
+
+                // open up the appropriate book profile
+                Intent bookProfileIntent = new Intent(getBaseContext(), BorrowerBookProfileActivity.class);
+                bookProfileIntent.putExtra("bid", bid);
+                startActivity(bookProfileIntent);
+            }
+        });
     }
 
     private void firebaseSearch(final String query) {
@@ -47,7 +72,7 @@ public class ResultsActivity extends AppCompatActivity {
         booksRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                bookArrayList.clear();
+                bookList.clear();
 
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
                     // turning doc into book object
@@ -61,18 +86,15 @@ public class ResultsActivity extends AppCompatActivity {
 
                     // filtering through results and adding to list if match
                     if (title.contains(query)) {
-                        bookArrayList.add(book);
+                        bookList.add(book);
                     } else if (author.contains(query)){
-                        bookArrayList.add(book);
+                        bookList.add(book);
                     } else if (ISBN.contains(query)) {
-                        bookArrayList.add(book);
+                        bookList.add(book);
                     }
-
-                    System.out.println(bookArrayList);
                 }
 
-                bookArrayAdapter.notifyDataSetChanged();
-                System.out.println("hello " + bookArrayList);
+                bookAdapter.notifyDataSetChanged();
             }
         });
     }
