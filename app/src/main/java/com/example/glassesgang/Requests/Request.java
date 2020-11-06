@@ -1,8 +1,8 @@
 package com.example.glassesgang.Requests;
 
 public class Request {
-    public final String bookId;
-    public final String email;
+    private String bookId;
+    private String email;
 
     public Request(String bookId, String email) {
         this.bookId = bookId;
