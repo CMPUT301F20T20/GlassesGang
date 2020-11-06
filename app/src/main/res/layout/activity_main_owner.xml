@@ -15,16 +15,9 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-        <TextView
-            android:id="@+id/screenType_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="@string/screen_type" />
-
         <ImageButton
             android:id="@+id/add_button"
-            android:layout_width="wrap_content"
+            android:layout_width="363dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_add" />
@@ -39,16 +32,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_bar">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="265dp"
-            android:layout_height="214dp"
-            android:text="WORKING"
-            android:textColor="#450606"
-            android:textSize="24sp" />
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@id/top_bar"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
