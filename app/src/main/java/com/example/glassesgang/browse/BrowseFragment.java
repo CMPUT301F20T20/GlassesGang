@@ -37,6 +37,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Fragment for browsing books that are available or requested
+ * does not show books that are owned by the user
+ */
 public class BrowseFragment extends Fragment {
     private ListView browseBookList;
     private ArrayAdapter<Book> browseBookAdapter;
@@ -64,34 +68,7 @@ public class BrowseFragment extends Fragment {
         browseBookList = v.findViewById(R.id.browse_list_view);
         browseBookList.setAdapter(browseBookAdapter);
 
-        // get user
-        String filename = getResources().getString(R.string.email_account);
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
-        String user = sharedPref.getString("email", null);
-
-        if (user == null) {
-            Log.e("Email","No user email recorded");
-        }
-
-        final CollectionReference collectionReference = db.collection("books");
-        collectionReference.whereNotEqualTo("owner", user).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                bookDataList.clear();
-
-                for (QueryDocumentSnapshot document: value) {
-                    Map<String, Object> bookData = document.getData();
-
-                    // TODO: ADD COMMENTS
-                    if (bookData.get("status").equals("requested") || bookData.get("status").equals("available")) {
-                        Book book = document.toObject(Book.class);
-                        bookDataList.add(book);
-                    }
-                }
-
-                browseBookAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
-            }
-        });
+        updateListView();
 
         browseBookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,5 +86,48 @@ public class BrowseFragment extends Fragment {
         });
 
         return v;
+    }
+
+    /**
+     * Get current user email they used to log in
+     * @return user's email
+     */
+    private String getUserEmail() {
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
+        String user = sharedPref.getString("email", null);
+
+        if (user == null) {
+            Log.e("Email","No user email recorded");
+        }
+        return user;
+    }
+
+    /**
+     * Updates the List View for the Browse Fragment
+     * fetching book with status requested or available
+     */
+    private void updateListView() {
+        final CollectionReference collectionReference = db.collection("books");
+        String user = getUserEmail();
+        // fetch books
+        collectionReference.whereNotEqualTo("owner", user).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                bookDataList.clear();
+
+                for (QueryDocumentSnapshot document: value) {
+                    Map<String, Object> bookData = document.getData();
+
+                    // show books that have status available or requested
+                    if (bookData.get("status").equals("requested") || bookData.get("status").equals("available")) {
+                        Book book = document.toObject(Book.class);
+                        bookDataList.add(book);
+                    }
+                }
+
+                browseBookAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+            }
+        });
     }
 }

@@ -10,14 +10,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity"></activity>
-        <activity android:name=".OwnerBookProfileActivity"
-            android:parentActivityName=".OwnerHomeActivity"/>
+        <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             tools:replace="android:launchMode"
             android:launchMode="standard" />
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +36,8 @@
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
-        <activity android:name=".AddBookActivity" />
+        <activity android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustNothing"/>   <!--So keyboard doesn't push up the save button-->
         <activity android:name=".EditBookActivity"
             android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
     </application>

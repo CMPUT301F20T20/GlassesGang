@@ -20,6 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
+/**
+ * Activity for editing book in the database
+ * possible fields to update are author, title, isbn
+ */
 public class EditBookActivity extends AppCompatActivity {
     private Button backButton;
     private Button scanButton;
@@ -94,11 +98,14 @@ public class EditBookActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement scanning
+                // TODO: implement scanning
             }
         });
     }
 
+    /**
+     * assigns each attribute to the proper textView.
+     */
     private void findViewsById() {
         backButton = findViewById(R.id.back_button);
         scanButton = findViewById(R.id.scan_button);
@@ -108,7 +115,10 @@ public class EditBookActivity extends AppCompatActivity {
         isbnEditText = findViewById(R.id.isbn_bar);
     }
 
-    // Update the title, author, and isbn fields in the database if user choses to save the changes made.
+    /**
+     * Update the title, author, and isbn fields in the database if user choses to save the changes made.
+     * @param docRef document location in the Firestore data
+     */
     private void updateDatabase(DocumentReference docRef) {
         // put the new info in a hash map
         HashMap<String, Object> newBookInfo = new HashMap<>();

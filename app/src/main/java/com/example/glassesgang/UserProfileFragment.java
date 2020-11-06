@@ -24,6 +24,10 @@ import com.example.glassesgang.R;
 import com.example.glassesgang.BorrowerHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Fragment for showing user's profile
+ * handles switching from owner to borrower, and vice versa
+ */
 public class UserProfileFragment extends Fragment{
     private Spinner usertypeSpinner;
     private Button signOutButton;
@@ -105,6 +109,10 @@ public class UserProfileFragment extends Fragment{
 
     } // on create class ends
 
+    /**
+     * Get current user email they used to log in
+     * @return user's email
+     */
     public String getEmail(){
         Context context = getContext();
         String filename = context.getResources().getString(R.string.email_account);

@@ -15,6 +15,9 @@ import com.example.glassesgang.R;
 
 import java.util.ArrayList;
 
+/**
+ * Book List Adapter for List View
+ */
 public class CustomBookList extends ArrayAdapter<Book> {
     private ArrayList<Book> bookList;
     private Context context;

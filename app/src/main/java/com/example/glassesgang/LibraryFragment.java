@@ -27,6 +27,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * Fragment for showing books that user is currently borrowing,
+ * requesting, or have an accepted request from the owner
+ */
 public class LibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;

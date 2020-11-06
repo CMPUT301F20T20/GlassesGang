@@ -15,6 +15,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Book Profile for Borrower view (no edit book functionality)
+ */
 public class BorrowerBookProfileActivity extends AppCompatActivity {
     private TextView titleTextView;
     private TextView authorTextView;
@@ -64,7 +67,9 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 });
     }
 
-    // assigns each attribute to the proper textView.
+    /**
+     * assigns each attribute to the proper textView.
+     */
     private void findViewsById() {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
@@ -73,7 +78,9 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         ownerTextView = findViewById(R.id.owner_textView);
     }
 
-    // just set each TextViews text with the appropriate text
+    /**
+     * just set each TextViews text with the appropriate text
+     */
     private void setTextViews() {
         titleTextView.setText(title);
         authorTextView.setText(author);

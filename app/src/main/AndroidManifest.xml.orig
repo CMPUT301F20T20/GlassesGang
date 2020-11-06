@@ -11,20 +11,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 <<<<<<< HEAD
-        <activity android:name=".Books.BorrowerBookProfileActivity"
-            android:parentActivityName=".Users.BorrowerHomeActivity"></activity>
-        <activity android:name=".Books.OwnerBookProfileActivity"
-            android:parentActivityName=".Users.OwnerHomeActivity"/>
-=======
-        <activity
-            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-            tools:replace="android:launchMode"
-            android:launchMode="standard" />
         <activity android:name=".BorrowerBookProfileActivity"
             android:parentActivityName=".BorrowerHomeActivity"></activity>
         <activity android:name=".OwnerBookProfileActivity"
             android:parentActivityName=".OwnerHomeActivity"/>
->>>>>>> c4e083e2ba1b4875c40d26c590c1da13b51da2ac
+=======
+        <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
+<<<<<<< HEAD
+=======
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,18 +41,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".GoogleSignInActivity" />
-<<<<<<< HEAD
-        <activity android:name=".Users.BorrowerHomeActivity"
-            android:exported="true"/>
-=======
         <activity android:name=".BorrowerHomeActivity"
             android:exported="true" />
->>>>>>> c4e083e2ba1b4875c40d26c590c1da13b51da2ac
         <activity
-            android:name=".Users.OwnerHomeActivity"
+            android:name=".OwnerHomeActivity"
             android:exported="true" />
-        <activity android:name=".Books.AddBookActivity" />
-        <activity android:name=".Books.EditBookActivity"
+        <activity android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustNothing"/>   <!--So keyboard doesn't push up the save button-->
+        <activity android:name=".EditBookActivity"
             android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
     </application>
 

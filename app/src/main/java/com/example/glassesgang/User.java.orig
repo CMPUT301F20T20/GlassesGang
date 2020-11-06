@@ -3,8 +3,8 @@ package com.example.glassesgang;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
+<<<<<<< HEAD
 import androidx.annotation.NonNull;
 
 import com.example.glassesgang.R;
@@ -20,16 +20,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+public abstract class User {
+    private String TAG;
+=======
 /**
  * TODO: Currently, database stores attributes fields not objects, will implement Object storage for submission 4
  */
 public class User {
     private static String TAG = "User Class";
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
     public String userName;
     public String email;
     private Object notifications;
-    // private FirebaseFirestore db;
-    CollectionReference userDatabase = FirebaseFirestore.getInstance().collection("users");
+
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
@@ -42,22 +45,8 @@ public class User {
     }
     public User(String email){
         this.email = email;
-
-    public void editContactInfo(String currentEmail, String newEmail){
-        userDatabase.document(currentEmail).update("email", newEmail)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "contact information successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating contact information", e);
-                    }
-                });
     }
+
 
     public String getTAG() {
         return TAG;
@@ -75,10 +64,6 @@ public class User {
         return notifications;
     }
 
-
-    public CollectionReference getUserDatabase() {
-        return userDatabase;
-    }
     /*
     public void editUsername(String newUserName) {
         if (userName.equals(this.userName)) {
