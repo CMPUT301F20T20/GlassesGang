@@ -123,8 +123,8 @@ public class GoogleSignInActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("email", user.getEmail());
             editor.apply();
-            // create user - need to fix bug, therefore commented out
-            //createUser();
+            User userobj = new User(user.getEmail());
+            DatabaseManager.createUser(userobj);
             // redirect to user home page
             Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
@@ -133,14 +133,14 @@ public class GoogleSignInActivity extends AppCompatActivity {
             //display error to user
         }
     }
-
+/*
     private void createUser(){
         // creates the user if user not in database
         CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         String filename = getResources().getString(R.string.email_account);
         SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
-        String email = sharedPref.getString("email", "False");
-        if (!email.equals("False")){
+        String email = sharedPref.getString("email", null);
+        if (email != null){
             usersDatabase.document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -167,5 +167,7 @@ public class GoogleSignInActivity extends AppCompatActivity {
         };
 
     }
+
+ */
 
 }

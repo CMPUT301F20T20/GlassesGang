@@ -3,29 +3,15 @@ package com.example.glassesgang;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.Map;
 
 
-public abstract class User {
-    private String TAG;
+
+public class User {
+    private static String TAG = "User Class";
     public String userName;
     public String email;
     private Object notifications;
-    // private FirebaseFirestore db;
-    CollectionReference userDatabase = FirebaseFirestore.getInstance().collection("users");
+
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
@@ -36,22 +22,10 @@ public abstract class User {
     public User(){
         // empty constructor for database access
     }
-
-    public void editContactInfo(String currentEmail, String newEmail){
-        userDatabase.document(currentEmail).update("email", newEmail)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "contact information successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating contact information", e);
-                    }
-                });
+    public User(String email){
+        this.email = email;
     }
+
 
     public String getTAG() {
         return TAG;
@@ -69,10 +43,6 @@ public abstract class User {
         return notifications;
     }
 
-
-    public CollectionReference getUserDatabase() {
-        return userDatabase;
-    }
     /*
     public void editUsername(String newUserName) {
         if (userName.equals(this.userName)) {
