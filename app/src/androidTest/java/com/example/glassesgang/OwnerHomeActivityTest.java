@@ -54,67 +54,6 @@ public class OwnerHomeActivityTest {
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
         assertTrue(solo.waitForText("test message", 1, 2000));
     }
-    /**
-     * Check item taken from the listview
-     */
-    @Test
-    public void checkCiyListItem(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        OwnerHomeActivity activity = (OwnerHomeActivity) solo.getCurrentActivity();
-        final ListView cityList = activity.cityList; // Get the listview
-        String city = (String) cityList.getItemAtPosition(0); // Get item from first position
-        assertEquals("Edmonton", city);
-    }
-
-    /**
-     * Check whether activity correctly switches when item is clicked
-     */
-    @Test
-    public void checkActivitySwitch(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        solo.assertCurrentActivity("Wrong Activity", ShowActivity.class);
-    }
-
-    /**
-     * Check if city name is consistent in new activity
-     */
-    @Test
-    public void checkDisplayName(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        ShowActivity showActivity = (ShowActivity) solo.getCurrentActivity();
-        final String displayNameString = showActivity.displayName.getText().toString();
-        assertEquals("Edmonton", displayNameString);
-    }
-
-    /**
-     * Check back button exists activity, should return to OwnerHomeActivity
-     */
-    @Test
-    public void checkBackButton(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        solo.assertCurrentActivity("Wrong Activity", ShowActivity.class);
-        solo.clickOnButton("BACK");
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-    }
 
     /**
      * Close activity after each test

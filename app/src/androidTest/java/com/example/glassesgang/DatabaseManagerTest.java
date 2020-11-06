@@ -18,12 +18,11 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-@RunWith(AndroidJUnit4.class)
 public class DatabaseManagerTest {
-    private FirebaseFirestore database;
+    public FirebaseFirestore database;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp(){
         // connect to database
         database = FirebaseFirestore.getInstance();
     }
