@@ -1,59 +1,70 @@
 package com.example.glassesgang.Requests;
-
 import java.util.ArrayList;
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.TextView;
+import java.util.Collections;
+import java.util.List;
 
-import androidx.annotation.NonNull;
+/**
+ * This is a class that keeps track of a list of request objects
+ */
+public class RequestList {
+    private List<Request> requests = new ArrayList<>();
 
-import com.example.glassesgang.R;
-
-import javax.annotation.Nullable;
-
-public class RequestList extends ArrayAdapter<Request> {
-
-    private ArrayList<Request> requests;
-    private Context context;
-
-    public RequestList(Context context, ArrayList<Request> requests) {
-        super(context, 0, requests);
-        this.requests = requests;
-        this.context = context;
-    }
-
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.fragment_request, parent, false);
+    /**
+     * This adds a request to the list if the request does not exist
+     * Throws an IllegalAccessException if request already exists in the RequestList
+     *
+     * @param request This is a candidate request to add
+     */
+    public void add(Request request) {
+        if (requests.contains(request)) {
+            throw new IllegalArgumentException("request already exists");
         }
-
-        Request request = requests.get(position);
-
-        TextView requestEmail = view.findViewById(R.id.request_email);
-        requestEmail.setText(request.getEmail());
-
-        Button declineButton = view.findViewById(R.id.request_decline_button);
-        declineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //delete request
-            }
-        });
-        Button acceptButton = view.findViewById(R.id.request_accept_button);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //accept request by
-            }
-        });
-
-        return view;
+        requests.add(request);
     }
 
+    /**
+     * This removes a request to the list if the request does exist
+     * Throws an IllegalAccessException if request does not exists in the RequestList
+     *
+     * @param request This is a candidate request to add
+     */
+    public void delete(Request request) {
+        if (requests.contains(request)) {
+            requests.remove(request);
+        }
+        else throw new IllegalArgumentException("request does not exist in list");
+    }
+
+    /**
+     * This checks whether a given request exists in the RequestList
+     *
+     * @param request This is a candidate request to add
+     * @return  Return true if request exists in RequestList;
+     *          Return false if request does not exist in RequestList
+     */
+    public boolean hasRequest(Request request) {
+        if (requests.contains(request)) return true;
+        return false;
+    }
+
+    /**
+     * This returns the size of the RequestList, denoting how many requests it contains
+     *
+     * @return Return integer of the number of requests within RequestList
+     */
+    public int countRequests() {
+        return requests.size();
+    }
+
+    /**
+     * This returns a sorted list of requests
+     *
+     * @return Return the sorted list
+     */
+    public List<Request> getRequests() {
+        List<Request> list = requests;
+        Collections.sort(list);
+        return list;
+    }
 }
+

@@ -53,7 +53,7 @@ public class RequestHandlingFragment extends Fragment {
         requestList = new ArrayList<>();
         requestList.add(new Request("temp bookId", "temp email"));
 
-        requestAdapter = new RequestList(this.getContext(), requestList);
+        requestAdapter = new RequestListAdapter(this.getContext(), requestList);
         requestListView.setAdapter(requestAdapter);
 
         return view;
