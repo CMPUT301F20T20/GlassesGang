@@ -15,14 +15,14 @@ public class borrowerClassTest {
     @Test
     public void getBorrowerEmailTest(){
         Borrower user = new Borrower("test@gmail.com");
-        assertEquals(user.getEmail(), "test@gmail.com");
+        assertEquals( "test@gmail.com", user.getEmail());
     }
 
     @Test
     public void getBorrowerCatalogue(){
         Borrower user = new Borrower("test@gmail.com");
         ArrayList<String> expectation = new ArrayList<String>();
-        assertEquals(expectation, user.getBorrowerCatalogue());
+        assertEquals(expectation, user.getCatalogue());
     }
 
 
@@ -32,8 +32,8 @@ public class borrowerClassTest {
         ArrayList<String> expectation = new ArrayList<String>();
         expectation.add("BID1");
         expectation.add("BID2");
-        user.setBorrowerCatalogue(expectation);
-        assertEquals(expectation, user.getBorrowerCatalogue());
+        user.setCatalogue(expectation);
+        assertEquals(expectation, user.getCatalogue());
     }
 
 }
