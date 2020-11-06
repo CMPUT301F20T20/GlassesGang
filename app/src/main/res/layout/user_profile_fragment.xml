@@ -76,6 +76,7 @@
         android:fontFamily="@font/source_sans_pro_semibold"
         android:text="@string/sign_out"
         android:textColor="@color/borrowerPrimary"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

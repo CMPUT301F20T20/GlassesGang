@@ -7,14 +7,9 @@
     tools:context=".ResultsActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="RESULTS" />
-
     <ListView
         android:id="@+id/result_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="#00FFFFFF" />
 </LinearLayout>
