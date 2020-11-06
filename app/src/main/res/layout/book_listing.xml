@@ -65,6 +65,7 @@
         android:fontFamily="@font/source_sans_pro_bold"
         android:text="Book Title"
         android:textSize="18sp"
+        android:maxLength="20"
         app:layout_constraintBottom_toTopOf="@+id/book_author"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
