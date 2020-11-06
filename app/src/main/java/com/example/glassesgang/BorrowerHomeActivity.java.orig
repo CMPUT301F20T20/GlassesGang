@@ -13,7 +13,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 
+<<<<<<< HEAD
 import com.example.glassesgang.Notification.NotificationFragment;
+import com.example.glassesgang.browse.BrowseFragment;
+=======
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;

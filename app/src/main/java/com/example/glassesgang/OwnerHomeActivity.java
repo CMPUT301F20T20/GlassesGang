@@ -3,6 +3,9 @@ package com.example.glassesgang;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +17,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Home Activity for Owner
+ */
 public class OwnerHomeActivity extends AppCompatActivity {
+    private ImageButton addButton;
 
     private BottomNavigationView bottomNavigation;
 
@@ -25,9 +32,20 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
 
         //setup bottom navigation
+        addButton = findViewById(R.id.add_button);
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
         bottomNavigation.setSelectedItemId(R.id.nav_books);
+
+
+        // go to add screen once user presses the add button
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addBookIntent = new Intent(OwnerHomeActivity.this, AddBookActivity.class);
+                startActivity(addBookIntent);
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -37,14 +55,17 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
                 switch(item.getItemId()) {
                     case R.id.nav_books:
+                        addButton.setVisibility(View.VISIBLE);
                         selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:
+                        addButton.setVisibility(View.GONE);
                         //implement fragment:
                         selectedFragment = new NotificationFragment();
                         break;
                     case R.id.nav_user:
                         // send current user to position 0 (Owner) to fragment
+                        addButton.setVisibility(View.GONE);
                         Bundle bundle = new Bundle();
                         bundle.putInt("currentUser", 0);
                         selectedFragment = new UserProfileFragment();

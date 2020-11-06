@@ -3,8 +3,11 @@ package com.example.glassesgang;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,7 +17,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class OwnerBookProfileActivity extends AppCompatActivity {
+/**
+ * Book profile for Owner View (edit book functionality)
+ */
+public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
@@ -29,13 +35,23 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
     private String bid;
     private String borrower;
     private Book book;
+    private String owner;
     private  FirebaseFirestore db;
-    private static final String TAG = "OwnerBookProfileActivity";
+    private static final String TAG = "OwnerBkProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_book_profile);
+
+        // get email of owner
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        owner = sharedPref.getString("email", "default value");
+
+        if (owner == null) {
+            Log.e("Email","No user email recorded");
+        }
 
         findViewsById();
         
@@ -63,7 +79,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement delete feature
+                new DeleteBookDialogFragment().show(getSupportFragmentManager(), "DELETE_BOOK");
             }
         });
 
@@ -78,7 +94,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
 
     }
 
-    // assigns each attribute to the proper textView.
+    /**
+     * assigns each attribute to the proper textView.
+     */
     private void findViewsById() {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
@@ -89,7 +107,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
         editButton = findViewById(R.id.edit_button);
     }
 
-    // just set each TextViews text with the appropriate text
+    /**
+     * just set each TextViews text with the appropriate text
+     */
     private void updateTextViews() {
         titleTextView.setText(title);
         authorTextView.setText(author);
@@ -127,5 +147,15 @@ public class OwnerBookProfileActivity extends AppCompatActivity {
                 });
             }
         }
+    }
+
+    /**
+     * When user confirms the deletion of a book, this method is called.
+     * It deletes that book from the database.
+     */
+    @Override
+    public void onConfirmPressed() {
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.deleteBook(book);
     }
 }
