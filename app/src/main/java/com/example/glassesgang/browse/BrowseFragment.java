@@ -6,22 +6,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.BorrowerBookProfileActivity;
 import com.example.glassesgang.CustomBookList;
+import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -79,12 +84,27 @@ public class BrowseFragment extends Fragment {
 
                     // TODO: ADD COMMENTS
                     if (bookData.get("status").equals("requested") || bookData.get("status").equals("available")) {
-                        Book book = new Book((String)document.get("title"), (String)bookData.get("author"), (String)bookData.get("isbn"), (String)document.getId(), (String)document.get("owner"));
+                        Book book = document.toObject(Book.class);
                         bookDataList.add(book);
                     }
                 }
 
                 browseBookAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+            }
+        });
+
+        browseBookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // get the book id of the book that was pressed
+                Book book = (Book) adapterView.getItemAtPosition(i);
+                String bid = book.getBID();
+
+                // open up the appropriate book profile
+                Intent bookProfileIntent;
+                bookProfileIntent = new Intent(getActivity(), BorrowerBookProfileActivity.class);
+                bookProfileIntent.putExtra("bid", bid);
+                startActivity(bookProfileIntent);
             }
         });
 
