@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.health.SystemHealthManager;
 import android.view.MenuItem;
@@ -25,21 +26,11 @@ public class BorrowerHomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private static final String TAG = "HomeActivity";
-    private ArrayAdapter<Book> bookArrayAdapter;
-    private ArrayList<Book> bookArrayList;
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_borrower);
-
-        // connect to the database
-        db = FirebaseFirestore.getInstance();
-
-        // setting up the array adapter
-        bookArrayList = new ArrayList<Book>();
-        //bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, userType);
 
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -50,7 +41,8 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                firebaseSearch(query.toLowerCase());
+                //firebaseSearch(query.toLowerCase());
+                getResult(query.toLowerCase());
                 return true;
             }
             @Override
@@ -92,40 +84,10 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         }
     };
 
-    private void firebaseSearch(final String query) {
-        System.out.println(query + " submit");
-        CollectionReference booksRef = db.collection("books");
-
-        booksRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                bookArrayList.clear();
-
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    // turning doc into book object
-                    Book book = doc.toObject(Book.class);
-                    book.setBID(doc.getId());
-
-                    // grabbing book description
-                    String title = book.getTitle().toLowerCase();
-                    String author = book.getAuthor().toLowerCase();
-                    String ISBN = book.getISBN().toLowerCase();
-
-                    // filtering through results and adding to list if match
-                    if (title.contains(query)) {
-                        bookArrayList.add(book);
-                    } else if (author.contains(query)){
-                        bookArrayList.add(book);
-                    } else if (ISBN.contains(query)) {
-                        bookArrayList.add(book);
-                    }
-
-                    System.out.println(bookArrayList);
-                }
-
-                System.out.println("hello " + bookArrayList);
-            }
-        });
-    }
+    private void getResult(final String query) {
+        Intent resultIntent = new Intent(this, ResultsActivity.class);
+        resultIntent.putExtra("query", query);
+        startActivity(resultIntent);
+    };
 
 }

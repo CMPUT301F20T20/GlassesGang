@@ -10,9 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ResultsActivity"></activity>
         <activity
             android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity"/>
+            android:parentActivityName=".BorrowerHomeActivity" />
         <activity
             android:name=".OwnerBookProfileActivity"
             android:parentActivityName=".OwnerHomeActivity" />
@@ -26,7 +27,7 @@
         <activity android:name=".GoogleSignInActivity" />
         <activity
             android:name=".BorrowerHomeActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
