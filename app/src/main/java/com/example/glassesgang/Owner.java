@@ -27,5 +27,8 @@ public class Owner extends User {
         return catalogue;
     }
 
+    public void setCatalogue(ArrayList<String> catalogue) {
+        this.catalogue = catalogue;
+    }
 }
 
