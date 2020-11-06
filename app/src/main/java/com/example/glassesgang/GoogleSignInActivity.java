@@ -28,6 +28,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Activity that handles the Google Sign In
+ * either prompts user to enter their email
+ * or choose an email they already logged in with
+ */
 public class GoogleSignInActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;

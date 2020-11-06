@@ -11,6 +11,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * DialogFragment for deleting book
+ */
 public class DeleteBookDialogFragment extends DialogFragment {
     private DeleteBookDialogListener listener;
 

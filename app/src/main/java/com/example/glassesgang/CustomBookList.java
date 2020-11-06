@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * Book List Adapter for List View
+ */
 public class CustomBookList extends ArrayAdapter<Book> {
     private ArrayList<Book> bookList;
     private Context context;

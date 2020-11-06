@@ -11,13 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             tools:replace="android:launchMode"
             android:launchMode="standard" />
-        <activity android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity"></activity>
-        <activity android:name=".OwnerBookProfileActivity"
-            android:parentActivityName=".OwnerHomeActivity"/>
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

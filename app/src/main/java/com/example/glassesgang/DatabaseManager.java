@@ -1,7 +1,5 @@
 package com.example.glassesgang;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -31,6 +29,7 @@ public class DatabaseManager {
     public DatabaseManager() {
         db = FirebaseFirestore.getInstance();
     }
+
     /**
      * adds a book to the owner catalogue of given user
      * @param newBook a Book object. It is the book to be added
