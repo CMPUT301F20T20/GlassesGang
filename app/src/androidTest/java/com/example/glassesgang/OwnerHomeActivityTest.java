@@ -44,82 +44,71 @@ public class OwnerHomeActivityTest {
     public void start() throws Exception{
         Activity activity = rule.getActivity();
     }
-    /**
-     * Add a city to the listview and check the city name using assertTrue
-     * Clear all the cities from the listview and check again with assertFalse
-     */
+
+
+    // check if pressing the add button starts the add book activity
     @Test
-    public void checkList(){
-//Asserts that the current activity is the OwnerHomeActivity. Otherwise, show “Wrong Activity”
+    public void checkAddButton(){
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        assertTrue(solo.waitForText("test message", 1, 2000));
-    }
-    /**
-     * Check item taken from the listview
-     */
-    @Test
-    public void checkCiyListItem(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        OwnerHomeActivity activity = (OwnerHomeActivity) solo.getCurrentActivity();
-        final ListView cityList = activity.cityList; // Get the listview
-        String city = (String) cityList.getItemAtPosition(0); // Get item from first position
-        assertEquals("Edmonton", city);
+        solo.clickOnImageButton(0);
+        solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
     }
 
-    /**
-     * Check whether activity correctly switches when item is clicked
-     */
+    // check if pressing the back button returns to the owner home activity
     @Test
-    public void checkActivitySwitch(){
+    public void checkBackButton() {
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        solo.assertCurrentActivity("Wrong Activity", ShowActivity.class);
-    }
-
-    /**
-     * Check if city name is consistent in new activity
-     */
-    @Test
-    public void checkDisplayName(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        ShowActivity showActivity = (ShowActivity) solo.getCurrentActivity();
-        final String displayNameString = showActivity.displayName.getText().toString();
-        assertEquals("Edmonton", displayNameString);
-    }
-
-    /**
-     * Check back button exists activity, should return to OwnerHomeActivity
-     */
-    @Test
-    public void checkBackButton(){
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnButton("ADD CITY");
-        solo.enterText((EditText) solo.getView(R.id.editText_name), "Edmonton");
-        solo.clickOnButton("CONFIRM");
-        solo.waitForText("Edmonton", 1, 2000);
-        solo.clickInList(0);
-        solo.waitForActivity("Can't Switch Activity", 2000);
-        solo.assertCurrentActivity("Wrong Activity", ShowActivity.class);
+        solo.clickOnImageButton(0);
+        solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
         solo.clickOnButton("BACK");
-        solo.waitForActivity("Can't Switch Activity", 2000);
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
     }
 
-    /**
-     * Close activity after each test
-     * @throws Exception
-     */
+    // check if pressing the book icon opens up the library
+    @Test
+    public void checkLibraryFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("Books");
+        // must be empty for now since no user is logged in, if there are any books, the test will fail
+        assertFalse(solo.waitForText("accepted", 1, 2000));
+        assertFalse(solo.waitForText("available", 1, 2000));
+        assertFalse(solo.waitForText("requested", 1, 2000));
+        assertFalse(solo.waitForText("borrowed", 1, 2000));
+    }
+
+    // check if pressing the notification icon shows notification
+    @Test
+    public void checkNotificationFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("Notifications");
+        // change this when notifications is implemented
+        assertTrue(solo.waitForText("test message", 1, 3000));
+    }
+
+    // check if pressing the profile icon shows profile
+    // test in the future
+    @Test
+    public void checkProfileFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("User");
+        assertTrue(solo.waitForText("Email:", 1, 3000));
+        assertTrue(solo.isSpinnerTextSelected("Owner"));
+    }
+
+    // check if switching from borrower to owner works
+    @Test
+    public void checkSwitch() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("User");
+        assertTrue(solo.waitForText("Email:", 1, 3000));
+        solo.pressSpinnerItem(0, 1);
+        solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
+    }
+
+//    /**
+//     * Close activity after each test
+//     * @throws Exception
+//     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
