@@ -40,8 +40,9 @@ public class User {
     public User(){
         // empty constructor for database access
     }
-    public User(String email){
+    public User(String email) {
         this.email = email;
+    }
 
     public void editContactInfo(String currentEmail, String newEmail){
         userDatabase.document(currentEmail).update("email", newEmail)
