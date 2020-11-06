@@ -26,6 +26,7 @@
         android:layout_height="56dp"
         android:background="@color/borrowerSecondary"
         app:itemTextColor="@color/borrowerPrimary"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

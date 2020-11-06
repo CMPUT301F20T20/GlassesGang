@@ -104,7 +104,6 @@ public class OwnerHomeActivityTest {
         solo.pressSpinnerItem(0, 1);
         solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
     }
-
 //    /**
 //     * Close activity after each test
 //     * @throws Exception
