@@ -44,21 +44,70 @@ public class OwnerHomeActivityTest {
     public void start() throws Exception{
         Activity activity = rule.getActivity();
     }
-    /**
-     * Add a city to the listview and check the city name using assertTrue
-     * Clear all the cities from the listview and check again with assertFalse
-     */
+
+
+    // check if pressing the add button starts the add book activity
     @Test
-    public void checkList(){
-//Asserts that the current activity is the OwnerHomeActivity. Otherwise, show “Wrong Activity”
+    public void checkAddButton(){
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        assertTrue(solo.waitForText("test message", 1, 2000));
+        solo.clickOnImageButton(0);
+        solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
     }
 
-    /**
-     * Close activity after each test
-     * @throws Exception
-     */
+    // check if pressing the back button returns to the owner home activity
+    @Test
+    public void checkBackButton() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnImageButton(0);
+        solo.assertCurrentActivity("Wrong Activity", AddBookActivity.class);
+        solo.clickOnButton("BACK");
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+    }
+
+    // check if pressing the book icon opens up the library
+    @Test
+    public void checkLibraryFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("Books");
+        // must be empty for now since no user is logged in, if there are any books, the test will fail
+        assertFalse(solo.waitForText("accepted", 1, 2000));
+        assertFalse(solo.waitForText("available", 1, 2000));
+        assertFalse(solo.waitForText("requested", 1, 2000));
+        assertFalse(solo.waitForText("borrowed", 1, 2000));
+    }
+
+    // check if pressing the notification icon shows notification
+    @Test
+    public void checkNotificationFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("Notifications");
+        // change this when notifications is implemented
+        assertTrue(solo.waitForText("test message", 1, 3000));
+    }
+
+    // check if pressing the profile icon shows profile
+    // test in the future
+    @Test
+    public void checkProfileFragment() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("User");
+        assertTrue(solo.waitForText("Email:", 1, 3000));
+        assertTrue(solo.isSpinnerTextSelected("Owner"));
+    }
+
+    // check if switching from borrower to owner works
+    @Test
+    public void checkSwitch() {
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnText("User");
+        assertTrue(solo.waitForText("Email:", 1, 3000));
+        solo.pressSpinnerItem(0, 1);
+        solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
+    }
+//    /**
+//     * Close activity after each test
+//     * @throws Exception
+//     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

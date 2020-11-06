@@ -72,7 +72,7 @@ public class LibraryFragment extends Fragment {
             Log.e("Email","No user email recorded");
         }
 
-        Log.d("user-email", user);
+//        Log.d("user-email", user);
 
         // connect to the database
         db = FirebaseFirestore.getInstance();
