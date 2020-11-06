@@ -1,4 +1,4 @@
-package com.example.glassesgang.Books;
+package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.glassesgang.Books.Book;
+import com.example.glassesgang.Book;
 import com.example.glassesgang.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

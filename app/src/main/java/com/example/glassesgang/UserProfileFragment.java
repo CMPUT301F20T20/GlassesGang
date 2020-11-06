@@ -1,4 +1,4 @@
-package com.example.glassesgang.Users;
+package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.glassesgang.GoogleSignInActivity;
+import com.example.glassesgang.OwnerHomeActivity;
 import com.example.glassesgang.R;
-import com.example.glassesgang.Users.BorrowerHomeActivity;
-import com.example.glassesgang.Users.OwnerHomeActivity;
+import com.example.glassesgang.BorrowerHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class UserProfileFragment extends Fragment{

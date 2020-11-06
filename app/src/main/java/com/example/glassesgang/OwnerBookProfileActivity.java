@@ -1,4 +1,4 @@
-package com.example.glassesgang.Books;
+package com.example.glassesgang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.glassesgang.R;
 import com.example.glassesgang.Requests.Request;
 import com.example.glassesgang.Requests.RequestHandlingFragment;
 import com.google.android.gms.tasks.OnSuccessListener;

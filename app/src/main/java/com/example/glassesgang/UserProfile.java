@@ -1,10 +1,11 @@
-package com.example.glassesgang.Users;
+package com.example.glassesgang;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.glassesgang.R;
+import com.example.glassesgang.User;
 
 public class UserProfile extends AppCompatActivity {
     public User user;

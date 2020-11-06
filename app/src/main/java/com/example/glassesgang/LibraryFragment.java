@@ -16,13 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.glassesgang.Books.Book;
-import com.example.glassesgang.Books.BorrowerBookProfileActivity;
-import com.example.glassesgang.Books.CustomBookList;
-import com.example.glassesgang.Books.OwnerBookProfileActivity;
-import com.example.glassesgang.Users.BorrowerHomeActivity;
-import com.example.glassesgang.Users.OwnerHomeActivity;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

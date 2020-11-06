@@ -1,4 +1,4 @@
-package com.example.glassesgang.Books;
+package com.example.glassesgang;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.glassesgang.Books.Book;
+import com.example.glassesgang.Book;
 import com.example.glassesgang.R;
 
 import java.util.ArrayList;

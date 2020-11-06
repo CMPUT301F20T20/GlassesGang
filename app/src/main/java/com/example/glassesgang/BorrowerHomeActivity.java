@@ -1,4 +1,4 @@
-package com.example.glassesgang.Users;
+package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,13 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-<<<<<<< HEAD:app/src/main/java/com/example/glassesgang/Users/BorrowerHomeActivity.java
-import com.example.glassesgang.BrowseFragment;
-import com.example.glassesgang.LibraryFragment;
-import com.example.glassesgang.R;
-=======
 import com.example.glassesgang.browse.BrowseFragment;
->>>>>>> c4e083e2ba1b4875c40d26c590c1da13b51da2ac:app/src/main/java/com/example/glassesgang/BorrowerHomeActivity.java
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BorrowerHomeActivity extends AppCompatActivity {
@@ -57,7 +51,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                     selectedFragment.setArguments(bundle);
                     break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.owner_fragment_container, selectedFragment).commit(); //displays fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit(); //displays fragment
 
             return true; //clicked item marked as selected. not selected = false
         }

@@ -1,4 +1,4 @@
-package com.example.glassesgang.Users;
+package com.example.glassesgang;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,8 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.glassesgang.LibraryFragment;
-import com.example.glassesgang.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class OwnerHomeActivity extends AppCompatActivity {
@@ -22,7 +20,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
         //first time launch we want to have library open
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.owner_fragment_container, new LibraryFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LibraryFragment()).commit();
         }
 
         //setup bottom navigation
@@ -51,7 +49,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
                         selectedFragment.setArguments(bundle);
                         break;
             }
-            getSupportFragmentManager().beginTransaction().replace(R.id.owner_fragment_container, selectedFragment).commit(); //displays fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit(); //displays fragment
 
             return true; //clicked item marked as selected. not selected = false
         }
