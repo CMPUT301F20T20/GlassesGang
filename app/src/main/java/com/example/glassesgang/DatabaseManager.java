@@ -1,14 +1,24 @@
 package com.example.glassesgang;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Object for handling transactions in the database
@@ -85,10 +95,7 @@ public class DatabaseManager {
         // check request list as well once requesting is implemented
 
 
-
-
     }
-
 
     private void addBookInOwnerCatalogue(String bid, String user) {
         db.collection("users").document(user)
@@ -103,6 +110,62 @@ public class DatabaseManager {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+    // User database interactions begin
+    public static void createUser(final User user){
+        final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
+        usersDatabase.document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "User already exist: " + document.getData());
+                    } else {
+                        Map<String, ArrayList<String>> userCatalogue = new HashMap<>();
+                        userCatalogue.put("ownerCatalogue", new ArrayList<String>());
+                        userCatalogue.put("borrowerCatalogue", new ArrayList<String>());
+                        //userCatalogue.put("email", new String());
+                        // adding the user
+                        usersDatabase.document(user.getEmail())
+                                .set(userCatalogue)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "User successfully added to database");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding user to database", e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+
+    public void editContactInfo(String currentEmail, String newEmail){
+        final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
+        usersDatabase.document(currentEmail).update("email", newEmail)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "contact information successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating contact information", e);
                     }
                 });
     }
