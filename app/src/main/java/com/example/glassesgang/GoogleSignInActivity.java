@@ -3,7 +3,10 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,26 +17,36 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * Activity that handles the Google Sign In
+ * either prompts user to enter their email
+ * or choose an email they already logged in with
+ */
 public class GoogleSignInActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private String TAG = "GoogleSignInActivity";
     private int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
-    private int DarkGreyBackground = 282828;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        getWindow().getDecorView().setBackgroundColor(DarkGreyBackground);
+        int darkGreyBackground = 282828;
+        getWindow().getDecorView().setBackgroundColor(darkGreyBackground);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -109,13 +122,57 @@ public class GoogleSignInActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         // successful sign in
         if (user != null) {
+            // save email to sharedPreferences
+            String filename = getResources().getString(R.string.email_account);
+            SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("email", user.getEmail());
+            editor.apply();
+            User userobj = new User(user.getEmail());
+            DatabaseManager.createUser(userobj);
             // redirect to user home page
-            Intent homeIntent = new Intent(this, HomeActivity.class);
+            Intent homeIntent = new Intent(this, OwnerHomeActivity.class);
             startActivity(homeIntent);
         } else {
             System.out.println("Error Signing In");
             //display error to user
         }
     }
+/*
+    private void createUser(){
+        // creates the user if user not in database
+        CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
+        String email = sharedPref.getString("email", null);
+        if (email != null){
+            usersDatabase.document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Owner owner = (Owner) document.get("owner");
+                            Borrower borrower = (Borrower) document.get("borrower");
+                            //User user = document.toObject(User.class);
+                            Log.d(TAG, "User is: " + document.getData());
+                        } else {
+                            Owner owner = new Owner(getApplicationContext());
+                            Borrower borrower = new Borrower(getApplicationContext());
+                            Log.d(TAG, "creating user");
+                        }
+                    } else {
+                        Log.d(TAG, "Error get failed with ", task.getException());
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+
+
+        };
+
+    }
+
+ */
 
 }

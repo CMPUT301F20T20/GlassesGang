@@ -17,19 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ResultsActivity"
-            android:parentActivityName=".BorrowerHomeActivity" />
-        <activity
-            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-            tools:replace="android:launchMode"
-            android:launchMode="standard" />
-        <activity
-            android:name=".BorrowerBookProfileActivity"
-            android:parentActivityName=".BorrowerHomeActivity" />
-        <activity
-            android:name=".OwnerBookProfileActivity"
-            android:parentActivityName=".OwnerHomeActivity" />
+<<<<<<< HEAD
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -50,6 +38,21 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
+=======
+        <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
+>>>>>>> cf5ef89812d71bcd35f87d6a9a3d0f9152806af0
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,6 +60,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+        <activity android:name=".GoogleSignInActivity" />
+        <activity android:name=".HomeActivity" />
+=======
         <activity android:name=".GoogleSignInActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".BorrowerHomeActivity"
@@ -71,6 +78,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />  <!--So keyboard doesn't push up the save button-->
+>>>>>>> cf5ef89812d71bcd35f87d6a9a3d0f9152806af0
     </application>
 
 </manifest>

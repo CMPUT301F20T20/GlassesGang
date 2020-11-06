@@ -6,4 +6,15 @@
     <color name="ownerDarkGrey">#282828</color>
     <color name="ownerLightGrey">#747474</color>
     <color name="colorDefault">#C8C8C8</color>
+    <color name="ownerPrimary">#282828</color>
+    <color name="ownerSecondary">#747474</color>
+    <color name="ownerText">#FFFFFF</color>
+    <color name="borrowerPrimary">#FFFFFF</color>
+    <color name="borrowerSecondary">#D6D6D6</color>
+    <color name="borrowerText">#000000</color>
+    <color name="orange">#FF7A00</color>
+    <color name="red">#E15454</color>
+    <color name="green">#03AA00</color>
+    <color name="blue">#0094FF</color>
+    <color name="yellow">#FFC700</color>
 </resources>
