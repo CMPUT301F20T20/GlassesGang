@@ -1,26 +1,23 @@
 package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.health.SystemHealthManager;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -28,6 +25,8 @@ public class BorrowerHomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
     private static final String TAG = "HomeActivity";
+    private ArrayAdapter<Book> bookArrayAdapter;
+    private ArrayList<Book> bookArrayList;
     private FirebaseFirestore db;
 
     @Override
@@ -35,10 +34,18 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_borrower);
 
+        // connect to the database
+        db = FirebaseFirestore.getInstance();
+
+        // setting up the array adapter
+        bookArrayList = new ArrayList<Book>();
+        //bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, userType);
+
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
+        // setting up search view
         SearchView searchView = (SearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -46,30 +53,12 @@ public class BorrowerHomeActivity extends AppCompatActivity {
                 firebaseSearch(query.toLowerCase());
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 //System.out.println(newText);
                 return true;
             }
-
-            private void firebaseSearch(String query) {
-                System.out.println(query + " submit");
-                db = FirebaseFirestore.getInstance();
-                CollectionReference bookRef = db.collection("books");
-            }
-
         });
-
-        // added this, to test BorrowerBookProfileActivity -Cholete
-        // automatically launches BorrowerBookProfileActivity when user goes to BorrowerHomeActivity.
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef = db.collection("books").document("book2");   // sample document reference
-//        Intent bookProfileIntent = new Intent(BorrowerHomeActivity.this, BorrowerBookProfileActivity.class);
-//        // OwnerBookProfileActivity is passed a path to the  book document
-//        bookProfileIntent.putExtra("bid", "book2");
-//        startActivity(bookProfileIntent);
-
 
     }
 
@@ -102,4 +91,41 @@ public class BorrowerHomeActivity extends AppCompatActivity {
             return true; //clicked item marked as selected. not selected = false
         }
     };
+
+    private void firebaseSearch(final String query) {
+        System.out.println(query + " submit");
+        CollectionReference booksRef = db.collection("books");
+
+        booksRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                bookArrayList.clear();
+
+                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    // turning doc into book object
+                    Book book = doc.toObject(Book.class);
+                    book.setBID(doc.getId());
+
+                    // grabbing book description
+                    String title = book.getTitle().toLowerCase();
+                    String author = book.getAuthor().toLowerCase();
+                    String ISBN = book.getISBN().toLowerCase();
+
+                    // filtering through results and adding to list if match
+                    if (title.contains(query)) {
+                        bookArrayList.add(book);
+                    } else if (author.contains(query)){
+                        bookArrayList.add(book);
+                    } else if (ISBN.contains(query)) {
+                        bookArrayList.add(book);
+                    }
+
+                    System.out.println(bookArrayList);
+                }
+
+                System.out.println("hello " + bookArrayList);
+            }
+        });
+    }
+
 }
