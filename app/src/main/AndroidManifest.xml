@@ -11,7 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ResultsActivity"
-            android:parentActivityName=".BorrowerHomeActivity"></activity>
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
         <activity
             android:name=".BorrowerBookProfileActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
@@ -26,8 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GoogleSignInActivity" />
-        <activity
-            android:name=".BorrowerHomeActivity"
+        <activity android:name=".BorrowerHomeActivity"
             android:exported="true" />
         <activity
             android:name=".OwnerHomeActivity"

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.health.SystemHealthManager;
+
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import com.example.glassesgang.browse.BrowseFragment;
 
 public class BorrowerHomeActivity extends AppCompatActivity {
 
@@ -52,6 +54,7 @@ public class BorrowerHomeActivity extends AppCompatActivity {
             }
         });
 
+        bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
