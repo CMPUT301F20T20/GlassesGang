@@ -1,14 +1,28 @@
 package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.os.health.SystemHealthManager;
 
-import com.example.glassesgang.browse.BrowseFragment;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.SearchView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import com.example.glassesgang.browse.BrowseFragment;
 
 public class BorrowerHomeActivity extends AppCompatActivity {
 
@@ -23,6 +37,22 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         //setup bottom navigation
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
+
+        // setting up search view
+        SearchView searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //firebaseSearch(query.toLowerCase());
+                getResult(query.toLowerCase());
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //System.out.println(newText);
+                return true;
+            }
+        });
 
         bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
@@ -56,4 +86,11 @@ public class BorrowerHomeActivity extends AppCompatActivity {
             return true; //clicked item marked as selected. not selected = false
         }
     };
+
+    private void getResult(final String query) {
+        Intent resultIntent = new Intent(this, ResultsActivity.class);
+        resultIntent.putExtra("query", query);
+        startActivity(resultIntent);
+    };
+
 }
