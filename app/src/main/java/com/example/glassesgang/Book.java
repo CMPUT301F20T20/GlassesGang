@@ -28,7 +28,17 @@ public class Book implements Serializable {
         this.ISBN = ISBN;
         this.BID = BID;
         this.owner = owner;
+        this.borrower = "";
         this.status = "available";
+    }
+
+    public Book(String title, String author, String ISBN, String owner) {
+        this.title = title;
+        this.author = author;
+        this.ISBN = ISBN;
+        this.owner = owner;
+        this.status = "available";
+        this.borrower = "";
     }
 
     // Getters and Setters for the Class Objects
