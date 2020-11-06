@@ -33,6 +33,7 @@ public class DatabaseManagerTest {
 
     }
 
+    /*
     @Test
     public void addBookTest() {
         Book newbook = new Book("Percy Jackon", "Rick Riodan", "103982", "Test1","chelsea4@ualberta.ca");
@@ -41,6 +42,8 @@ public class DatabaseManagerTest {
         DatabaseManager.addBook(newbook, "chelsea4@ualberta.ca");
         database.collection("books").document("Test1").get().getResult();
     }
+
+     */
 
 
 }
