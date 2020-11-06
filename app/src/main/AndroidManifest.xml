@@ -40,7 +40,10 @@
         <activity android:name=".AddBookActivity"
             android:windowSoftInputMode="adjustNothing"/>   <!--So keyboard doesn't push up the save button-->
         <activity android:name=".EditBookActivity"
-            android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
+            android:windowSoftInputMode="adjustNothing"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />  <!--So keyboard doesn't push up the save button-->
     </application>
 
 </manifest>
