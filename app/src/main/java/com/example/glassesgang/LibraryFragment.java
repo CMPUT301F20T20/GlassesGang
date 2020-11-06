@@ -42,7 +42,6 @@ public class LibraryFragment extends Fragment {
     private String userType; // "o" = owner ; "b" = borrower
     final String TAG = "LibraryFragment";
     private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
 
 
     @Override
@@ -98,7 +97,7 @@ public class LibraryFragment extends Fragment {
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // setting up the bookList view
-        bookListView = (ListView) view.findViewById(R.id.library_list_view);
+        bookListView = view.findViewById(R.id.library_list_view);
         bookListView.setAdapter(bookArrayAdapter);
 
         DocumentReference userRef = db.collection("users").document(user);   // get user reference from db

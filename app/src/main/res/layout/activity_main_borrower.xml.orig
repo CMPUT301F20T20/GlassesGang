@@ -8,22 +8,16 @@
     tools:context=".MainActivity">
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/owner_fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="265dp"
-            android:layout_height="214dp"
-            android:text="WORKING"
-            android:textColor="#450606"
-            android:textSize="24sp" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,9 +25,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_container"
-        app:menu="@menu/owner_bottom_navigation"
+        app:layout_constraintTop_toBottomOf="@id/owner_fragment_container"
+        app:menu="@menu/borrower_bottom_navigation"
         app:itemTextColor="@color/ownerDarkGrey"
         android:background="?android:attr/windowBackground" />
 
+<<<<<<< HEAD
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_weight="1"
+        android:text="Search"
+        app:layout_constraintBottom_toTopOf="@+id/owner_fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/screenType_textview" />
+
+=======
+>>>>>>> c4e083e2ba1b4875c40d26c590c1da13b51da2ac
 </androidx.constraintlayout.widget.ConstraintLayout>
