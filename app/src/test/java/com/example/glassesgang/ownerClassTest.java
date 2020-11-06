@@ -15,14 +15,14 @@ public class ownerClassTest {
     @Test
     public void getOwnerEmailTest(){
         Owner user = new Owner("test@gmail.com");
-        assertEquals(user.getEmail(), "test@gmail.com");
+        assertEquals("test@gmail.com", user.getEmail());
     }
 
     @Test
     public void getOwnerCatalogue(){
         Owner user = new Owner("test@gmail.com");
         ArrayList<String> expectation = new ArrayList<String>();
-        assertEquals(expectation, user.getOwnerCatalogue());
+        assertEquals(expectation, user.getCatalogue() );
     }
 
 
@@ -32,8 +32,8 @@ public class ownerClassTest {
         ArrayList<String> expectation = new ArrayList<String>();
         expectation.add("BID1");
         expectation.add("BID2");
-        user.setOwnerCatalogue(expectation);
-        assertEquals(expectation, user.getOwnerCatalogue());
+        user.setCatalogue(expectation);
+        assertEquals(expectation, user.getCatalogue());
     }
 
 }

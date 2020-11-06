@@ -21,7 +21,7 @@ public class Owner extends User {
     }
 
     public Owner(String email) {
-        super();
+        super(email);
         this.catalogue = new ArrayList<>();
     }
 
@@ -32,5 +32,6 @@ public class Owner extends User {
     public void setCatalogue(ArrayList<String> catalogue) {
         this.catalogue = catalogue;
     }
+
 }
 
