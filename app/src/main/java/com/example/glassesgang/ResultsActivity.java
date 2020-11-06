@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +35,7 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         resultList = findViewById(R.id.result_list_view);
 
         // connect to the database
@@ -43,11 +46,13 @@ public class ResultsActivity extends AppCompatActivity {
         bookAdapter = new CustomBookList(getBaseContext(), bookList, "b");
         resultList.setAdapter(bookAdapter);
 
+        // getting query string
         Intent intent = getIntent();
         String query = intent.getExtras().getString("query");
 
         firebaseSearch(query);
 
+        // making each item clickable and open book profile
         resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -93,9 +98,23 @@ public class ResultsActivity extends AppCompatActivity {
                         bookList.add(book);
                     }
                 }
-
                 bookAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 }
