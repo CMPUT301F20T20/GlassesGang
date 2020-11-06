@@ -1,6 +1,5 @@
 package com.example.glassesgang;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -11,12 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-
+/**
+ * Activity to add a book in the database
+ * title, author, isbn are fields required to add book
+ */
 public class AddBookActivity extends AppCompatActivity {
     private Button backButton;
     private Button scanButton;
@@ -25,8 +22,6 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText authorEditText;
     private EditText isbnEditText;
     private String user;
-    private static final String TAG = "AddBookActivity";
-    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +59,7 @@ public class AddBookActivity extends AppCompatActivity {
                     Book newBook = new Book(title, author, isbn, user);
                     DatabaseManager database = new DatabaseManager();
                     database.addBook(newBook, user);
-                    // somehow add to the system and make sure photos are attached
+                    // TODO: somehow add to the system and make sure photos are attached
                     finish();
                 }
 
@@ -74,11 +69,14 @@ public class AddBookActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // implement scanning
+                // TODO: implement scanning for submission 4
             }
         });
     }
 
+    /**
+     * assigns each attribute to the proper textView.
+     */
     private void findViewsById() {
         backButton = findViewById(R.id.back_button);
         scanButton = findViewById(R.id.scan_button);

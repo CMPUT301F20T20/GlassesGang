@@ -24,10 +24,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import com.example.glassesgang.browse.BrowseFragment;
 
+/**
+ * Home Activity for Borrower
+ */
 public class BorrowerHomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigation;
-    private static final String TAG = "HomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
