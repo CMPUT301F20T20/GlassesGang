@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -92,6 +92,8 @@
 
     <!--Implementing status as a text view for now -->
 
+<<<<<<< HEAD
+=======
 
     <ImageView
         android:id="@+id/book_status"
@@ -117,4 +119,5 @@
         app:layout_constraintEnd_toEndOf="@+id/book_status"
         app:layout_constraintHorizontal_bias="0.571"
         app:layout_constraintStart_toStartOf="@+id/book_status" />
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 </androidx.constraintlayout.widget.ConstraintLayout>

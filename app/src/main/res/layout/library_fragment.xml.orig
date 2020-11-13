@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultsActivity"
-    android:orientation="vertical">
+    android:background="#00FFFFFF"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <ListView
-        android:id="@+id/result_list_view"
+        android:id="@+id/library_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+<<<<<<< HEAD
+        tools:listitem="@layout/book_listing" />
+=======
         android:divider="#00FFFFFF" />
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 </LinearLayout>

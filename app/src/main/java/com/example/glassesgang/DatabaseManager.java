@@ -22,7 +22,7 @@ import java.util.Map;
  * Object for handling transactions in the database
  */
 public class DatabaseManager {
-    private FirebaseFirestore db;
+    private static FirebaseFirestore db;
     private static final String TAG = "DatabaseManager";
 
 
@@ -35,7 +35,7 @@ public class DatabaseManager {
      * @param newBook a Book object. It is the book to be added
      * @param user a String consisting of the user's email.
      */
-    public void addBook(final Book newBook , final String user) {
+    public static void addBook(final Book newBook , final String user) {
         // add the book to the database books collection
         db.collection("books")
                 .add(newBook)
@@ -60,7 +60,7 @@ public class DatabaseManager {
      * deletes the book from the database
      * @param bookToDelete a Book object representing the book to delete
      */
-    public void deleteBook(Book bookToDelete) {
+    public static void deleteBook(Book bookToDelete) {
         String owner = bookToDelete.getOwner();
         String borrower = bookToDelete.getBorrower();
         String bid = bookToDelete.getBID();
@@ -96,7 +96,7 @@ public class DatabaseManager {
 
     }
 
-    private void addBookInOwnerCatalogue(String bid, String user) {
+    private static void addBookInOwnerCatalogue(String bid, String user) {
         db.collection("users").document(user)
                 .update("ownerCatalogue", FieldValue.arrayUnion(bid))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -152,7 +152,7 @@ public class DatabaseManager {
     }
 
 
-    public void editContactInfo(String currentEmail, String newEmail){
+    public static void editContactInfo(String currentEmail, String newEmail){
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         usersDatabase.document(currentEmail).update("email", newEmail)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

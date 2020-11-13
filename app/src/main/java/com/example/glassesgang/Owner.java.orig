@@ -40,17 +40,76 @@ public class Owner extends User {
         this.catalogue = new ArrayList<>();
     }
 
+<<<<<<< HEAD
+=======
+    public Owner(String email) {
         super(email);
         this.catalogue = new ArrayList<>();
     }
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 
     public ArrayList<String> getCatalogue() {
         return catalogue;
     }
 
+<<<<<<< HEAD
+
+    /*public DocumentReference getOwnerDatabase() {
+        return ownerDatabase;
+    }*/
+
+
+    public void addBooktoCatalogue(String newBook) {
+        this.catalogue.add(newBook);
+        ownerDatabase.update("owners", this);
+    }
+
+    public void deleteBookFromCatalogue(String delBook) {
+        // I'm not sure which to use, this.catalogue or this.getCatalogue...
+        this.getCatalogue().remove(delBook);
+        ownerDatabase.update("owners", this);
+    }
+
+    public void addOwnerToDatabase() {
+        ownerDatabase.update("owners", this);
+    }
+=======
     public void setCatalogue(ArrayList<String> catalogue) {
         this.catalogue = catalogue;
     }
 
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 }
+
+    /* Originally had method to update book objects within catalog
+
+    public ArrayList<Book> getCatalogue() {
+        return catalogue;
+    }
+
+    @Override
+    public FirebaseFirestore getDb() {
+        return db;
+    }
+
+    public DocumentReference getOwnerDatabase() {
+        return ownerDatabase;
+    }
+
+    public boolean editCatalogue(Book updatedbook){
+        for(Book bookItem : getCatalogue()) {
+            if(bookItem.getBID().equals(updatedbook.getBID())) {
+                // book found in catalog
+                this.catalogue.set(this.catalogue.indexOf(bookItem), updatedbook);
+                // writes owner into database
+                ownerDatabase.update("owners", this);
+            }
+            else{
+                // book item was not found in database
+                return false;
+            }
+        }
+        return true;
+    }
+    */
 

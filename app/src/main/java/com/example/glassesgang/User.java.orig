@@ -3,6 +3,22 @@ package com.example.glassesgang;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.example.glassesgang.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import java.util.ArrayList;
 
@@ -15,9 +31,14 @@ public class User {
     public String userName;
     public String email;
     private Object notifications;
+<<<<<<< HEAD
+    // private FirebaseFirestore db;
+    CollectionReference userDatabase = FirebaseFirestore.getInstance().collection("users");
+=======
     public ArrayList<String> ownerCatalogue;
     public ArrayList<String> borrowerCatalogue;
 
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 
     public User(Context context) {
         String filename = context.getResources().getString(R.string.email_account);
@@ -31,12 +52,27 @@ public class User {
     public User(){
         // empty constructor for database access
     }
-    public User(String email){
+    public User(String email) {
         this.email = email;
         ownerCatalogue = new ArrayList<String>();
         borrowerCatalogue = new ArrayList<String>();
     }
 
+    public void editContactInfo(String currentEmail, String newEmail){
+        userDatabase.document(currentEmail).update("email", newEmail)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "contact information successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating contact information", e);
+                    }
+                });
+    }
 
     public String getTAG() {
         return TAG;
@@ -54,6 +90,13 @@ public class User {
         return notifications;
     }
 
+<<<<<<< HEAD
+
+    public CollectionReference getUserDatabase() {
+        return userDatabase;
+    }
+    /*
+=======
     public ArrayList<String> getOwnerCatalogue() {
         return ownerCatalogue;
     }
@@ -70,6 +113,7 @@ public class User {
         this.borrowerCatalogue = borrowerCatalogue;
     }
 /*
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
     public void editUsername(String newUserName) {
         if (userName.equals(this.userName)) {
             this.userName = newUserName;

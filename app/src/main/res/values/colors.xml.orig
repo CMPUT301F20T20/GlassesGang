@@ -6,6 +6,9 @@
     <color name="ownerDarkGrey">#282828</color>
     <color name="ownerLightGrey">#747474</color>
     <color name="colorDefault">#C8C8C8</color>
+<<<<<<< HEAD
+    <color name="requestGrey">#BFBFBF</color>
+=======
     <color name="ownerPrimary">#282828</color>
     <color name="ownerSecondary">#747474</color>
     <color name="ownerText">#FFFFFF</color>
@@ -17,4 +20,5 @@
     <color name="green">#03AA00</color>
     <color name="blue">#0094FF</color>
     <color name="yellow">#FFC700</color>
+>>>>>>> f7e3b54325839d38f45c4b24783bded91bd24060
 </resources>
