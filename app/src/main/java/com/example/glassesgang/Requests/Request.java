@@ -1,4 +1,5 @@
 package com.example.glassesgang.Requests;
+import java.util.UUID;
 
 /**
  * This is a class that represents the Request object, allowing for comparison of requests by bookId
@@ -6,6 +7,7 @@ package com.example.glassesgang.Requests;
 public class Request implements Comparable<Request>{
     private String bookId;
     private String email;
+    private String requestId;
 
     /**
      * This is the constructor for a Request object
@@ -34,6 +36,14 @@ public class Request implements Comparable<Request>{
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * This returns the String requestId
+     * @return
+     */
+    public String getRequestId() {
+        return this.requestId;
     }
 
     /**

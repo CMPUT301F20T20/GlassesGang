@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.glassesgang.Book;
@@ -22,7 +24,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
-    private TextView statusTextView;
+    private Button statusButton;
     private TextView ownerTextView;
     private String author;
     private String title;
@@ -57,6 +59,14 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         status = book.getStatus();
                         owner = book.getOwner();
                         setTextViews();
+                        if (statusButton.getText().toString() == "available") {
+                            statusButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //send a request
+                                }
+                            });
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -74,7 +84,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusTextView = findViewById(R.id.status_textView);
+        statusButton = findViewById(R.id.status_textView);
         ownerTextView = findViewById(R.id.owner_textView);
     }
 
@@ -85,7 +95,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        statusTextView.setText(status);
+        statusButton.setText(status);
         ownerTextView.setText(owner);
     }
 }

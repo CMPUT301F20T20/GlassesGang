@@ -3,6 +3,8 @@ package com.example.glassesgang;
 import android.media.Image;
 import android.provider.MediaStore;
 
+import com.example.glassesgang.Requests.Request;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class Book implements Serializable {
     private String owner;
     private String borrower;
 //    private ArrayList<Image> images;
-    //private ArrayList<Request> requestList; //  getter and setter currently commented out but ready to implement as soon as Request exists
+    private ArrayList<Request> requests;
 
 
     public Book() {
@@ -187,11 +189,11 @@ public class Book implements Serializable {
      *
      * @return an array of requests that are attached to the book
      */
-    /*
+
     public ArrayList<Request> getRequests() {
         return requests;
     }
-    */
+
 
     /**
      * Sets the requests of the book
