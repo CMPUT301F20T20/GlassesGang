@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.glassesgang.Requests.Request;
+import com.example.glassesgang.BookStatus.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -173,18 +174,18 @@ public class DatabaseManager {
     /**
      * Make a request as a borrower. Creates a request object and attaches it to the book
      * @param request   The request object to be added to the database
-     * @param book      Book object for which the request is being made
      */
-    public static void addRequest(Request request, String bid) {
+    public static void addRequest(Request request) {
         // add the request to the requests collection in the database
         db.collection("requests")
                 .add(request)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        Log.d(TAG, "Request added successfully, written with ID: " + documentReference.getId());
                         documentReference.update("requestId", documentReference.getId());
-                        addRequestToBook(documentReference.getId(), book);
+                        addRequestToBook(documentReference.getId(), request.getBookId());
+                        changeBookStatus(Status.PENDING, request.getBookId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -197,18 +198,65 @@ public class DatabaseManager {
 
     public static void addRequestToBook(String requestId, String bid) {
         db.collection("books").document(bid)
-                .update("requests", FieldValue.arrayUnion(bid))
+                .update("requests", FieldValue.arrayUnion(requestId))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        Log.d(TAG, "Request successfully added to book " + bid);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
+                        Log.w(TAG, "Error adding request to book " + bid, e);
                     }
                 });
+    }
+
+    public static void changeBookStatus(Status status, String bid) {
+        db.collection("books").document(bid).update("status", status)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Book status successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating book status", e);
+                    }
+                });
+    }
+
+    public static void deleteRequest(Request requestToDelete, Status newStatus) {
+        String bid = requestToDelete.getBookId();
+        DocumentReference bookRef = db.collection("books").document(bid);
+        DocumentReference requestRef = db.collection("requests").document(requestToDelete.getRequestId());
+
+        // send notification to borrower on request status
+
+
+        // delete request from its books request list
+        bookRef.update("ownerCatalogue", FieldValue.arrayRemove(requestToDelete.getRequestId()));
+
+        //handle the book status to its new status
+        changeBookStatus(newStatus, bid);
+
+        // delete request from database
+        requestRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Request " + requestToDelete.getRequestId() + " successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting request " + requestToDelete.getRequestId(), e);
+                    }
+                });
+
     }
 }

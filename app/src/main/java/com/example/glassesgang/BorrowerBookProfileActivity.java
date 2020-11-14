@@ -3,19 +3,23 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.glassesgang.Book;
-import com.example.glassesgang.R;
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
+import com.example.glassesgang.Requests.Request;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 
 /**
  * Book Profile for Borrower view (no edit book functionality)
@@ -29,10 +33,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private String author;
     private String title;
     private String isbn;
-    private String status;
+    private Status status;
     private String bid;
     private String owner;
     private Book book;
+    private String userEmail;
     private FirebaseFirestore db;
     final String TAG = "Database error";
 
@@ -43,6 +48,12 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
+        //get user
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
+        userEmail = sharedPref.getString("email", null);
+
+        //get db
         db = FirebaseFirestore.getInstance();
         bid = getIntent().getStringExtra("bid");
         DocumentReference docRef = db.collection("books").document(bid);
@@ -59,13 +70,32 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         status = book.getStatus();
                         owner = book.getOwner();
                         setTextViews();
-                        if (statusButton.getText().toString() == "available") {
-                            statusButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //send a request
-                                }
-                            });
+                        switch(status) {
+                            case AVAILABLE: //make a request for this book
+                                statusButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // get the values for title, author, and isbn from the EditTexts
+                                            Request newRequest = new Request(bid, userEmail);
+                                            DatabaseManager database = new DatabaseManager();
+                                            database.addRequest(newRequest);
+                                            // TODO: somehow add to the system and make sure photos are attached
+                                            finish();
+                                    }
+                                });
+                                break;
+                            case PENDING: //cancel request
+                                statusButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //find request object in db
+                                        //TODO: get requestid from borrower catalogue
+                                        DatabaseManager database = new DatabaseManager();
+                                        //database.deleteRequest(Status.AVAILABLE);
+                                        finish();
+                                    }
+                                });
+                                break;
                         }
                     }
                 })
@@ -95,7 +125,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        statusButton.setText(status);
+        statusButton.setText(stringStatus(status));
         ownerTextView.setText(owner);
     }
 }

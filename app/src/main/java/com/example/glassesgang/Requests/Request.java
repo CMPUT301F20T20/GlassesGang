@@ -13,7 +13,7 @@ public class Request implements Comparable<Request>{
      * This is the constructor for a Request object
      *
      * @param bookId This is the name of the new Request object
-     * @param email This is the email of the new Request object
+     * @param email This is the email of the borrower making the request
      */
     public Request(String bookId, String email) {
         this.bookId = bookId;

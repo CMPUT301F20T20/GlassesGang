@@ -4,7 +4,7 @@ import android.media.Image;
 import android.provider.MediaStore;
 
 import com.example.glassesgang.Requests.Request;
-
+import com.example.glassesgang.BookStatus.Status;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class Book implements Serializable {
     private String author;
     private String ISBN;
     private String BID;
-    private String status;
+    private Status status;
     private String owner;
     private String borrower;
 //    private ArrayList<Image> images;
@@ -31,7 +31,7 @@ public class Book implements Serializable {
         this.BID = BID;
         this.owner = owner;
         this.borrower = "";
-        this.status = "available";
+        this.status = Status.AVAILABLE;
     }
 
     public Book(String title, String author, String ISBN, String owner) {
@@ -39,7 +39,7 @@ public class Book implements Serializable {
         this.author = author;
         this.ISBN = ISBN;
         this.owner = owner;
-        this.status = "available";
+        this.status = Status.AVAILABLE;
         this.borrower = "";
     }
 
@@ -121,7 +121,7 @@ public class Book implements Serializable {
      *
      * @return a string of the book status, one of available, requested, accepted, or borrowed
      */
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -130,7 +130,7 @@ public class Book implements Serializable {
      *
      * @param status a string of the status to set the book status to, one of available, requested, accepted, or borrowed
      */
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -189,7 +189,6 @@ public class Book implements Serializable {
      *
      * @return an array of requests that are attached to the book
      */
-
     public ArrayList<Request> getRequests() {
         return requests;
     }
@@ -200,9 +199,8 @@ public class Book implements Serializable {
      *
      * @param requests an array of the requests attached to a book
      */
-    /*
     public void setRequests(ArrayList<Request> requests) {
         this.requests = requests;
     }
-    */
+
 }

@@ -11,7 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,14 +25,14 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
-    private TextView statusTextView;
+    private Button statusButton;
     private TextView borrowerTextView;
     private Button deleteButton;
     private Button editButton;
     private String author;
     private String title;
     private String isbn;
-    private String status;
+    private Status status;
     private String bid;
     private String borrower;
     private Book book;
@@ -101,7 +102,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusTextView = findViewById(R.id.status_textView);
+        statusButton = findViewById(R.id.status_textView);
         borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
@@ -114,7 +115,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        statusTextView.setText(status);
+        statusButton.setText(stringStatus(status));
         borrowerTextView.setText(borrower);
     }
 
