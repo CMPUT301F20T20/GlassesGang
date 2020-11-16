@@ -103,6 +103,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView4"
         tools:srcCompat="@color/blue" />
 
+    <!--temporarily changed text color from #FFFFFF to #000000 to see book status-->
     <TextView
         android:id="@+id/book_temp_status"
         android:layout_width="wrap_content"
@@ -111,7 +112,7 @@
         android:fontFamily="@font/source_sans_pro_semibold"
         android:padding="5dp"
         android:text="Book Status"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/book_status"
