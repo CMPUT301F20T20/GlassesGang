@@ -4,12 +4,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.glassesgang.R;
@@ -22,6 +25,8 @@ public class NotificationFragment extends Fragment {
     private ArrayAdapter<Notification> notificationAdapter;
     private ArrayList<Notification> notificationList;
     final String TAG = "NotificationFragment";
+    private Button sendNotification;
+    private NotificationManagerCompat notificationManagerCompat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +38,8 @@ public class NotificationFragment extends Fragment {
         notificationList.add(new Notification("test message"));
 
         notificationAdapter = new NotificationListAdapter(this.getActivity(), notificationList);
+
+        notificationManagerCompat = NotificationManagerCompat.from(getContext());
     }
 
     @Override
@@ -50,5 +57,24 @@ public class NotificationFragment extends Fragment {
         // setting up the notificationList view
         notificationListView = view.findViewById(R.id.notification_listview);
         notificationListView.setAdapter(notificationAdapter);
+
+        sendNotification = view.findViewById(R.id.send_notification);
+        sendNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // creates a notification
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),
+                        App.CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                        .setContentTitle("test")
+                        .setContentText("test notification");
+
+                // creates the notification alert on phone
+                notificationManagerCompat.notify(1, builder.build());
+
+                System.out.println("send notification");
+                //notificationList.add(new Notification("test message"));
+            }
+        });
     }
 }
