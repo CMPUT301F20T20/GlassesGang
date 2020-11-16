@@ -112,9 +112,14 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         book.setStatus(document.get("bookStatus").toString());  // if book is in borrower catalogue, use the status from there
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
+                        // in this case the book is requested by other borrowers, but not the current borrower
+                        // so it should appear as available to them
+                        if (book.getStatus().equals("requested")) {
+                            book.setStatus("available");
+                        }
                         Log.d(TAG, "No such document");
                     }
-                    // set the status of the book and update the text views
+                    // set the text for status text view and update all the text views
                     status = book.getStatus();
                     setTextViews();
                 } else {
