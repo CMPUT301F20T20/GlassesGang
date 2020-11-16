@@ -95,7 +95,7 @@ public class OwnerLibraryFragment extends Fragment {
                     Log.d(TAG, "Current data 1: " + snapshot.getData());
                     bidList = new ArrayList<>();
                     bidList = (ArrayList<String>) snapshot.get("ownerCatalogue");  // set the bidList
-                    updateListView(view);  // update ListView to display books whose bid are in the bidList
+                    updateListView();  // update ListView to display books whose bid are in the bidList
                 } else {
                     Log.d(TAG, "Current data 2: null");
                 }
@@ -124,7 +124,7 @@ public class OwnerLibraryFragment extends Fragment {
 
     }
 
-    private void updateListView(View v) {
+    private void updateListView() {
         // get a reference for the books collection
         CollectionReference booksRef = db.collection("books");
 

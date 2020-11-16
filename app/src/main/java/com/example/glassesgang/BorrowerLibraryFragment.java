@@ -96,7 +96,7 @@ public class BorrowerLibraryFragment extends Fragment {
                 borrowerCatalogue = new HashMap<>();
                 for (QueryDocumentSnapshot doc : value) {
                     borrowerCatalogue.put(doc.getId(), doc.get("bookStatus").toString());   // putting each bid and status in the hashmap
-                    updateListView(view);      // updating ListView to display books in the borrowerCatalogue
+                    updateListView();      // updating ListView to display books in the borrowerCatalogue
                 }
             }
         });
@@ -120,7 +120,7 @@ public class BorrowerLibraryFragment extends Fragment {
 
     }
 
-    private void updateListView(View v) {
+    private void updateListView() {
         // get a reference to books collection
         CollectionReference booksRef = db.collection("books");
 
