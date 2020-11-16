@@ -14,6 +14,8 @@ public class Book implements Serializable {
     private String status;
     private String owner;
     private String borrower;
+    private ArrayList<String> requestList;
+    private ArrayList<String> imageList;
 //    private ArrayList<Image> images;
     //private ArrayList<Request> requestList; //  getter and setter currently commented out but ready to implement as soon as Request exists
 
@@ -30,6 +32,8 @@ public class Book implements Serializable {
         this.owner = owner;
         this.borrower = "";
         this.status = "available";
+        this.requestList = new ArrayList<>();
+        this.imageList = new ArrayList<>();
     }
 
     public Book(String title, String author, String ISBN, String owner) {
@@ -37,8 +41,10 @@ public class Book implements Serializable {
         this.author = author;
         this.ISBN = ISBN;
         this.owner = owner;
-        this.status = "available";
         this.borrower = "";
+        this.status = "available";
+        this.requestList = new ArrayList<>();
+        this.imageList = new ArrayList<>();
     }
 
     // Getters and Setters for the Class Objects
@@ -162,6 +168,38 @@ public class Book implements Serializable {
      */
     public void setBorrower(String borrower) {
         this.borrower = borrower;
+    }
+
+    /**
+     * Gets the requestList of a book
+     * @return the requestList of a book
+     */
+    public ArrayList<String> getRequestList() {
+        return requestList;
+    }
+
+    /**
+     * Sets the request list of a book
+     * @param requestList the new request list to be set
+     */
+    public void setRequestList(ArrayList<String> requestList) {
+        this.requestList = requestList;
+    }
+
+    /**
+     * Gets the image list of a book
+     * @return the image list of a book
+     */
+    public ArrayList<String> getImageList() {
+        return imageList;
+    }
+
+    /**
+     * Sets the image list of a book
+     * @param imageList new image list of book to be set
+     */
+    public void setImageList(ArrayList<String> imageList) {
+        this.imageList = imageList;
     }
 
     /**
