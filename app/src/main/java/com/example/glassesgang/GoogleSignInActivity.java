@@ -1,3 +1,4 @@
+/**
 package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * either prompts user to enter their email
  * or choose an email they already logged in with
  */
+/**
 public class GoogleSignInActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -138,41 +140,6 @@ public class GoogleSignInActivity extends AppCompatActivity {
             //display error to user
         }
     }
-/*
-    private void createUser(){
-        // creates the user if user not in database
-        CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
-        String filename = getResources().getString(R.string.email_account);
-        SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
-        String email = sharedPref.getString("email", null);
-        if (email != null){
-            usersDatabase.document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Owner owner = (Owner) document.get("owner");
-                            Borrower borrower = (Borrower) document.get("borrower");
-                            //User user = document.toObject(User.class);
-                            Log.d(TAG, "User is: " + document.getData());
-                        } else {
-                            Owner owner = new Owner(getApplicationContext());
-                            Borrower borrower = new Borrower(getApplicationContext());
-                            Log.d(TAG, "creating user");
-                        }
-                    } else {
-                        Log.d(TAG, "Error get failed with ", task.getException());
-                        Log.d(TAG, "get failed with ", task.getException());
-                    }
-                }
-            });
-
-
-        };
-
-    }
-
- */
 
 }
+**/
