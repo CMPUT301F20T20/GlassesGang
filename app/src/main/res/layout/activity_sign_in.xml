@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/login_book_image_view"
         android:layout_width="461dp"
         android:layout_height="514dp"
         android:contentDescription="@string/app_name"
