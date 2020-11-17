@@ -103,8 +103,6 @@ public class DatabaseManager {
                 });
 
         // check request list as well once requesting is implemented
-
-
     }
 
     private static void addBookInOwnerCatalogue(String bid, String user) {

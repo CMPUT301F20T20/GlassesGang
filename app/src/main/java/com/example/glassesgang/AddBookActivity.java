@@ -42,6 +42,7 @@ public class AddBookActivity extends AppCompatActivity {
     private Button backButton;
     private Button scanButton;
     private Button addImageButton;
+    private Button deleteImageButton;
     private Button saveButton;
     private ImageView bookImageView;
     private EditText titleEditText;
@@ -100,6 +101,15 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: implement scanning for submission 4
+            }
+        });
+
+        deleteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CameraActivity.cleanBookImage();
+                bookImageView.setImageBitmap(null);
+                bookImageUrl = null;
             }
         });
 
@@ -176,6 +186,7 @@ public class AddBookActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         scanButton = findViewById(R.id.scan_button);
         saveButton = findViewById(R.id.finish_button);
+        deleteImageButton = findViewById(R.id.delete_image_button);
         bookImageView = findViewById(R.id.login_book_image_view);
         titleEditText = findViewById(R.id.book_title_bar);
         authorEditText = findViewById(R.id.author_name_bar);

@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -46,11 +51,6 @@ public class EditBookActivity extends AppCompatActivity {
     private EditText authorEditText;
     private EditText isbnEditText;
     private ImageView bookImageView;
-    private String author;
-    private String title;
-    private String isbn;
-    private String bid;
-    private String status;
     private Book book;
     FirebaseFirestore db;
     private static final String TAG = "EditBookActivity";
@@ -66,7 +66,7 @@ public class EditBookActivity extends AppCompatActivity {
         findViewsById();
 
         db = FirebaseFirestore.getInstance();
-        bid = getIntent().getStringExtra("bid");   // get the bid
+        String bid = getIntent().getStringExtra("bid");   // get the bid
         final DocumentReference docRef = db.collection("books").document(bid);    // get reference to the book object using bid
 
         // convert book document to Book object
@@ -74,11 +74,7 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 book = documentSnapshot.toObject(Book.class);
-                author = book.getAuthor();
-                title = book.getTitle();
-                isbn = book.getISBN();
-                status = book.getStatus();
-                setTextViews();
+                setTextViews(book);
             }
         });
 
@@ -94,9 +90,9 @@ public class EditBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // get the text from edit text fields
-                title = titleEditText.getText().toString();
-                author = authorEditText.getText().toString();
-                isbn = isbnEditText.getText().toString();
+                String title = titleEditText.getText().toString();
+                String author = authorEditText.getText().toString();
+                String isbn = isbnEditText.getText().toString();
 
                 // save changes if there is no empty fields
                 if (title.length()>0 && author.length()>0 && isbn.length()>0) {
@@ -105,7 +101,7 @@ public class EditBookActivity extends AppCompatActivity {
                      book.setISBN(isbn);
                      book.setImageUrl(bookImageUrl);
 
-                     updateDatabase(docRef);
+                     updateDatabase(docRef, book);
 
                     setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
                     finish();
@@ -159,12 +155,12 @@ public class EditBookActivity extends AppCompatActivity {
      * Update the title, author, and isbn fields in the database if user choses to save the changes made.
      * @param docRef document location in the Firestore data
      */
-    private void updateDatabase(DocumentReference docRef) {
+    private void updateDatabase(DocumentReference docRef, Book newBook) {
         // put the new info in a hash map
         HashMap<String, Object> newBookInfo = new HashMap<>();
-        newBookInfo.put("title", title);
-        newBookInfo.put("author", author);
-        newBookInfo.put("isbn", isbn);
+        newBookInfo.put("title", newBook.getTitle());
+        newBookInfo.put("author", newBook.getAuthor());
+        newBookInfo.put("isbn", newBook.getISBN());
         newBookInfo.put("imageUrl", bookImageUrl);
 
         // update the database
@@ -225,14 +221,47 @@ public class EditBookActivity extends AppCompatActivity {
         });
     }
 
+    private void setBookImage(Book book, ImageView bookImage) {
+        String bookImageUrl = book.getImageUrl();
+        if (bookImageUrl != null && bookImageUrl != "") {
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                URL url;
+                try {
+                    url = new URL(bookImageUrl);
+                } catch (MalformedURLException e) {
+                    Log.d(TAG, "URL not valid " + bookImageUrl);
+                    return;
+                }
+
+                try {
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    bookImage.setImageBitmap(bmp);
+                } catch (IOException e) {
+                    Toast.makeText(
+                            this,
+                            "There was a problem fetching the image for the book " + book.getTitle(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        }
+    }
+
     private void setBookImageUrl(String newBookImageUrl) {
         bookImageUrl = newBookImageUrl;
     }
 
-    private void setTextViews() {
-        titleEditText.setText(title);
-        authorEditText.setText(author);
-        isbnEditText.setText(isbn);
+    private void setTextViews(Book selectedBook) {
+        titleEditText.setText(selectedBook.getTitle());
+        authorEditText.setText(selectedBook.getAuthor());
+        isbnEditText.setText(selectedBook.getISBN());
+        setBookImage(selectedBook, bookImageView);
     }
 
 }
