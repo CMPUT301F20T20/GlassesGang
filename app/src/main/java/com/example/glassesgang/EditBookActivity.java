@@ -105,9 +105,10 @@ public class EditBookActivity extends AppCompatActivity {
                      updateDatabase(docRef, book);
 
                     setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
-                    finish();
+
                 }
                 CameraActivity.cleanBookImage();
+                finish();
             }
         });
 
@@ -233,7 +234,7 @@ public class EditBookActivity extends AppCompatActivity {
     }
 
     private void setBookImage(Book book, ImageView bookImage) {
-        String bookImageUrl = book.getImageUrl();
+        bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
 

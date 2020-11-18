@@ -83,7 +83,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                     borrower = "None";
                 }
                 updateTextViews();
-                setBookImage(book, bookImageView);
+                setBookImage(book);
             }
         });
 
@@ -154,7 +154,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         if (borrower == null || borrower.equals("")) {
                             borrower = "None";
                         }
-                        updateTextViews();
+                        setBookImage(book);
+
                     }
                 });
             }
@@ -171,7 +172,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         databaseManager.deleteBook(book);
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -191,7 +192,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,
@@ -200,6 +201,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                     ).show();
                 }
             }
+        } else {
+            bookImageView.setImageBitmap(null);
         }
     }
 }
