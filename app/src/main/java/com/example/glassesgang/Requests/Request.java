@@ -6,18 +6,21 @@ import java.util.UUID;
  */
 public class Request implements Comparable<Request>{
     private String bookId;
-    private String email;
+    private String borrowerEmail;
+    private String ownerEmail;
     private String requestId;
 
     /**
      * This is the constructor for a Request object
      *
      * @param bookId This is the name of the new Request object
-     * @param email This is the email of the borrower making the request
+     * @param borrowerEmail This is the email of the borrower making the request
+     * @param borrowerEmail This is the email of the owner receiving the request
      */
-    public Request(String bookId, String email) {
+    public Request(String bookId, String borrowerEmail, String ownerEmail) {
         this.bookId = bookId;
-        this.email = email;
+        this.borrowerEmail = borrowerEmail;
+        this.ownerEmail = ownerEmail;
     }
 
     /**
@@ -30,12 +33,21 @@ public class Request implements Comparable<Request>{
     }
 
     /**
-     * This returns the String email, the bookId's email
+     * This returns the borrower email
      *
-     * @return Returns the bookId email
+     * @return Returns the String borrowerEmail
      */
-    public String getEmail() {
-        return email;
+    public String getBorrowerEmail() {
+        return this.borrowerEmail;
+    }
+
+    /**
+     * This returns the owner email
+     *
+     * @return Returns the String ownerEmail
+     */
+    public String getOwnerEmail() {
+        return this.ownerEmail;
     }
 
     /**
@@ -45,6 +57,8 @@ public class Request implements Comparable<Request>{
     public String getRequestId() {
         return this.requestId;
     }
+
+    public void setRequestId(String requestId) { this.requestId = requestId; }
 
     /**
      * This is an override of compareTo() method which compares two strings by the Unicode value of each character in the strings

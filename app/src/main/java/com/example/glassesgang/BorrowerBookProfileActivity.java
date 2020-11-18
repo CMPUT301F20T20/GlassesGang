@@ -76,7 +76,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         // get the values for title, author, and isbn from the EditTexts
-                                            Request newRequest = new Request(bid, userEmail);
+                                            Request newRequest = new Request(bid, userEmail, owner);
                                             DatabaseManager database = new DatabaseManager();
                                             database.addRequest(newRequest);
                                             // TODO: somehow add to the system and make sure photos are attached
@@ -84,7 +84,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                                     }
                                 });
                                 break;
-                            case PENDING: //cancel request
+                            case REQUESTED: //cancel request
                                 statusButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -114,7 +114,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusButton = findViewById(R.id.status_textView);
+        statusButton = findViewById(R.id.status_button);
         ownerTextView = findViewById(R.id.owner_textView);
     }
 

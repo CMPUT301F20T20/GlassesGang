@@ -5,13 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.glassesgang.Book;
-import com.example.glassesgang.R;
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
 
 import java.util.ArrayList;
 
@@ -42,13 +43,13 @@ public class CustomBookList extends ArrayAdapter<Book> {
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
         TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
-        TextView statusTextView = view.findViewById(R.id.book_temp_status);   // implementing status as a text view for now, might change to image view in the future
+        Button statusButton = view.findViewById(R.id.book_temp_status);   // implementing status as a text view for now, might change to image view in the future
 
 
         titleTexView.setText(book.getTitle());
         authorTexView.setText(book.getAuthor());
         isbnTextView.setText(book.getISBN());
-        statusTextView.setText(book.getStatus());
+        statusButton.setText(stringStatus(book.getStatus()));
 
         // if user is an owner, display the borrower of a book
         // if user is a borrower, display the owner of a book

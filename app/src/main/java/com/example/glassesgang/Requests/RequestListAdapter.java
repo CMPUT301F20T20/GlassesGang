@@ -35,8 +35,8 @@ public class RequestListAdapter extends ArrayAdapter<Request> {
 
         Request request = requests.get(position);
 
-        TextView requestEmail = view.findViewById(R.id.request_email);
-        requestEmail.setText(request.getEmail());
+        TextView requestBorrowerEmail = view.findViewById(R.id.request_email);
+        requestBorrowerEmail.setText(request.getBorrowerEmail());
 
         Button declineButton = view.findViewById(R.id.request_decline_button);
         declineButton.setOnClickListener(new View.OnClickListener() {

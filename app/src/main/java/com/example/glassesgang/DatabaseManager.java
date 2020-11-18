@@ -1,11 +1,13 @@
 package com.example.glassesgang;
 
+import android.nfc.Tag;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.glassesgang.Requests.Request;
 import com.example.glassesgang.BookStatus.Status;
+import com.example.glassesgang.Requests.RequestReference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -185,7 +187,9 @@ public class DatabaseManager {
                         Log.d(TAG, "Request added successfully, written with ID: " + documentReference.getId());
                         documentReference.update("requestId", documentReference.getId());
                         addRequestToBook(documentReference.getId(), request.getBookId());
-                        changeBookStatus(Status.PENDING, request.getBookId());
+                        addRequestToUser(documentReference.getId(), request.getBookId(), request.getBorrowerEmail());
+                        //addNotificationToUser(documentReference, request.getOwnerEmail);
+                        changeBookStatus(Status.REQUESTED, request.getBookId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -211,6 +215,25 @@ public class DatabaseManager {
                         Log.w(TAG, "Error adding request to book " + bid, e);
                     }
                 });
+    }
+
+    public static void addRequestToUser(String requestId, String bid, String userEmail) {
+        db.collection("users").document(userEmail).collection("borrowerCatalogue").document(bid)
+                .set( new RequestReference(Status.REQUESTED, requestId))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Request reference for request " + requestId + " successfully added to user");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Failed to add request reference for request " + requestId + " to user", e);
+                    }
+                })
+
+        ;
     }
 
     public static void changeBookStatus(Status status, String bid) {
@@ -259,4 +282,9 @@ public class DatabaseManager {
                 });
 
     }
+
+    //TODO: awaiting notification schema to be finished to complete this method
+    /*
+    public static void addNotificationToUser(String requestId)
+    */
 }

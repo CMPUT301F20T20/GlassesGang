@@ -1,7 +1,10 @@
 package com.example.glassesgang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +13,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
+
+import com.example.glassesgang.Requests.Request;
+import com.example.glassesgang.Requests.RequestHandlingFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 /**
  * Book profile for Owner View (edit book functionality)
@@ -37,6 +46,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String borrower;
     private Book book;
     private String owner;
+    private ArrayList<Request> requests;
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBkProfileActivity";
 
@@ -62,6 +72,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
         // convert the book document to a Book object
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @SuppressLint("ResourceType") //bypass layout check for request_list_layout
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 book = documentSnapshot.toObject(Book.class);
@@ -70,10 +81,20 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 isbn = book.getISBN();
                 status = book.getStatus();
                 borrower = book.getBorrower();
+                requests = book.getRequests();
                 if (borrower == null || borrower.equals("")) {
                     borrower = "None";
                 }
                 updateTextViews();
+
+                if (requests.size() > 0) {
+                    //inflate requestList fragment inside framelayout fragment container
+                    Bundle bundle = new Bundle();
+                    bundle.putString("bin", book.getBID()); //store bin for later use in request handling
+                    Fragment requestFragment = new RequestHandlingFragment();
+                    requestFragment.setArguments(bundle);
+                    getSupportFragmentManager().beginTransaction().add(R.id.owner_book_profile_fragment_container, requestFragment).commit();
+                }
             }
         });
 
@@ -102,7 +123,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusButton = findViewById(R.id.status_textView);
+        statusButton = findViewById(R.id.status_button);
         borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
