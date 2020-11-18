@@ -14,10 +14,6 @@
             android:name=".ResultsActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
         <activity
-            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-            tools:replace="android:launchMode"
-            android:launchMode="standard" />
-        <activity
             android:name=".BorrowerBookProfileActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
         <activity
