@@ -18,12 +18,11 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-@RunWith(AndroidJUnit4.class)
 public class DatabaseManagerTest {
-    private FirebaseFirestore database;
+    public FirebaseFirestore database;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp(){
         // connect to database
         database = FirebaseFirestore.getInstance();
     }
@@ -33,6 +32,7 @@ public class DatabaseManagerTest {
 
     }
 
+    /*
     @Test
     public void addBookTest() {
         Book newbook = new Book("Percy Jackon", "Rick Riodan", "103982", "Test1","chelsea4@ualberta.ca");
@@ -41,6 +41,8 @@ public class DatabaseManagerTest {
         DatabaseManager.addBook(newbook, "chelsea4@ualberta.ca");
         database.collection("books").document("Test1").get().getResult();
     }
+
+     */
 
 
 }

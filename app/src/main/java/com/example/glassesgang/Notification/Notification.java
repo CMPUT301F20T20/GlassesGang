@@ -1,6 +1,7 @@
 package com.example.glassesgang.Notification;
 
 /**
+ * TODO: Notification will be completely implemented for submission 4, now it's a boilerplate code
  * This is a class that represents the Notification object, allowing for comparison of notifications by bookId
  */
 public class Notification {
