@@ -46,23 +46,23 @@ public class AddBookActivity extends AppCompatActivity {
             }
         });
 
-        // add information to database upon saving
+        // add information to database if valid upon saving
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get the values for title, author, and isbn from the EditTexts
-                final String title = titleEditText.getText().toString();
-                final String author = authorEditText.getText().toString();
-                final String isbn = isbnEditText.getText().toString();
+                if (!isThereInvalidInput()) {
+                    // get the values for title, author, and isbn from the EditTexts
+                    final String title = titleEditText.getText().toString();
+                    final String author = authorEditText.getText().toString();
+                    final String isbn = isbnEditText.getText().toString();
 
-                if (title.length()>0 && author.length()>0 && isbn.length()>0) {
+                    // update the database
                     Book newBook = new Book(title, author, isbn, user);
                     DatabaseManager database = new DatabaseManager();
                     database.addBook(newBook, user);
                     // TODO: somehow add to the system and make sure photos are attached
                     finish();
                 }
-
             }
         });
 
@@ -85,4 +85,30 @@ public class AddBookActivity extends AppCompatActivity {
         authorEditText = findViewById(R.id.author_name_bar);
         isbnEditText = findViewById(R.id.isbn_bar);
     }
+
+    /**
+     * Checks for empty fields in the title, author and isbn fields and that isbn is only of length 13.
+     * Displays error message for the invalid fields.
+     * @return true if there is an invalid input, false otherwise.
+     */
+    public boolean isThereInvalidInput() {
+        boolean invalidInput = false;
+        if (titleEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            titleEditText.setError("This field can not be blank");
+            invalidInput = true;
+        }
+        if (authorEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            authorEditText.setError("This field can not be blank");
+            invalidInput = true;
+        }
+        if (isbnEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            isbnEditText.setError("This field can not be blank");
+            invalidInput = true;
+        } else if (isbnEditText.getText().toString().length() != 13) {   // ISBN can only be of length 13
+            isbnEditText.setError("invalid ISBN");
+            invalidInput = true;
+        }
+        return invalidInput;
+    }
+
 }
