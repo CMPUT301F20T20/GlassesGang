@@ -46,7 +46,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String borrower;
     private Book book;
     private String owner;
-    private ArrayList<Request> requests;
+    private ArrayList<String> requests;
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBkProfileActivity";
 

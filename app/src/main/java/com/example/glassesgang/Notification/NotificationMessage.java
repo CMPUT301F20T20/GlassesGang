@@ -29,7 +29,10 @@ public class NotificationMessage {
                 return senderName + " has accepted your request to borrow " + bookName;
             case DECLINE_REQUEST:
                 return senderName + " has declined your request to borrow " + bookName;
+            default:
+                return "default notification message";
         }
+
     }
 
 }

@@ -6,6 +6,7 @@ import android.provider.MediaStore;
 import com.example.glassesgang.Requests.Request;
 import com.example.glassesgang.BookStatus.Status;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Book implements Serializable {
@@ -17,7 +18,7 @@ public class Book implements Serializable {
     private String owner;
     private String borrower;
 //    private ArrayList<Image> images;
-    private ArrayList<Request> requests;
+    private ArrayList<String> requests;
 
 
     public Book() {
@@ -32,6 +33,7 @@ public class Book implements Serializable {
         this.owner = owner;
         this.borrower = "";
         this.status = Status.AVAILABLE;
+        this.requests = new ArrayList<String>();
     }
 
     public Book(String title, String author, String ISBN, String owner) {
@@ -41,6 +43,8 @@ public class Book implements Serializable {
         this.owner = owner;
         this.status = Status.AVAILABLE;
         this.borrower = "";
+        this.status = Status.AVAILABLE;
+        this.requests = new ArrayList<String>();
     }
 
     // Getters and Setters for the Class Objects
@@ -189,7 +193,7 @@ public class Book implements Serializable {
      *
      * @return an array of requests that are attached to the book
      */
-    public ArrayList<Request> getRequests() {
+    public ArrayList<String> getRequests() {
         return requests;
     }
 
@@ -199,7 +203,7 @@ public class Book implements Serializable {
      *
      * @param requests an array of the requests attached to a book
      */
-    public void setRequests(ArrayList<Request> requests) {
+    public void setRequests(ArrayList<String> requests) {
         this.requests = requests;
     }
 

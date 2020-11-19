@@ -138,7 +138,7 @@ public class LibraryFragment extends Fragment {
                     if (snapshot != null && snapshot.exists()) {
                         Log.d(TAG, "Current data 3: " + snapshot.getData());
                         ArrayList<String> catalogue = (ArrayList<String>) snapshot.get("borrowerCatalogue");
-                        updateListView(catalogue, view);
+                        if (catalogue != null) updateListView(catalogue, view);
                     } else {
                         Log.d(TAG, "Current data 4: null");
                     }

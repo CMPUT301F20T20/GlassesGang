@@ -120,7 +120,7 @@ public class BrowseFragment extends Fragment {
                     Map<String, Object> bookData = document.getData();
 
                     // show books that have status available or requested
-                    if (bookData.get("status").equals("requested") || bookData.get("status").equals("available")) {
+                    if (bookData.get("status").equals("REQUESTED") || bookData.get("status").equals("AVAILABLE")) {
                         Book book = document.toObject(Book.class);
                         bookDataList.add(book);
                     }

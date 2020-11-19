@@ -10,8 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.glassesgang.Book;
-import com.example.glassesgang.R;
+import com.example.glassesgang.BookStatus.Status;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,7 +34,7 @@ public class EditBookActivity extends AppCompatActivity {
     private String title;
     private String isbn;
     private String bid;
-    private String status;
+    private Status status;
     private Book book;
     FirebaseFirestore db;
     private static final String TAG = "EditBookActivity";
