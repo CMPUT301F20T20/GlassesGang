@@ -108,6 +108,8 @@ public class CustomBookList extends ArrayAdapter<Book> {
                     ).show();
                 }
             }
+        } else {
+            bookImage.setImageBitmap(null);  // clearing the image view
         }
     }
 
