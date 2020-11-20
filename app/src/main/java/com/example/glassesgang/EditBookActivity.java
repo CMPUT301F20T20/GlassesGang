@@ -102,13 +102,12 @@ public class EditBookActivity extends AppCompatActivity {
                     book.setISBN(isbn);
                     book.setImageUrl(bookImageUrl);
 
-                    updateDatabase(docRef);
+                    updateDatabase(docRef, book);
 
                     setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
-                    // finish();
+                    CameraActivity.cleanBookImage();
+                    finish();
                 }
-                CameraActivity.cleanBookImage();
-                finish();
             }
         });
 

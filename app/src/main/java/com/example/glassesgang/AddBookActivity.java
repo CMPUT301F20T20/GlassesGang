@@ -90,9 +90,9 @@ public class AddBookActivity extends AppCompatActivity {
                     DatabaseManager database = new DatabaseManager();
                     database.addBook(newBook, user);
                     // TODO: somehow add to the system and make sure photos are attached
+                    CameraActivity.cleanBookImage();
                     finish();
                 }
-                CameraActivity.cleanBookImage();
             }
         });
 
