@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +23,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Book Profile for Borrower view (no edit book functionality)
@@ -28,6 +37,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private TextView isbnTextView;
     private TextView statusTextView;
     private TextView ownerTextView;
+    private ImageView bookImageView;
     private String author;
     private String title;
     private String isbn;
@@ -69,6 +79,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         isbn = book.getISBN();
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
+                        setBookImage(book, bookImageView);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -88,6 +99,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         isbnTextView = findViewById(R.id.isbn_textView);
         statusTextView = findViewById(R.id.status_textView);
         ownerTextView = findViewById(R.id.owner_textView);
+        bookImageView = findViewById(R.id.borrowerBook_image_view);
     }
 
     /**
@@ -130,4 +142,35 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
     }
 
+    private void setBookImage(Book book, ImageView bookImage) {
+        String bookImageUrl = book.getImageUrl();
+        if (bookImageUrl != null && bookImageUrl != "") {
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                URL url;
+                try {
+                    url = new URL(bookImageUrl);
+                } catch (MalformedURLException e) {
+                    Log.d(TAG, "URL not valid " + bookImageUrl);
+                    return;
+                }
+
+                try {
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    bookImage.setImageBitmap(bmp);
+                } catch (IOException e) {
+                    Toast.makeText(
+                            this,
+                            "There was a problem fetching the image for the book " + book.getTitle(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        }
+    }
 }

@@ -1,9 +1,14 @@
 package com.example.glassesgang;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,10 +18,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Object for handling transactions in the database
@@ -107,8 +118,6 @@ public class DatabaseManager {
                 });
 
         // check request list as well once requesting is implemented
-
-
     }
 
     private static void addBookInOwnerCatalogue(String bid, String user) {
@@ -165,7 +174,6 @@ public class DatabaseManager {
             }
         });
     }
-
 
     public static void editContactInfo(String currentEmail, String newEmail){
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");

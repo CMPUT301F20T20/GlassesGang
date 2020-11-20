@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/login_book_image_view"
         android:layout_width="105dp"
         android:layout_height="155dp"
         android:layout_marginStart="24dp"
@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toTopOf="@+id/book_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/login_book_image_view"
         app:layout_constraintTop_toBottomOf="@+id/book_isbn" />
 
     <TextView
@@ -50,7 +50,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/login_book_image_view"
         app:layout_constraintTop_toBottomOf="@+id/book_isbn" />
 
     <TextView
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@+id/book_author"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/login_book_image_view"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -87,7 +87,7 @@
         app:layout_constraintBottom_toTopOf="@+id/book_borrower_owner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/login_book_image_view"
         app:layout_constraintTop_toBottomOf="@+id/book_author" />
 
     <!--Implementing status as a text view for now -->
@@ -100,7 +100,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/login_book_image_view"
         tools:srcCompat="@color/blue" />
 
     <!--temporarily changed text color from #FFFFFF to #000000 to see book status-->
