@@ -41,7 +41,7 @@ public class RequestHandlingFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onDeclineRequest();
-        void onAcceptRequest(String requestId);
+        void onAcceptRequest(Request request);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class RequestHandlingFragment extends Fragment {
 
                 // transition to the transaction fragment in parent
                 //TODO: transaction fragment, sending switch command to parent through interface
-                listener.onAcceptRequest(requestId);
+                listener.onAcceptRequest(request);
             }
         });
 

@@ -85,7 +85,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                     borrower = "None";
                 }
                 updateTextViews();
-                inflateRequestFragment();
+                if (requests.size() > 0) inflateRequestFragment();
             }
         });
 
@@ -163,14 +163,12 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
 
     private void inflateRequestFragment() {
-        if (requests.size() > 0) {
-            //inflate requestList fragment inside framelayout fragment container
-            Bundle bundle = new Bundle();
-            bundle.putString("bin", book.getBID()); //store bin for later use in request handling
-            Fragment requestFragment = new RequestHandlingFragment();
-            requestFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().add(R.id.owner_book_profile_fragment_container, requestFragment).commit();
-        }
+        //inflate requestList fragment inside framelayout fragment container
+        Bundle bundle = new Bundle();
+        bundle.putString("bin", book.getBID()); //store bin for later use in request handling
+        Fragment requestFragment = new RequestHandlingFragment();
+        requestFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, requestFragment).commit();
     }
 
     /**
@@ -189,12 +187,13 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
 
     @Override
-    public void onAcceptRequest(String requestId) {
+    public void onAcceptRequest(Request request) {
         //inflate requestList fragment inside framelayout fragment container
         Bundle bundle = new Bundle();
-        bundle.putString("requestId", requestId); //store bin for later use in request handling
+        bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
+        bundle.putString("borrowerEmail", request.getBorrowerEmail());
         Fragment transactionFragment = new TransactionFragment();
         transactionFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 }

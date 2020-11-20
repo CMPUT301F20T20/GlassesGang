@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.glassesgang.R;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,7 +35,10 @@ import java.util.ArrayList;
 public class TransactionFragment extends Fragment {
 
     private OnFragmentInteractionListener listener;
-    private ListView requestListView;
+    private TextView borrowerEmailTextView;
+    private Button showLocationButton;
+    private String requestId;
+    private String borrowerEmail;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
 
@@ -60,88 +65,40 @@ public class TransactionFragment extends Fragment {
         // connect to the database
         db = FirebaseFirestore.getInstance();
 
-        // setting up the array adapter
-        requestArrayList = new ArrayList<Request>();
-        requestAdapter = new RequestListAdapter(getActivity(), requestArrayList);
+        //get requestId and borrowerEmail from bundle
+        requestId = getArguments().getString("requestId");
+        borrowerEmail = getArguments().getString("borrowerEmail");
 
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_request_list, container, false);
+        final View v = inflater.inflate(R.layout.fragment_transaction, container, false);
         return v;
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // setting up the requestList view
-        requestListView = view.findViewById(R.id.request_listview);
-        requestListView.setAdapter(requestAdapter);
 
-        //get bid from bundle
-        String bid = getArguments().getString("bid");
+        //get borrower email displayed
+        borrowerEmailTextView = view.findViewById(R.id.borrower_email_textview);
+        borrowerEmailTextView.setText(borrowerEmail);
 
-        DocumentReference reqRef = db.collection("books").document(bid);   // get request reference from db for that book
-
-        // display requests for this book
-        reqRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        //show location button
+        showLocationButton = view.findViewById(R.id.show_location_button);
+        showLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+            public void onClick(View v) {
+                //display map fragment
+                Fragment mapFragment = new MapFragment();
+                getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
 
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, "Current data 1: " + snapshot.getData());
-                    ArrayList<String> requestList = (ArrayList<String>) snapshot.get("requestList");
-                    updateListView(requestList, view);
-                } else {
-                    Log.d(TAG, "Current data 2: null");
-                }
+                //destroy button
+                showLocationButton.setVisibility(View.GONE);
             }
         });
 
-        requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // get the request id of the book that was pressed
-                Request request = (Request) adapterView.getItemAtPosition(i);
-                String requestId = request.getRequestId();
-
-                // get request reference from db
-                DocumentReference reqRef = db.collection("requests").document(requestId);
-
-                // transition to the transaction fragment in parent
-                //TODO: transaction fragment, sending switch command to parent through interface
-                listener.onAcceptRequest();
-            }
-        });
-
-
-    }
-
-    private void updateListView(final ArrayList<String> requestList, View v) {
-        CollectionReference reqRef = db.collection("requests");
-
-        reqRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                requestArrayList.clear();
-
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    // if a request is in the requestList, add it to the requestArrayList for the requestListView to be displayed.
-                    if (requestList.contains(doc.getId())) {
-                        Request req = doc.toObject(Request.class);
-                        req.setRequestId(doc.getId());
-                        requestArrayList.add(req);
-                    }
-                }
-                requestAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
-            }
-        });
     }
 
 }
