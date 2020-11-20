@@ -1,8 +1,6 @@
-package com.example.glassesgang.Requests;
+package com.example.glassesgang.Transaction;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,12 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.glassesgang.Book;
-import com.example.glassesgang.BorrowerBookProfileActivity;
-import com.example.glassesgang.BorrowerHomeActivity;
-import com.example.glassesgang.CustomBookList;
-import com.example.glassesgang.OwnerBookProfileActivity;
-import com.example.glassesgang.OwnerHomeActivity;
 import com.example.glassesgang.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -49,7 +41,7 @@ public class RequestHandlingFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onDeclineRequest();
-        void onAcceptRequest();
+        void onAcceptRequest(String requestId);
     }
 
     @Override
@@ -126,6 +118,7 @@ public class RequestHandlingFragment extends Fragment {
 
                 // transition to the transaction fragment in parent
                 //TODO: transaction fragment, sending switch command to parent through interface
+                listener.onAcceptRequest(requestId);
             }
         });
 

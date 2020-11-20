@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
-import com.example.glassesgang.Requests.Request;
+import com.example.glassesgang.Transaction.Request;
+import com.example.glassesgang.Transaction.RequestHandlingFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;

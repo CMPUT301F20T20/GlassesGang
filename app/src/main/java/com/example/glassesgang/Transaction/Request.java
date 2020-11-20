@@ -1,5 +1,4 @@
-package com.example.glassesgang.Requests;
-import java.util.UUID;
+package com.example.glassesgang.Transaction;
 
 /**
  * This is a class that represents the Request object, allowing for comparison of requests by bookId

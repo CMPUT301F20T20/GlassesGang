@@ -1,13 +1,12 @@
 package com.example.glassesgang;
 
-import android.nfc.Tag;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.glassesgang.Requests.Request;
+import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.BookStatus.Status;
-import com.example.glassesgang.Requests.RequestReference;
+import com.example.glassesgang.Transaction.RequestReference;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

@@ -1,7 +1,7 @@
 package com.example.glassesgang;
 
-import com.example.glassesgang.Requests.Request;
-import com.example.glassesgang.Requests.RequestList;
+import com.example.glassesgang.Transaction.Request;
+import com.example.glassesgang.Transaction.RequestList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.Test;
 

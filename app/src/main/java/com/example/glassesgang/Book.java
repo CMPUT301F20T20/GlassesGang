@@ -1,12 +1,7 @@
 package com.example.glassesgang;
 
-import android.media.Image;
-import android.provider.MediaStore;
-
-import com.example.glassesgang.Requests.Request;
 import com.example.glassesgang.BookStatus.Status;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Book implements Serializable {
