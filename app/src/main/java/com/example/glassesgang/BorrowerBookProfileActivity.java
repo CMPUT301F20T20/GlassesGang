@@ -126,8 +126,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                     } else {
                         // in this case the book is requested by other borrowers, but not the current borrower
                         // so it should appear as available to them
-                        if (book.getStatus().equals("requested")) {
-                            book.setStatus("available");
+                        if (book.getStatus().equals("REQUESTED")) {
+                            book.setStatus("AVAILABLE");
                         }
                         Log.d(TAG, "No such document");
                     }

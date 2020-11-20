@@ -30,7 +30,7 @@ public class Book implements Serializable {
         this.BID = BID;
         this.owner = owner;
         this.borrower = "";
-        this.status = "available";
+        this.status = "AVAILABLE";
         this.requestList = new ArrayList<>();
         this.imageUrl = imageUrl;
     }
@@ -41,7 +41,7 @@ public class Book implements Serializable {
         this.ISBN = ISBN;
         this.owner = owner;
         this.borrower = "";
-        this.status = "available";
+        this.status = "AVAILABLE";
         this.requestList = new ArrayList<>();
         this.imageUrl = imageUrl;
     }
@@ -184,22 +184,6 @@ public class Book implements Serializable {
      */
     public void setRequestList(ArrayList<String> requestList) {
         this.requestList = requestList;
-    }
-
-    /**
-     * Gets the image list of a book
-     * @return the image list of a book
-     */
-    public ArrayList<String> getImageList() {
-        return imageList;
-    }
-
-    /**
-     * Sets the image list of a book
-     * @param imageList new image list of book to be set
-     */
-    public void setImageList(ArrayList<String> imageList) {
-        this.imageList = imageList;
     }
 
     /**
