@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(ownerHomeIntent);
         } else {
             // redirect to sign in page
-            Intent signInIntent = new Intent(this, GoogleSignInActivity.class);
+            Intent signInIntent = new Intent(this, SignInActivity.class);
             startActivity(signInIntent);
         }
     }

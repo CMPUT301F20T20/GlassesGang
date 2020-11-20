@@ -62,7 +62,7 @@ public class UserProfileFragment extends Fragment{
                 // Do something in response to button click
                 Log.d(TAG, "please help me");
                 FirebaseAuth.getInstance().signOut();
-                Intent i = new Intent(getContext(), GoogleSignInActivity.class);
+                Intent i = new Intent(getContext(), SignInActivity.class);
                 startActivity(i);
 
             }
