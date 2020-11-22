@@ -87,8 +87,8 @@ public class BrowseFragment extends Fragment {
                 }
                 borrowerCatalogue = new HashMap<>();
                 for (QueryDocumentSnapshot doc : value) {
-                    // Store the contents of borrowerCatalogue from db in borrowerCatalogue hashmap<bid, bookStatus>
-                    borrowerCatalogue.put(doc.getId(), doc.get("bookStatus").toString());
+                    // Store the contents of borrowerCatalogue from db in borrowerCatalogue hashmap<bid, requestRefStatus>
+                    borrowerCatalogue.put(doc.getId(), doc.get("requestRefStatus").toString());
                 }
                 updateListView();      // updating ListView and overwriting status as needed using borrowerCatalogue
             }

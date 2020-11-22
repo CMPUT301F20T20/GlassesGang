@@ -83,7 +83,7 @@ public class BorrowerLibraryFragment extends Fragment {
         bookListView = view.findViewById(R.id.library_list_view);
         bookListView.setAdapter(bookArrayAdapter);
 
-        // Store the contents of borrowerCatalogue from db in borrowerCatalogue hashmap<bid, bookStatus>,
+        // Store the contents of borrowerCatalogue from db in borrowerCatalogue hashmap<bid, requestRefStatus>,
         // display the books whose bids are keys in the borrowerCatalogue hashmap
         borrowerCatalogueRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -95,7 +95,7 @@ public class BorrowerLibraryFragment extends Fragment {
                 }
                 borrowerCatalogue = new HashMap<>();
                 for (QueryDocumentSnapshot doc : value) {
-                    borrowerCatalogue.put(doc.getId(), doc.get("bookStatus").toString());   // putting each bid and status in the hashmap
+                    borrowerCatalogue.put(doc.getId(), doc.get("requestRefStatus").toString());   // putting each bid and status in the hashmap
                     updateListView();      // updating ListView to display books in the borrowerCatalogue
                 }
             }

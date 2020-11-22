@@ -121,7 +121,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        book.setStatus(document.get("bookStatus").toString());  // if book is in borrower catalogue, use the status from there
+                        book.setStatus(document.get("requestRefStatus").toString());  // if book is in borrower catalogue, use the status from there
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
                         // in this case the book is requested by other borrowers, but not the current borrower
