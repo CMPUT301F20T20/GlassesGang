@@ -137,6 +137,8 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
                     ).show();
                 }
             }
+        } else {
+            bookImage.setImageBitmap(null);
         }
     }
 
@@ -146,10 +148,10 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
     // so books of that status will not be displayed in the list view
     public void updateFilter(String status, int show) {
         if (show == 1) {
-            statusFilterList.add(status.toLowerCase());
+            statusFilterList.add(status);
         }
         else {
-            statusFilterList.remove(status.toLowerCase());
+            statusFilterList.remove(status);
         }
     }
 
@@ -170,7 +172,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
             FilterResults results = new FilterResults();
             ArrayList<Book> filteredBooks = new ArrayList<>();
             for(Book book: bookList) {  // if book's status is in status filter, add it to the filtered book list
-                if (statusFilterList.contains(book.getStatus().toLowerCase())) {
+                if (statusFilterList.contains(book.getStatus())) {
                     filteredBooks.add(book);
                 }
             }

@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +38,10 @@ public class OwnerLibraryFragment extends Fragment {
     private ArrayAdapter<Book> bookArrayAdapter;
     private ArrayList<Book> bookArrayList;
     private ArrayList<String> bidList; // list containing the bids of books that the owner owns
+    private ToggleButton availableTogButton;
+    private ToggleButton requestedTogButton;
+    private ToggleButton acceptedTogButton;
+    private ToggleButton borrowedTogButton;
     private String user;
     final String TAG = "OwnerLibraryFragment";
     private FirebaseFirestore db;
@@ -75,6 +81,9 @@ public class OwnerLibraryFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setUpFilter(view, (CustomBookList) bookArrayAdapter);
+
         // setting up the bookList view
         bookListView = view.findViewById(R.id.library_list_view);
         bookListView.setAdapter(bookArrayAdapter);
@@ -146,7 +155,71 @@ public class OwnerLibraryFragment extends Fragment {
                     }
                 }
                 bookArrayAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+                bookArrayAdapter.getFilter().filter("");  // refilter the new list of books
             }
         });
+    }
+
+    private void setUpFilter(View view, CustomBookList adapter) {
+        // setting up the buttons
+        availableTogButton = view.findViewById(R.id.availableToggleButton);
+        requestedTogButton = view.findViewById(R.id.requestedToggleButton);
+        acceptedTogButton = view.findViewById(R.id.acceptedToggleButton);
+        borrowedTogButton = view.findViewById(R.id.borrowedToggleButton);
+
+        // setting up listeners
+        availableTogButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.updateFilter("AVAILABLE", 1);
+                    adapter.getFilter().filter("");
+                } else {
+                    adapter.updateFilter("AVAILABLE", 0);
+                    adapter.getFilter().filter("");
+                }
+            }
+        });
+
+        requestedTogButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.updateFilter("REQUESTED", 1);
+                    adapter.getFilter().filter("");
+                } else {
+                    adapter.updateFilter("REQUESTED", 0);
+                    adapter.getFilter().filter("");
+                }
+            }
+        });
+
+        acceptedTogButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.updateFilter("ACCEPTED", 1);
+                    adapter.getFilter().filter("");
+                } else {
+                    adapter.updateFilter("ACCEPTED", 0);
+                    adapter.getFilter().filter("");
+                }
+            }
+        });
+
+        borrowedTogButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    adapter.updateFilter("BORROWED", 1);
+                    adapter.getFilter().filter("");
+                } else {
+                    adapter.updateFilter("BORROWED", 0);
+                    adapter.getFilter().filter("");
+                }
+            }
+        });
+
+
     }
 }
