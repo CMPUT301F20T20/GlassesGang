@@ -155,6 +155,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                             borrower = "None";
                         }
                         setBookImage(book);
+                        updateTextViews();
 
                     }
                 });

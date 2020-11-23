@@ -87,28 +87,27 @@ public class EditBookActivity extends AppCompatActivity {
             }
         });
 
+        // save the changes if there is no empty field or invalid input
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get the text from edit text fields
-                String title = titleEditText.getText().toString();
-                String author = authorEditText.getText().toString();
-                String isbn = isbnEditText.getText().toString();
+                if (!isThereInvalidInput()) {
+                    // get the text from edit text fields
+                    String title = titleEditText.getText().toString();
+                    String author = authorEditText.getText().toString();
+                    String isbn = isbnEditText.getText().toString();
+                    
+                    book.setTitle(title);
+                    book.setAuthor(author);
+                    book.setISBN(isbn);
+                    book.setImageUrl(bookImageUrl);
 
-                // save changes if there is no empty fields
-                if (title.length()>0 && author.length()>0 && isbn.length()>0) {
-                     book.setTitle(title);
-                     book.setAuthor(author);
-                     book.setISBN(isbn);
-                     book.setImageUrl(bookImageUrl);
-
-                     updateDatabase(docRef, book);
+                    updateDatabase(docRef, book);
 
                     setResult(Activity.RESULT_OK, getIntent());   // so when we go back to OwnerBookProfileActivity, it knows that it must update itself.
-
+                    CameraActivity.cleanBookImage();
+                    finish();
                 }
-                CameraActivity.cleanBookImage();
-                finish();
             }
         });
 
@@ -274,6 +273,31 @@ public class EditBookActivity extends AppCompatActivity {
         authorEditText.setText(selectedBook.getAuthor());
         isbnEditText.setText(selectedBook.getISBN());
         setBookImage(selectedBook, bookImageView);
+    }
+
+    /**
+     * Checks for empty fields in the title, author and isbn fields and that isbn is only of length 13.
+     * Displays error message for the invalid fields.
+     * @return true if there is an invalid input, false otherwise.
+     */
+    public boolean isThereInvalidInput() {
+        boolean invalidInput = false;
+        if (titleEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            titleEditText.setError("This field can not be blank");
+            invalidInput = true;
+        }
+        if (authorEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            authorEditText.setError("This field can not be blank");
+            invalidInput = true;
+        }
+        if (isbnEditText.getText().toString().trim().equalsIgnoreCase("")) {
+            isbnEditText.setError("This field can not be blank");
+            invalidInput = true;
+        } else if (isbnEditText.getText().toString().length() != 13) {   // ISBN can only be of length 13
+            isbnEditText.setError("invalid ISBN");
+            invalidInput = true;
+        }
+        return invalidInput;
     }
 
 }
