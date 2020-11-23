@@ -7,6 +7,12 @@
     tools:context=".Notification.NotificationFragment">
 
     <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/send_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Notification" />
+
     <ListView
         android:id="@+id/notification_listview"
         android:layout_width="match_parent"

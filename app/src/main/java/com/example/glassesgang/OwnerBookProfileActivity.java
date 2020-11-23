@@ -8,11 +8,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
 
@@ -24,7 +29,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+
+import java.net.URL;
 
 /**
  * Book profile for Owner View (edit book functionality)
@@ -37,6 +46,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private TextView borrowerTextView;
     private Button deleteButton;
     private Button editButton;
+    private ImageView bookImageView;
     private String author;
     private String title;
     private String isbn;
@@ -85,6 +95,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                     borrower = "None";
                 }
                 updateTextViews();
+                setBookImage(book);
                 if (requests.size() > 0) inflateRequestFragment();
             }
         });
@@ -118,6 +129,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
+        bookImageView = findViewById(R.id.borrowerBook_image_view);
     }
 
     /**
@@ -155,7 +167,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         if (borrower == null || borrower.equals("")) {
                             borrower = "None";
                         }
+                        setBookImage(book);
                         updateTextViews();
+
                     }
                 });
             }
@@ -180,12 +194,12 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.deleteBook(book);
     }
-
+    
     @Override
     public void onDeclineRequest() {
 
     }
-
+    
     @Override
     public void onAcceptRequest(Request request) {
         //inflate requestList fragment inside framelayout fragment container
@@ -195,5 +209,39 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         Fragment transactionFragment = new TransactionFragment();
         transactionFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
+    }
+
+    private void setBookImage(Book book) {
+        String bookImageUrl = book.getImageUrl();
+        if (bookImageUrl != null && bookImageUrl != "") {
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                URL url;
+                try {
+                    url = new URL(bookImageUrl);
+                } catch (MalformedURLException e) {
+                    Log.d(TAG, "URL not valid " + bookImageUrl);
+                    return;
+                }
+
+                try {
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    bookImageView.setImageBitmap(bmp);
+                } catch (IOException e) {
+                    Toast.makeText(
+                            this,
+                            "There was a problem fetching the image for the book " + book.getTitle(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        } else {
+            bookImageView.setImageBitmap(null);
+        }
     }
 }

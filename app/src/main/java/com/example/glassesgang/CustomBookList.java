@@ -1,6 +1,10 @@
 package com.example.glassesgang;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +12,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
 
@@ -24,6 +32,7 @@ public class CustomBookList extends ArrayAdapter<Book> {
     private ArrayList<Book> bookList;
     private Context context;
     private String userType;  // "o" = owner ; "b" = borrower
+    private String TAG = "Book properties";
 
     public CustomBookList(Context context, ArrayList<Book> bookList, String userType) {
         super(context, 0, bookList);
@@ -45,7 +54,9 @@ public class CustomBookList extends ArrayAdapter<Book> {
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
         TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
         TextView statusTextView = view.findViewById(R.id.book_temp_status);
+        ImageView bookImage = view.findViewById(R.id.login_book_image_view);
 
+        setBookImage(book, bookImage);
 
         titleTexView.setText(book.getTitle());
         authorTexView.setText(book.getAuthor());
@@ -68,9 +79,42 @@ public class CustomBookList extends ArrayAdapter<Book> {
                 borrowerOwnerTextView.setText("Owner: " + owner);
             }
         }
-        
 
         return view;
+    }
+
+    private void setBookImage(Book book, ImageView bookImage) {
+        String bookImageUrl = book.getImageUrl();
+        if (bookImageUrl != null && bookImageUrl != "") {
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
+            if (SDK_INT > 8) {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                URL url;
+                try {
+                    url = new URL(bookImageUrl);
+                } catch (MalformedURLException e) {
+                    Log.d(TAG, "URL not valid " + bookImageUrl);
+                    return;
+                }
+
+                try {
+                    Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    bookImage.setImageBitmap(bmp);
+                } catch (IOException e) {
+                    Toast.makeText(
+                            getContext(),
+                            "There was a problem fetching the image for the book " + book.getTitle(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        } else {
+            bookImage.setImageBitmap(null);  // clearing the image view
+        }
     }
 
 }

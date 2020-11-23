@@ -1,6 +1,9 @@
 package com.example.glassesgang;
 
 import com.example.glassesgang.BookStatus.Status;
+import android.media.Image;
+import android.provider.MediaStore;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -12,7 +15,7 @@ public class Book implements Serializable {
     private Status status;
     private String owner;
     private String borrower;
-//    private ArrayList<Image> images;
+    private String imageUrl;
     private ArrayList<String> requests;
 
 
@@ -20,7 +23,7 @@ public class Book implements Serializable {
         // no argument constructor for converting a book document snapshot to custom object
     }
 
-    public Book(String title, String author, String ISBN, String BID, String owner) {
+    public Book(String title, String author, String ISBN, String BID, String owner, String imageUrl) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
@@ -29,18 +32,20 @@ public class Book implements Serializable {
         this.borrower = "";
         this.status = Status.AVAILABLE;
         this.requests = new ArrayList<String>();
+        this.imageUrl = imageUrl;
     }
 
-    public Book(String title, String author, String ISBN, String owner) {
+    public Book(String title, String author, String ISBN, String owner, String imageUrl) {
         this.title = title;
         this.author = author;
         this.ISBN = ISBN;
         this.owner = owner;
         this.status = Status.AVAILABLE;
         this.borrower = "";
-        this.status = Status.AVAILABLE;
+        this.imageUrl = imageUrl;
         this.requests = new ArrayList<String>();
     }
+
 
     // Getters and Setters for the Class Objects
     /**
@@ -170,18 +175,18 @@ public class Book implements Serializable {
      *
      * @return an array of images that are attached to the book
      */
-//    public ArrayList<Image> getImages() {
-//        return images;
-//    }
-//
-//    /**
-//     * Sets the images of the book
-//     *
-//     * @param images an array of the images attached to a book
-//     */
-//    public void setImages(ArrayList<Image> images) {
-//        this.images = images;
-//    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    /**
+     * Sets the images of the book
+     *
+     * @param newImageUrl an array of the images attached to a book
+     */
+    public void setImageUrl(String newImageUrl) {
+        this.imageUrl = newImageUrl;
+    }
 
     /**
      * Gets the requests of the book
