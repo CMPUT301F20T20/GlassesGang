@@ -138,7 +138,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
                 }
             }
         } else {
-            bookImage.setImageBitmap(null);
+            bookImage.setImageBitmap(null);  // clearing the image view
         }
     }
 

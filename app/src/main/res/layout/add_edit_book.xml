@@ -60,7 +60,7 @@
         android:background="@color/borrowerSecondary"
         android:ems="10"
         android:fontFamily="@font/source_sans_pro_bold"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:textColor="@color/borrowerText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

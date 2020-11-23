@@ -156,6 +156,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         }
                         updateTextViews();
                         setBookImage(book);
+                        updateTextViews();
 
                     }
                 });
