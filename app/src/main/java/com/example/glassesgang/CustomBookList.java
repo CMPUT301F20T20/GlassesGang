@@ -170,8 +170,10 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
+            ArrayList<Book> origBooks = new ArrayList<>();
+            origBooks.addAll(bookList);
             ArrayList<Book> filteredBooks = new ArrayList<>();
-            for(Book book: bookList) {  // if book's status is in status filter, add it to the filtered book list
+            for(Book book: origBooks) {  // if book's status is in status filter, add it to the filtered book list
                 if (statusFilterList.contains(book.getStatus())) {
                     filteredBooks.add(book);
                 }
