@@ -96,14 +96,14 @@ public class OwnerHomeActivityTest {
     }
 
     // check if switching from borrower to owner works
-    @Test
-    public void checkSwitch() {
-        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
-        solo.clickOnText("User");
-        assertTrue(solo.waitForText("Email:", 1, 3000));
-        solo.pressSpinnerItem(0, 1);
-        solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
-    }
+//    @Test
+//    public void checkSwitch() {
+//        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+//        solo.clickOnText("User");
+//        assertTrue(solo.waitForText("Email:", 1, 3000));
+//        solo.pressSpinnerItem(0, 1);
+//        solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
+//    }
 //    /**
 //     * Close activity after each test
 //     * @throws Exception
