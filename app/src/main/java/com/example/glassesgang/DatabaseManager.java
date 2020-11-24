@@ -1,9 +1,14 @@
 package com.example.glassesgang;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,10 +18,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Object for handling transactions in the database
@@ -72,8 +83,23 @@ public class DatabaseManager {
 
         // delete from borrower Catalogue if book is borrowed
         if (!borrower.equals("")) {
-            DocumentReference borrowerRef = db.collection("users").document(borrower);
-            borrowerRef.update("borrowerCatalogue", FieldValue.arrayRemove(bid));
+            // get reference to the borrower catalogue
+            CollectionReference borrowerCatRef = db.collection("users").document(borrower).collection("borrowerCatalogue");
+            // delete the book document from borrower catalogue
+            borrowerCatRef.document(bid)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
+                        }
+                    });
         }
 
         // delete book from database
@@ -92,8 +118,6 @@ public class DatabaseManager {
                 });
 
         // check request list as well once requesting is implemented
-
-
     }
 
     private static void addBookInOwnerCatalogue(String bid, String user) {
@@ -150,7 +174,6 @@ public class DatabaseManager {
             }
         });
     }
-
 
     public static void editContactInfo(String currentEmail, String newEmail){
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
