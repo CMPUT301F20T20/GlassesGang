@@ -4,11 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 /**
  * Activity to add a book in the database
@@ -22,6 +28,16 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText authorEditText;
     private EditText isbnEditText;
     private String user;
+
+    // scanner variables
+    private SurfaceView surfaceView;
+    private BarcodeDetector barcodeDetector;
+    private CameraSource cameraSource;
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
+    //This class provides methods to play DTMF tones
+    //private ToneGenerator toneGen1;
+    private TextView barcodeText;
+    private String barcodeData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
