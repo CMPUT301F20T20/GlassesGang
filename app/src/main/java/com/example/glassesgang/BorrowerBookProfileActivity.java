@@ -11,16 +11,18 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
 import com.example.glassesgang.Transaction.Request;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,8 +49,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
     private String bid;
     private Book book;
-    private String userEmail;
     private FirebaseFirestore db;
+    private String user;
     final String TAG = "Database error";
 
     @Override
@@ -58,17 +60,19 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
-        //get user
+        // get the user email
         String filename = getResources().getString(R.string.email_account);
-        SharedPreferences sharedPref = this.getSharedPreferences(filename, Context.MODE_PRIVATE);
-        userEmail = sharedPref.getString("email", null);
+        SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
+        user = sharedPref.getString("email", "null");
+        if (user == "null") {
+            Log.e("Email","No user email recorded");
+        }
 
-        //get db
         db = FirebaseFirestore.getInstance();
         bid = getIntent().getStringExtra("bid");
         DocumentReference docRef = db.collection("books").document(bid);
 
-        // get the book document from firestore using the document reference
+        // get the book document from firestore using the document reference and display book information
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -77,9 +81,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         author = book.getAuthor();
                         title = book.getTitle();
                         isbn = book.getISBN();
-                        status = book.getStatus();
                         owner = book.getOwner();
-                        setTextViews();
+                        setBorrowerStatus(book);  // text views updated inside this method after the status is set
                         setBookImage(book, bookImageView);
                         switch(status) {
                             case AVAILABLE: //make a request for this book
@@ -87,7 +90,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                         // get the values for title, author, and isbn from the EditTexts
-                                            Request newRequest = new Request(bid, userEmail, owner);
+                                            Request newRequest = new Request(bid, user, owner);
                                             DatabaseManager database = new DatabaseManager();
                                             database.addRequest(newRequest);
                                             // TODO: somehow add to the system and make sure photos are attached
@@ -145,8 +148,38 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        statusButton.setText(stringStatus(status));
         ownerTextView.setText(owner);
+        statusButton.setText(stringStatus(status));
+    }
+
+    private void setBorrowerStatus(Book book) {
+        DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
+        //TODO: fix bug, for some reason it keeps failing here...
+        borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        book.setStringStatus(document.get("requestRefStatus").toString());  // if book is in borrower catalogue, use the status from there
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        // in this case the book is requested by other borrowers, but not the current borrower
+                        // so it should appear as available to them
+                        if (book.getStatus() == Status.REQUESTED) {
+                            book.setStatus(Status.AVAILABLE);
+                        }
+                        Log.d(TAG, "No such document");
+                    }
+                    // set the text for status text view and update all the text views
+                    status = book.getStatus();
+                    setTextViews();
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
     }
 
     private void setBookImage(Book book, ImageView bookImage) {

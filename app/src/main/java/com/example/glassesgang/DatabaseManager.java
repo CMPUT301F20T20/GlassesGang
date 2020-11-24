@@ -90,8 +90,23 @@ public class DatabaseManager {
 
         // delete from borrower Catalogue if book is borrowed
         if (!borrower.equals("")) {
-            DocumentReference borrowerRef = db.collection("users").document(borrower);
-            borrowerRef.update("borrowerCatalogue", FieldValue.arrayRemove(bid));
+            // get reference to the borrower catalogue
+            CollectionReference borrowerCatRef = db.collection("users").document(borrower).collection("borrowerCatalogue");
+            // delete the book document from borrower catalogue
+            borrowerCatRef.document(bid)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
+                        }
+                    });
         }
 
         // delete book from database

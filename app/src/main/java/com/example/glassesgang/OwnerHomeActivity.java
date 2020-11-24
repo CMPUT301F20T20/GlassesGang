@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -29,7 +28,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
 
         //first time launch we want to have library open
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LibraryFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new OwnerLibraryFragment()).commit();
         }
 
         //setup bottom navigation
@@ -57,7 +56,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_books:
                         addButton.setVisibility(View.VISIBLE);
-                        selectedFragment = new LibraryFragment();
+                        selectedFragment = new OwnerLibraryFragment();
                         break;
                     case R.id.nav_notifications:
                         addButton.setVisibility(View.GONE);

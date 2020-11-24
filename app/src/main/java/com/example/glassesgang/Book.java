@@ -132,10 +132,33 @@ public class Book implements Serializable {
     /**
      * Sets the status of the book
      *
-     * @param status a string of the status to set the book status to, one of available, requested, accepted, or borrowed
+     * @param status a status enum to set the book status to, one of available, requested, accepted, or borrowed
      */
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    /**
+     * Sets the status of the book
+     *
+     * @param status a String status  to set the book status to, one of available, requested, accepted, or borrowed
+     */
+    public void setStringStatus(String status) {
+        switch(status) {
+            case ("AVAILABLE"):
+                this.status = Status.AVAILABLE;
+                break;
+            case ("REQUESTED"):
+                this.status = Status.REQUESTED;
+                break;
+            case ("ACCEPTED"):
+                this.status = Status.ACCEPTED;
+                break;
+            case ("BORROWED"):
+                this.status = Status.BORROWED;
+                break;
+            default: this.status = null;
+        }
     }
 
     /**
@@ -171,6 +194,22 @@ public class Book implements Serializable {
     }
 
     /**
+     * Gets the requests of a book
+     * @return the requests of a book
+     */
+    public ArrayList<String> getRequests() {
+        return requests;
+    }
+
+    /**
+     * Sets the request list of a book
+     * @param requests the new request list to be set
+     */
+    public void setRequests(ArrayList<String> requests) {
+        this.requests = requests;
+    }
+
+    /**
      * Gets the images of the book
      *
      * @return an array of images that are attached to the book
@@ -188,23 +227,6 @@ public class Book implements Serializable {
         this.imageUrl = newImageUrl;
     }
 
-    /**
-     * Gets the requests of the book
-     *
-     * @return an array of requests that are attached to the book
-     */
-    public ArrayList<String> getRequests() {
-        return requests;
-    }
 
-
-    /**
-     * Sets the requests of the book
-     *
-     * @param requests an array of the requests attached to a book
-     */
-    public void setRequests(ArrayList<String> requests) {
-        this.requests = requests;
-    }
 
 }
