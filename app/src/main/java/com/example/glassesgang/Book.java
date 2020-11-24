@@ -14,7 +14,6 @@ public class Book implements Serializable {
     private String status;
     private String owner;
     private String borrower;
-    private ArrayList<String> requestList;
     private String imageUrl;
     //private ArrayList<Request> requestList; //  getter and setter currently commented out but ready to implement as soon as Request exists
 
@@ -30,8 +29,7 @@ public class Book implements Serializable {
         this.BID = BID;
         this.owner = owner;
         this.borrower = "";
-        this.status = "AVAILABLE";
-        this.requestList = new ArrayList<>();
+        this.status = "available";
         this.imageUrl = imageUrl;
     }
 
@@ -40,9 +38,8 @@ public class Book implements Serializable {
         this.author = author;
         this.ISBN = ISBN;
         this.owner = owner;
+        this.status = "available";
         this.borrower = "";
-        this.status = "AVAILABLE";
-        this.requestList = new ArrayList<>();
         this.imageUrl = imageUrl;
     }
 
@@ -168,22 +165,6 @@ public class Book implements Serializable {
      */
     public void setBorrower(String borrower) {
         this.borrower = borrower;
-    }
-
-    /**
-     * Gets the requestList of a book
-     * @return the requestList of a book
-     */
-    public ArrayList<String> getRequestList() {
-        return requestList;
-    }
-
-    /**
-     * Sets the request list of a book
-     * @param requestList the new request list to be set
-     */
-    public void setRequestList(ArrayList<String> requestList) {
-        this.requestList = requestList;
     }
 
     /**

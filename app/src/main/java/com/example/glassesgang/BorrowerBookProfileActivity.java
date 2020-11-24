@@ -3,23 +3,17 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,7 +40,6 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
     private String owner;
     private Book book;
     private FirebaseFirestore db;
-    private String user;
     final String TAG = "Database error";
 
     @Override
@@ -56,19 +49,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
         findViewsById();
 
-        // get the user email
-        String filename = getResources().getString(R.string.email_account);
-        SharedPreferences sharedPref = getSharedPreferences(filename, Context.MODE_PRIVATE);
-        user = sharedPref.getString("email", "null");
-        if (user == "null") {
-            Log.e("Email","No user email recorded");
-        }
-
         db = FirebaseFirestore.getInstance();
         bid = getIntent().getStringExtra("bid");
         DocumentReference docRef = db.collection("books").document(bid);
 
-        // get the book document from firestore using the document reference and display book information
+        // get the book document from firestore using the document reference
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -77,8 +62,9 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         author = book.getAuthor();
                         title = book.getTitle();
                         isbn = book.getISBN();
+                        status = book.getStatus();
                         owner = book.getOwner();
-                        setBorrowerStatus(book);  // text views updated inside this method after the status is set
+                        setTextViews();
                         setBookImage(book, bookImageView);
                     }
                 })
@@ -109,37 +95,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        ownerTextView.setText(owner);
         statusTextView.setText(status);
-    }
-
-    private void setBorrowerStatus(Book book) {
-        DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
-        borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        book.setStatus(document.get("requestRefStatus").toString());  // if book is in borrower catalogue, use the status from there
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        // in this case the book is requested by other borrowers, but not the current borrower
-                        // so it should appear as available to them
-                        if (book.getStatus().equals("REQUESTED")) {
-                            book.setStatus("AVAILABLE");
-                        }
-                        Log.d(TAG, "No such document");
-                    }
-                    // set the text for status text view and update all the text views
-                    status = book.getStatus();
-                    setTextViews();
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
-
+        ownerTextView.setText(owner);
     }
 
     private void setBookImage(Book book, ImageView bookImage) {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.glassesgang.Notification.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * Home Activity for Owner
@@ -52,7 +56,7 @@ public class OwnerHomeActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_books:
                         addButton.setVisibility(View.VISIBLE);
-                        selectedFragment = new OwnerLibraryFragment();
+                        selectedFragment = new LibraryFragment();
                         break;
                     case R.id.nav_notifications:
                         addButton.setVisibility(View.GONE);

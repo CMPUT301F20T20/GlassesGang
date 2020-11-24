@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,44 +24,17 @@ import java.util.ArrayList;
 /**
  * Book List Adapter for List View
  */
-public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
+public class CustomBookList extends ArrayAdapter<Book> {
     private ArrayList<Book> bookList;
-    private ArrayList<Book> filteredBookList;
     private Context context;
     private String userType;  // "o" = owner ; "b" = borrower
-    private ArrayList<String> statusFilterList;
-    private BookStatusFilter bookStatusFilter;
     private String TAG = "Book properties";
-
-    @Override
-    public int getCount() {
-        return filteredBookList.size();
-    }
-
-    @Override
-    public Book getItem(int position) {
-        return filteredBookList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     public CustomBookList(Context context, ArrayList<Book> bookList, String userType) {
         super(context, 0, bookList);
         this.bookList = bookList;
         this.context = context;
         this.userType = userType;
-        this.statusFilterList = new ArrayList<>();  // contains the statuses of books that must be displayed
-
-        // when initialized books of all statuses can be displayed
-        this.statusFilterList.add("AVAILABLE");
-        this.statusFilterList.add("REQUESTED");
-        this.statusFilterList.add("ACCEPTED");
-        this.statusFilterList.add("BORROWED");
-
-        this.filteredBookList = bookList;
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -73,7 +44,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
             view = LayoutInflater.from(context).inflate(R.layout.book_listing, parent, false);
         }
 
-        Book book = filteredBookList.get(position);
+        Book book = bookList.get(position);
         TextView titleTexView = view.findViewById(R.id.book_title);
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
@@ -142,52 +113,4 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         }
     }
 
-    // if show is 1, it adds the status string passed to status filter
-    // so books of that status will be displayed in the list view
-    // if show is 0, it removers the status string passed from status filter
-    // so books of that status will not be displayed in the list view
-    public void updateFilter(String status, int show) {
-        if (show == 1) {
-            statusFilterList.add(status);
-        }
-        else {
-            statusFilterList.remove(status);
-        }
-    }
-
-    // must implement this method when implementing Filterable interface
-    @Override
-    public Filter getFilter() {
-        if (bookStatusFilter == null) {
-            bookStatusFilter = new BookStatusFilter();
-        }
-        return bookStatusFilter;
-    }
-
-    class BookStatusFilter extends Filter {
-
-        // filter the books according to the statuses in the statusFilter
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-            ArrayList<Book> origBooks = new ArrayList<>();
-            origBooks.addAll(bookList);
-            ArrayList<Book> filteredBooks = new ArrayList<>();
-            for(Book book: origBooks) {  // if book's status is in status filter, add it to the filtered book list
-                if (statusFilterList.contains(book.getStatus())) {
-                    filteredBooks.add(book);
-                }
-            }
-            results.values = filteredBooks;
-            results.count = filteredBooks.size();
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredBookList = (ArrayList<Book>) results.values;
-            notifyDataSetChanged();
-        }
-    }
 }
-

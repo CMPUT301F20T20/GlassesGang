@@ -45,10 +45,7 @@ public class BrowseFragment extends Fragment {
     private ListView browseBookList;
     private ArrayAdapter<Book> browseBookAdapter;
     private ArrayList<Book> bookDataList;
-    private HashMap<String, String> borrowerCatalogue;
-    private String user;
     private FirebaseFirestore db;
-    private CollectionReference borrowerCatalogueRef;
     private final String TAG = "Database";
 
     @Override
@@ -58,15 +55,9 @@ public class BrowseFragment extends Fragment {
         // connect to the database
         db = FirebaseFirestore.getInstance();
 
-        // get the user email
-        user = getUserEmail();
-
         // set up the arrayAdapter
         bookDataList = new ArrayList<>();
         browseBookAdapter = new CustomBookList(getActivity(), bookDataList, "b");
-
-        // get a reference to the borrowerCatalogue collection
-        borrowerCatalogueRef = db.collection("users").document(user).collection("borrowerCatalogue");
     }
 
     @Nullable
@@ -77,22 +68,7 @@ public class BrowseFragment extends Fragment {
         browseBookList = v.findViewById(R.id.browse_list_view);
         browseBookList.setAdapter(browseBookAdapter);
 
-        borrowerCatalogueRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-                borrowerCatalogue = new HashMap<>();
-                for (QueryDocumentSnapshot doc : value) {
-                    // Store the contents of borrowerCatalogue from db in borrowerCatalogue hashmap<bid, requestRefStatus>
-                    borrowerCatalogue.put(doc.getId(), doc.get("requestRefStatus").toString());
-                }
-                updateListView();      // updating ListView and overwriting status as needed using borrowerCatalogue
-            }
-        });
+        updateListView();
 
         browseBookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -133,6 +109,7 @@ public class BrowseFragment extends Fragment {
      */
     private void updateListView() {
         final CollectionReference collectionReference = db.collection("books");
+        String user = getUserEmail();
         // fetch books
         collectionReference.whereNotEqualTo("owner", user).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -143,13 +120,8 @@ public class BrowseFragment extends Fragment {
                     Map<String, Object> bookData = document.getData();
 
                     // show books that have status available or requested
-                    if (bookData.get("status").equals("REQUESTED") || bookData.get("status").equals("AVAILABLE")) {
+                    if (bookData.get("status").equals("requested") || bookData.get("status").equals("available")) {
                         Book book = document.toObject(Book.class);
-                        if (borrowerCatalogue.containsKey(document.getId())) {  // if book is the borrower catalogue, overwrite the book status
-                            book.setStatus(borrowerCatalogue.get(document.getId()));
-                        } else {
-                            book.setStatus("AVAILABLE");   // if book is not in the borrower catalogue, then borrower hasn't interacted with book yet, so set it to available
-                        }
                         bookDataList.add(book);
                     }
                 }
