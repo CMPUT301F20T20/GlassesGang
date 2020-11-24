@@ -7,54 +7,55 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.glassesgang.Book;
 import com.example.glassesgang.R;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
  */
-public class TransactionFragment extends Fragment {
+public class TransactionFragment extends Fragment implements MapFragment.OnMapInteractionListener {
 
-    private OnFragmentInteractionListener listener;
-    private TextView borrowerEmailTextView;
+    private OnTransactionInteractionListener listener;
+    private TextView emailTextView;
+    private Button transactionButton;
     private Button showLocationButton;
     private String requestId;
-    private String borrowerEmail;
+    private String userEmail;
+    private String userType;
+    private Request request;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
+    private com.google.android.gms.maps.model.LatLng mapMarker;
 
-    public interface OnFragmentInteractionListener {
-        void onOfferPressed();
-        void onRetrievePressed();
+    @Override
+    public void onMarkerSelected(com.google.android.gms.maps.model.LatLng latLng) {
+        transactionButton.setEnabled(true);
+        mapMarker = latLng;
+    }
+
+    public interface OnTransactionInteractionListener {
+        void onTransactionPressed();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnTransactionInteractionListener) {
+            listener = (OnTransactionInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
+                    + "must implement OnTransactionInteractionListener");
         }
     }
 
@@ -65,9 +66,10 @@ public class TransactionFragment extends Fragment {
         // connect to the database
         db = FirebaseFirestore.getInstance();
 
-        //get requestId and borrowerEmail from bundle
+        //get requestId, borrower or owner email, and userType from bundle
         requestId = getArguments().getString("requestId");
-        borrowerEmail = getArguments().getString("borrowerEmail");
+        userEmail = getArguments().getString("userEmail");
+        userType = getArguments().getString("userType");
 
     }
 
@@ -81,11 +83,66 @@ public class TransactionFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //get borrower email displayed
-        borrowerEmailTextView = view.findViewById(R.id.borrower_email_textview);
-        borrowerEmailTextView.setText(borrowerEmail);
+        //get request object
+        DocumentReference reqRef = db.collection("requests").document(requestId);
+        reqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+              @Override
+              public void onSuccess(DocumentSnapshot documentSnapshot) {
+                  request = documentSnapshot.toObject(Request.class);   // convert the book document to Book Object
+              }
+        });
 
-        //show location button
+        //get email displayed based on userType
+        emailTextView = view.findViewById(R.id.email_textview);
+        emailTextView.setText(userEmail);
+
+        //location button, default gone. if owner, enable. if borrower, disabled permanently
+        showLocationButton = view.findViewById(R.id.show_location_button);
+        showLocationButton.setVisibility(View.GONE); //disabled by default
+        transactionButton = view.findViewById(R.id.transaction_button);
+
+        //if owner, then transaction is offering a requested book. involves map and scan
+        if (userType.equals("o")) {
+            //enable location button and enable scanning
+            transactionButton.setText("OFFER");
+            //offer button for scanning only after location is chosen
+            transactionButton.setEnabled(false);
+            showLocationButton.setVisibility(View.VISIBLE);
+            showLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //display map fragment
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userType", userType); //store bin for later use in request handling
+                    Fragment mapFragment = new MapFragment(); //initialized as an owner map fragment (no params)
+                    mapFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+
+                    //destroy button
+                    showLocationButton.setVisibility(View.GONE);
+                }
+            });
+            transactionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //offer book functionality, TODO: open scan activity
+                }
+            });
+        }
+
+        //if borrower, then transaction is accepting owners offer. load map fragment
+        else if (userType.equals("b")) {
+            transactionButton.setText("ACCEPT"); //transaction button enabled by default, location button uninteractable
+            //display map fragment
+            Bundle bundle = new Bundle();
+            bundle.putString("userType", userType); //store bin for later use in request handling
+            Fragment mapFragment = new MapFragment(request.getLocation()); //initialized as a borrower map fragment
+            mapFragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+        }
+
+
+        //show map location, set offer button to accept
         showLocationButton = view.findViewById(R.id.show_location_button);
         showLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +153,8 @@ public class TransactionFragment extends Fragment {
 
                 //destroy button
                 showLocationButton.setVisibility(View.GONE);
+
+                //TODO: scanning for borrower
             }
         });
 

@@ -96,7 +96,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 }
                 updateTextViews();
                 setBookImage(book);
-                if (requests.size() > 0) inflateRequestFragment();
+                if (requests != null && requests.size() > 0) inflateRequestFragment();
             }
         });
 
@@ -196,8 +196,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
     
     @Override
-    public void onDeclineRequest() {
-
+    public void onDeclineRequest(Request request) {
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.deleteRequest(request, Status.AVAILABLE);
     }
     
     @Override
@@ -205,7 +206,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         //inflate requestList fragment inside framelayout fragment container
         Bundle bundle = new Bundle();
         bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
-        bundle.putString("borrowerEmail", request.getBorrowerEmail());
+        bundle.putString("userEmail", request.getBorrowerEmail());
+        bundle.putString("userType", "o");
         Fragment transactionFragment = new TransactionFragment();
         transactionFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();

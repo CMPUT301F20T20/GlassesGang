@@ -17,18 +17,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/borrower_email_label"
+        android:id="@+id/email_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/borrower_email_textview"
+        app:layout_constraintBottom_toTopOf="@+id/email_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/borrower_email_textview"
+        android:id="@+id/email_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -36,24 +36,24 @@
         app:layout_constraintBottom_toTopOf="@+id/transaction_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borrower_email_label" />
+        app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
     <FrameLayout
         android:id="@+id/transaction_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/offer_button"
+        app:layout_constraintBottom_toTopOf="@id/transaction_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/borrower_email_textview">
+        app:layout_constraintTop_toBottomOf="@+id/email_textview">
 
     </FrameLayout>
 
     <Button
-        android:id="@+id/offer_button"
+        android:id="@+id/transaction_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="OFFER"
+        android:text="TRANSACTION"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

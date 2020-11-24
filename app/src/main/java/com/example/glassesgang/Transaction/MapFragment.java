@@ -1,8 +1,11 @@
 package com.example.glassesgang.Transaction;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -26,9 +29,34 @@ import java.util.Objects;
 
 public class MapFragment extends Fragment {
 
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
     private static final int zoomAmount = 13;
+    private OnMapInteractionListener listener;
+    private LatLng givenLocation;
+    private String userType;
+
+    public MapFragment() {
+        userType = "o";
+    }
+
+    public MapFragment(LatLng latLng) {
+        givenLocation = latLng;
+        userType = "b"; //must be borrower to receive location
+    }
+
+    public interface OnMapInteractionListener {
+        void onMarkerSelected(LatLng latLng);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MapFragment.OnMapInteractionListener) {
+            listener = (MapFragment.OnMapInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement OnMapInteractionListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,72 +69,78 @@ public class MapFragment extends Fragment {
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                checkLocationPermission(googleMap);
+                if (hasLocationPermissions() && userType.equals("o")) {
+                    goToLocation(googleMap, null);
+                    //after map is loaded
+                    googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(LatLng latLng) {
+                            //Creating Marker and setting its position
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(latLng);
 
-                //after map is loaded
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(LatLng latLng) {
-                        //Creating Marker and setting its position
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(latLng);
+                            //Give marker a title
+                            markerOptions.title(latLng.latitude + " : " + latLng.longitude); //debug, replace with more meaningful title later
 
-                        //Give marker a title
-                        markerOptions.title(latLng.latitude + " : " + latLng.longitude); //debug, replace with more meaningful title later
+                            //Clear previously clicked position
+                            googleMap.clear();
 
-                        //Clear previously clicked position
-                        googleMap.clear();
+                            //Zoom to marker location
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
 
-                        //Zoom to marker location
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                            //Add marker to the map
+                            googleMap.addMarker(markerOptions);
 
-                        //Add marker to the map
-                        googleMap.addMarker(markerOptions);
-                    }
-                });
+                            //send to transaction fragment to be added into request
+                            listener.onMarkerSelected(latLng);
+                        }
+                    });
+                }
+                else if (userType.equals("b") && givenLocation != null) goToLocation(googleMap, givenLocation);
             }
         });
 
         return view;
     }
 
-    private boolean checkLocationPermission() {
-
+    private boolean hasLocationPermissions() {
         if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            return true;
         }
         else {
-            requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION, 2);
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+            return false;
         }
     }
 
-    private void goToCurrentLocation(GoogleMap map) {
-        //zoom to current location if has location permissions on
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
+    private void goToLocation(GoogleMap map, @Nullable LatLng givenLocation) {
+        if (givenLocation == null) {
+            //user is owner, zoom to current location if has location permissions on
+            LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            Criteria criteria = new Criteria();
 
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        if (location != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoomAmount));
+            @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+            if (location != null) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoomAmount));
 
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude())) //sets center of map to users location
-                    .zoom(zoomAmount) //sets the zoom
-                    .bearing(90) //sets the orientation of the camera
-                    .tilt(40) //sets tilt of camera to 30 degrees
-                    .build();
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                /* //optional camera settings for zooming to a location //TODO: remove camera settings once team has chosen camera options
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude())) //sets center of map to users location
+                        .zoom(zoomAmount) //sets the zoom
+                        .bearing(90) //sets the orientation of the camera
+                        .tilt(40) //sets tilt of camera to 30 degrees
+                        .build();
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                */
+            }
         }
-
+        else {
+            //user is borrower, givenLocation exists
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(givenLocation, zoomAmount));
+        }
     }
 
 }

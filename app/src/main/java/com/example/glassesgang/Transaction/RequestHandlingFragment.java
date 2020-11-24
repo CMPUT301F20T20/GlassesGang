@@ -40,7 +40,7 @@ public class RequestHandlingFragment extends Fragment {
     private FirebaseFirestore db;
 
     public interface OnFragmentInteractionListener {
-        void onDeclineRequest();
+        void onDeclineRequest(Request request);
         void onAcceptRequest(Request request);
     }
 

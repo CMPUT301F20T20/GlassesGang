@@ -7,7 +7,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.example.glassesgang.Notification.App;
+import com.example.glassesgang.Notification.Notification;
 import com.google.android.gms.tasks.Continuation;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.BookStatus.Status;
@@ -138,7 +142,7 @@ public class DatabaseManager {
                     } else {
                         Map<String, ArrayList<String>> userCatalogue = new HashMap<>();
                         userCatalogue.put("ownerCatalogue", new ArrayList<String>());
-                        userCatalogue.put("borrowerCatalogue", new ArrayList<String>());
+                        userCatalogue.put("notificationCatalogue", new ArrayList<String>());
                         //userCatalogue.put("email", new String());
                         // adding the user
                         usersDatabase.document(user.getEmail())
@@ -267,8 +271,8 @@ public class DatabaseManager {
         // send notification to borrower on request status
 
 
-        // delete request from its books request list
-        bookRef.update("ownerCatalogue", FieldValue.arrayRemove(requestToDelete.getRequestId()));
+        // delete request from its books request list //TODO: add a check for if the request exists
+        bookRef.update("requests", FieldValue.arrayRemove(requestToDelete.getRequestId()));
 
         //handle the book status to its new status
         changeBookStatus(newStatus, bid);
@@ -290,8 +294,81 @@ public class DatabaseManager {
 
     }
 
-    //TODO: awaiting notification schema to be finished to complete this method
-    /*
-    public static void addNotificationToUser(String requestId)
-    */
+    public static void addNotification(Context context, Notification notification) {
+        // add the request to the requests collection in the database
+        db.collection("notifications")
+                .add(notification)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Notification added successfully, written with ID: " + documentReference.getId());
+                        documentReference.update("notificationId", documentReference.getId());
+                        notification.setNotificationId(documentReference.getId());
+                        addNotificationToUser(context, notification);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    private static void addNotificationToUser(Context context, Notification notification)
+    {
+        // adds to receiver's notification array
+        db.collection("users")
+                .document(notification.getReceiverEmail())
+                .update("notificationCatalogue", FieldValue.arrayUnion(notification.getNotificationId()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Notification successfully added to user " + notification.getReceiverEmail());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding notification to user" + notification.getReceiverEmail(), e);
+                    }
+                });
+
+        // TODO: create a notification to be displayed as a popup
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
+                App.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                .setContentTitle(notification.getPopupTitle())
+                .setContentText(notification.getPopupText());
+
+        // TODO: create the notification alert on receiver's phone
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.notify(1, builder.build());
+    }
+
+    public static void deleteNotification(Notification not) {
+        String notId = not.getNotificationId();
+        DocumentReference notRef = db.collection("notifications").document(notId);
+        DocumentReference userRef = db.collection("users").document(not.getReceiverEmail());
+
+        // delete notification from users notificationCatalogue //TODO: add a check for if the notification exists
+        userRef.update("notificationCatalogue", FieldValue.arrayRemove(notId));
+
+        // delete notification from database
+        notRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Notification " + notId + " successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting request " + notId, e);
+                    }
+                });
+
+    }
+
 }

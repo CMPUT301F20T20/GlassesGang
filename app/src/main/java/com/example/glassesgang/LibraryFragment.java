@@ -80,7 +80,6 @@ public class LibraryFragment extends Fragment {
         // setting up the array adapter
         bookArrayList = new ArrayList<Book>();
         bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, userType);
-
     }
 
 
@@ -125,7 +124,7 @@ public class LibraryFragment extends Fragment {
             });
         }
         if (userType.equals("b")) {
-            // display borrower catalogue
+            // display borrower catalogue //TODO: needs refactoring, cholete has it
             userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot snapshot,

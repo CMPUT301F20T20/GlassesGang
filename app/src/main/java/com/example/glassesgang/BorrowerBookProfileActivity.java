@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
 import com.example.glassesgang.Transaction.Request;
-import com.example.glassesgang.Transaction.RequestHandlingFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,18 +33,19 @@ import java.net.URL;
  * Book Profile for Borrower view (no edit book functionality)
  */
 public class BorrowerBookProfileActivity extends AppCompatActivity {
+    private Button statusButton;
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
-    private Button statusButton;
     private TextView ownerTextView;
     private ImageView bookImageView;
-    private String author;
-    private String title;
-    private String isbn;
     private Status status;
-    private String bid;
+    private String title;
+    private String author;
+    private String isbn;
     private String owner;
+
+    private String bid;
     private Book book;
     private String userEmail;
     private FirebaseFirestore db;
@@ -107,6 +107,14 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                                     }
                                 });
                                 break;
+                            case ACCEPTED: //show transaction fragment to accept book at owner specified location
+                                statusButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //find request object in db, will contain owner's added info like map marker
+
+                                    }
+                                });
                         }
                     }
                 })
@@ -126,7 +134,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
         statusButton = findViewById(R.id.status_button);
-        ownerTextView = findViewById(R.id.owner_textView);
+        ownerTextView = findViewById(R.id.bookOwner_textView);
         bookImageView = findViewById(R.id.borrowerBook_image_view);
     }
 

@@ -1,5 +1,7 @@
 package com.example.glassesgang.Transaction;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * This is a class that represents the Request object, allowing for comparison of requests by bookId
  */
@@ -8,6 +10,7 @@ public class Request implements Comparable<Request>{
     private String borrowerEmail;
     private String ownerEmail;
     private String requestId;
+    private LatLng location;
 
     /**
      * This is the constructor for a Request object
@@ -20,6 +23,14 @@ public class Request implements Comparable<Request>{
         this.bookId = bookId;
         this.borrowerEmail = borrowerEmail;
         this.ownerEmail = ownerEmail;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 
     /**
