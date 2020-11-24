@@ -17,11 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.example.glassesgang.SignInActivity;
-import com.example.glassesgang.OwnerHomeActivity;
-import com.example.glassesgang.R;
-import com.example.glassesgang.BorrowerHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**

@@ -142,7 +142,7 @@ public class BrowseFragment extends Fragment {
                     if (bookData.get("status").equals("REQUESTED") || bookData.get("status").equals("AVAILABLE")) {
                         Book book = document.toObject(Book.class);
                         if (borrowerCatalogue.containsKey(document.getId())) {  // if book is the borrower catalogue, overwrite the book status
-                            book.setStringStatus(Objects.requireNonNull(borrowerCatalogue.get(document.getId())));
+                            book.setStringStatus(borrowerCatalogue.get(document.getId()));
                         } else {
                             book.setStatus(Status.AVAILABLE);   // if book is not in the borrower catalogue, then borrower hasn't interacted with book yet, so set it to available
                         }
