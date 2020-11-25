@@ -3,20 +3,14 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -56,6 +50,7 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText isbnEditText;
     private String user;
     private final int CAMERA_PHOTO_TAKEN = 102;
+    private final int SCAN_TAKEN = 111;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String bookImageUrl;
 
@@ -116,6 +111,9 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: implement scanning for submission 4
+                Intent intent = new Intent(AddBookActivity.this, ScannerActivity.class);
+                //startActivityForResult(intent, SCAN_TAKEN);
+                startActivity(intent);
             }
         });
 
@@ -145,6 +143,9 @@ public class AddBookActivity extends AppCompatActivity {
             Bitmap bookImage = CameraActivity.getBookImage();
             bookImageView.setImageBitmap(bookImage);
             uploadPictureToStorage(bookImage);
+        }
+        if (requestCode == SCAN_TAKEN){
+            //TODO: REQUEST WHEN SCAN IS TAKEN
         }
     }
 
