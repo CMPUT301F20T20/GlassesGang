@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.BookList;
 import com.example.glassesgang.BorrowerBookProfileActivity;
 import com.example.glassesgang.CustomBookList;
 import com.example.glassesgang.OwnerBookProfileActivity;
@@ -44,7 +45,7 @@ import java.util.Map;
 public class BrowseFragment extends Fragment {
     private ListView browseBookList;
     private ArrayAdapter<Book> browseBookAdapter;
-    private ArrayList<Book> bookDataList;
+    private BookList bookList;
     private HashMap<String, String> borrowerCatalogue;
     private String user;
     private FirebaseFirestore db;
@@ -62,8 +63,9 @@ public class BrowseFragment extends Fragment {
         user = getUserEmail();
 
         // set up the arrayAdapter
-        bookDataList = new ArrayList<>();
-        browseBookAdapter = new CustomBookList(getActivity(), bookDataList, "b");
+//        bookDataList = new ArrayList<>();
+        bookList = new BookList();
+        browseBookAdapter = new CustomBookList(getActivity(), bookList.getBooks(), "b");
 
         // get a reference to the borrowerCatalogue collection
         borrowerCatalogueRef = db.collection("users").document(user).collection("borrowerCatalogue");
@@ -137,7 +139,7 @@ public class BrowseFragment extends Fragment {
         collectionReference.whereNotEqualTo("owner", user).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                bookDataList.clear();
+                bookList.clearBookList();
 
                 for (QueryDocumentSnapshot document: value) {
                     Map<String, Object> bookData = document.getData();
@@ -150,7 +152,7 @@ public class BrowseFragment extends Fragment {
                         } else {
                             book.setStatus("AVAILABLE");   // if book is not in the borrower catalogue, then borrower hasn't interacted with book yet, so set it to available
                         }
-                        bookDataList.add(book);
+                        bookList.addBook(book);
                     }
                 }
 

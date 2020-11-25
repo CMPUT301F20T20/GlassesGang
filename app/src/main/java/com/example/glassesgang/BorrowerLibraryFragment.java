@@ -35,7 +35,8 @@ import java.util.HashMap;
 public class BorrowerLibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;
-    private ArrayList<Book> bookArrayList;
+//    private ArrayList<Book> bookArrayList;
+    private BookList bookList;
     private HashMap<String, String> borrowerCatalogue;   // key is bid and value is status of that book under the borrower
     private String user;
     final String TAG = "BorrowerLibraryFragment";
@@ -62,8 +63,8 @@ public class BorrowerLibraryFragment extends Fragment {
 
 
         // setting up the array adapter
-        bookArrayList = new ArrayList<Book>();
-        bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, "b");
+        bookList = new BookList();
+        bookArrayAdapter = new CustomBookList(getActivity(), bookList.getBooks(), "b");
 
         // get a reference to the borrowerCatalogue collection
         borrowerCatalogueRef = db.collection("users").document(user).collection("borrowerCatalogue");
@@ -136,7 +137,7 @@ public class BorrowerLibraryFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
                                 @Nullable FirebaseFirestoreException e) {
-                bookArrayList.clear();
+                bookList.clearBookList();
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
@@ -146,7 +147,7 @@ public class BorrowerLibraryFragment extends Fragment {
                     if (borrowerCatalogue.containsKey(doc.getId())) {
                         Book book = doc.toObject(Book.class);
                         book.setStatus(borrowerCatalogue.get(doc.getId()));    // setting the status of the book to match its status under the borrower
-                        bookArrayList.add(book);
+                        bookList.addBook(book);
                     }
                 }
                 bookArrayAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
