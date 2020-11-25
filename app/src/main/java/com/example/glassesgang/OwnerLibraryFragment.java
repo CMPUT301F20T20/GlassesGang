@@ -36,7 +36,6 @@ import java.util.ArrayList;
 public class OwnerLibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;
-//    private ArrayList<Book> bookArrayList;
     private BookList bookList;
     private ArrayList<String> bidList; // list containing the bids of books that the owner owns
     private ToggleButton availableTogButton;

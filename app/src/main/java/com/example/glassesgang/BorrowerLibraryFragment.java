@@ -35,7 +35,6 @@ import java.util.HashMap;
 public class BorrowerLibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;
-//    private ArrayList<Book> bookArrayList;
     private BookList bookList;
     private HashMap<String, String> borrowerCatalogue;   // key is bid and value is status of that book under the borrower
     private String user;
