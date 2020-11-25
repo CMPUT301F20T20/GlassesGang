@@ -11,13 +11,13 @@ public class BookStatus {
     public static String stringStatus(Status status) {
         switch(status) {
             case AVAILABLE:
-                return "Available";
+                return "AVAILABLE";
             case REQUESTED:
-                return "Requested";
+                return "REQUESTED";
             case ACCEPTED:
-                return "Accepted";
+                return "ACCEPTED";
             case BORROWED:
-                return "Declined";
+                return "BORROWED";
         }
         return "";
     }

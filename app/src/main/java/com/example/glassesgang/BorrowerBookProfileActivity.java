@@ -2,12 +2,14 @@ package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.glassesgang.Transaction.TransactionFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
@@ -30,11 +34,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Book Profile for Borrower view (no edit book functionality)
  */
-public class BorrowerBookProfileActivity extends AppCompatActivity {
+public class BorrowerBookProfileActivity extends AppCompatActivity implements TransactionFragment.OnTransactionInteractionListener{
     private Button statusButton;
     private TextView titleTextView;
     private TextView authorTextView;
@@ -84,6 +89,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
                         setBookImage(book, bookImageView);
+                        status = book.getStatus();
                         switch(status) {
                             case AVAILABLE: //make a request for this book
                                 statusButton.setOnClickListener(new View.OnClickListener() {
@@ -105,17 +111,17 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                                         //find request object in db
                                         //TODO: get requestid from borrower catalogue
                                         DatabaseManager database = new DatabaseManager();
-                                        //database.deleteRequest(Status.AVAILABLE);
+                                        database.deleteRequest(user, bid);
                                         finish();
                                     }
                                 });
                                 break;
                             case ACCEPTED: //show transaction fragment to accept book at owner specified location
-                                statusButton.setOnClickListener(new View.OnClickListener() {
+                                db.collection("users").document(user).collection("borrowerCatalogue").document(bid).get()
+                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
-                                    public void onClick(View v) {
-                                        //find request object in db, will contain owner's added info like map marker
-
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
                                     }
                                 });
                         }
@@ -179,7 +185,24 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void inflateTransactionFragment(String requestId, String ownerEmail) {
+        //inflate requestList fragment inside framelayout fragment container
+        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Bundle bundle = new Bundle();
+                bundle.putString("requestId", requestId); //store bin for later use in request handling
+                bundle.putString("userEmail", ownerEmail);
+                bundle.putString("userType", "b");
+                Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
+                bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
+                Fragment transactionFragment = new TransactionFragment();
+                transactionFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.borrower_book_profile_fragment_container, transactionFragment).commit();
+            }
+        });
     }
 
     private void setBookImage(Book book, ImageView bookImage) {
@@ -212,5 +235,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onTransactionPressed() {
+        //TODO: open scanner
+        finish();
     }
 }

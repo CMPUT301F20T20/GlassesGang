@@ -3,7 +3,9 @@ package com.example.glassesgang.Transaction;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,12 +27,14 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 public class MapFragment extends Fragment {
 
-    private static final int zoomAmount = 13;
-    private OnMapInteractionListener listener;
+    public static final int REQUEST_LOCATION_CODE = 99;
+    private static final int zoomAmount = 20;
     private LatLng givenLocation;
     private String userType;
 
@@ -41,21 +45,6 @@ public class MapFragment extends Fragment {
     public MapFragment(LatLng latLng) {
         givenLocation = latLng;
         userType = "b"; //must be borrower to receive location
-    }
-
-    public interface OnMapInteractionListener {
-        void onMarkerSelected(LatLng latLng);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof MapFragment.OnMapInteractionListener) {
-            listener = (MapFragment.OnMapInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + "must implement OnMapInteractionListener");
-        }
     }
 
     @Override
@@ -69,7 +58,7 @@ public class MapFragment extends Fragment {
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                if (hasLocationPermissions() && userType.equals("o")) {
+                if (userType.equals("o")) {
                     goToLocation(googleMap, null);
                     //after map is loaded
                     googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -92,28 +81,17 @@ public class MapFragment extends Fragment {
                             googleMap.addMarker(markerOptions);
 
                             //send to transaction fragment to be added into request
-                            listener.onMarkerSelected(latLng);
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("location", latLng);
+                            getParentFragmentManager().setFragmentResult("location", bundle);
                         }
                     });
-                }
-                else if (userType.equals("b") && givenLocation != null) goToLocation(googleMap, givenLocation);
+                } else if (userType.equals("b") && givenLocation != null)
+                    goToLocation(googleMap, givenLocation);
             }
         });
 
         return view;
-    }
-
-    private boolean hasLocationPermissions() {
-        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        else {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-            return false;
-        }
     }
 
     private void goToLocation(GoogleMap map, @Nullable LatLng givenLocation) {
@@ -122,10 +100,18 @@ public class MapFragment extends Fragment {
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
             Criteria criteria = new Criteria();
 
-            @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-            if (location != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoomAmount));
-
+            if (ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[] { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION },
+                        REQUEST_LOCATION_CODE);
+            }
+            else {
+                Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+                if (location != null) map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoomAmount));
+            }
                 /* //optional camera settings for zooming to a location //TODO: remove camera settings once team has chosen camera options
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(new LatLng(location.getLatitude(), location.getLongitude())) //sets center of map to users location
@@ -135,7 +121,6 @@ public class MapFragment extends Fragment {
                         .build();
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 */
-            }
         }
         else {
             //user is borrower, givenLocation exists

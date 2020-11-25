@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * A fragment representing a list of Items.
  */
-public class TransactionFragment extends Fragment implements MapFragment.OnMapInteractionListener {
+public class TransactionFragment extends Fragment{
 
     private OnTransactionInteractionListener listener;
     private TextView emailTextView;
@@ -33,16 +35,12 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
     private String requestId;
     private String userEmail;
     private String userType;
-    private Request request;
+    private LatLng givenLocation;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
-    private com.google.android.gms.maps.model.LatLng mapMarker;
+    private LatLng mapMarker;
 
-    @Override
-    public void onMarkerSelected(com.google.android.gms.maps.model.LatLng latLng) {
-        transactionButton.setEnabled(true);
-        mapMarker = latLng;
-    }
+
 
     public interface OnTransactionInteractionListener {
         void onTransactionPressed();
@@ -62,6 +60,16 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getParentFragmentManager().setFragmentResultListener("location", this, (FragmentResultListener) (locationString, bundle) -> {
+            //convert to latlng coordinates
+            mapMarker = bundle.getParcelable("location");
+            if (mapMarker != null)
+            {
+                transactionButton.setText("CONFIRM LOCATION");
+                transactionButton.setEnabled(true);
+            }
+            else transactionButton.setEnabled(false);
+        });
 
         // connect to the database
         db = FirebaseFirestore.getInstance();
@@ -70,7 +78,8 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
         requestId = getArguments().getString("requestId");
         userEmail = getArguments().getString("userEmail");
         userType = getArguments().getString("userType");
-
+        if (getArguments().getParcelable("givenLocation") != null)
+            givenLocation = getArguments().getParcelable("givenLocation");
     }
 
     @Override
@@ -82,15 +91,6 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //get request object
-        DocumentReference reqRef = db.collection("requests").document(requestId);
-        reqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-              @Override
-              public void onSuccess(DocumentSnapshot documentSnapshot) {
-                  request = documentSnapshot.toObject(Request.class);   // convert the book document to Book Object
-              }
-        });
 
         //get email displayed based on userType
         emailTextView = view.findViewById(R.id.email_textview);
@@ -104,7 +104,7 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
         //if owner, then transaction is offering a requested book. involves map and scan
         if (userType.equals("o")) {
             //enable location button and enable scanning
-            transactionButton.setText("OFFER");
+            transactionButton.setText("CONFIRM LOCATION");
             //offer button for scanning only after location is chosen
             transactionButton.setEnabled(false);
             showLocationButton.setVisibility(View.VISIBLE);
@@ -113,10 +113,10 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
                 public void onClick(View v) {
                     //display map fragment
                     Bundle bundle = new Bundle();
-                    bundle.putString("userType", userType); //store bin for later use in request handling
+                    bundle.putString("userType", userType);
                     Fragment mapFragment = new MapFragment(); //initialized as an owner map fragment (no params)
                     mapFragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
 
                     //destroy button
                     showLocationButton.setVisibility(View.GONE);
@@ -126,6 +126,15 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
                 @Override
                 public void onClick(View v) {
                     //offer book functionality, TODO: open scan activity
+                    if (transactionButton.getText().toString().equals("CONFIRM LOCATION") && mapMarker != null) {
+                        //write location to request
+                        db.collection("requests").document(requestId).update("location", mapMarker);
+                        transactionButton.setText("OFFER");
+                    }
+                    else if (transactionButton.getText().toString().equals("OFFER")){
+                        //TODO: open scanner and initiate transaction
+                        listener.onTransactionPressed();
+                    }
                 }
             });
         }
@@ -136,27 +145,16 @@ public class TransactionFragment extends Fragment implements MapFragment.OnMapIn
             //display map fragment
             Bundle bundle = new Bundle();
             bundle.putString("userType", userType); //store bin for later use in request handling
-            Fragment mapFragment = new MapFragment(request.getLocation()); //initialized as a borrower map fragment
+            Fragment mapFragment = new MapFragment(givenLocation); //initialized as a borrower map fragment
             mapFragment.setArguments(bundle);
-            getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+            getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+            transactionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onTransactionPressed();
+                }
+            });
         }
-
-
-        //show map location, set offer button to accept
-        showLocationButton = view.findViewById(R.id.show_location_button);
-        showLocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //display map fragment
-                Fragment mapFragment = new MapFragment();
-                getFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
-
-                //destroy button
-                showLocationButton.setVisibility(View.GONE);
-
-                //TODO: scanning for borrower
-            }
-        });
 
     }
 

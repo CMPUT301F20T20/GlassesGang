@@ -1,10 +1,12 @@
 package com.example.glassesgang.Transaction;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -30,28 +32,38 @@ import java.util.ArrayList;
 /**
  * A fragment representing a list of Items.
  */
-public class RequestHandlingFragment extends Fragment {
+public class RequestHandlingFragment extends Fragment implements RequestListAdapter.OnRequestInteractionListener {
 
-    private OnFragmentInteractionListener listener;
+    private OnRequestFragmentInteractionListener listener;
     private ListView requestListView;
     private ArrayAdapter<Request> requestAdapter;
     private ArrayList<Request> requestArrayList;
     final String TAG = "RequestFragment";
     private FirebaseFirestore db;
 
-    public interface OnFragmentInteractionListener {
-        void onDeclineRequest(Request request);
-        void onAcceptRequest(Request request);
+    @Override
+    public void OnDeclineRequest(Request request) {
+        listener.OnDeclineRequest(request);
+    }
+
+    @Override
+    public void OnAcceptRequest(Request request) {
+        listener.OnAcceptRequest(request);
+    }
+
+    public interface OnRequestFragmentInteractionListener {
+        void OnDeclineRequest(Request request);
+        void OnAcceptRequest(Request request);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnRequestFragmentInteractionListener) {
+            listener = (OnRequestFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + "must implement OnFragmentInteractionListener");
+                    + "must implement OnRequestFragmentInteractionListener");
         }
     }
 
@@ -64,7 +76,7 @@ public class RequestHandlingFragment extends Fragment {
 
         // setting up the array adapter
         requestArrayList = new ArrayList<Request>();
-        requestAdapter = new RequestListAdapter(getActivity(), requestArrayList);
+        requestAdapter = new RequestListAdapter(getActivity(), requestArrayList, this);
 
     }
 
@@ -74,6 +86,7 @@ public class RequestHandlingFragment extends Fragment {
         return v;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -98,31 +111,13 @@ public class RequestHandlingFragment extends Fragment {
 
                 if (snapshot != null && snapshot.exists()) {
                     Log.d(TAG, "Current data 1: " + snapshot.getData());
-                    ArrayList<String> requestList = (ArrayList<String>) snapshot.get("requestList");
-                    updateListView(requestList, view);
+                    ArrayList<String> requests = (ArrayList<String>) snapshot.get("requests");
+                    updateListView(requests, view);
                 } else {
                     Log.d(TAG, "Current data 2: null");
                 }
             }
         });
-
-        requestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // get the request id of the book that was pressed
-                Request request = (Request) adapterView.getItemAtPosition(i);
-                String requestId = request.getRequestId();
-
-                // get request reference from db
-                DocumentReference reqRef = db.collection("requests").document(requestId);
-
-                // transition to the transaction fragment in parent
-                //TODO: transaction fragment, sending switch command to parent through interface
-                listener.onAcceptRequest(request);
-            }
-        });
-
-
     }
 
     private void updateListView(final ArrayList<String> requestList, View v) {

@@ -3,10 +3,12 @@ package com.example.glassesgang;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -25,6 +27,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -33,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -50,10 +55,11 @@ public class DatabaseManager {
 
     /**
      * adds a book to the owner catalogue of given user
+     *
      * @param newBook a Book object. It is the book to be added
-     * @param user a String consisting of the user's email.
+     * @param user    a String consisting of the user's email.
      */
-    public static void addBook(final Book newBook , final String user) {
+    public static void addBook(final Book newBook, final String user) {
         // add the book to the database books collection
         db.collection("books")
                 .add(newBook)
@@ -76,6 +82,7 @@ public class DatabaseManager {
 
     /**
      * deletes the book from the database
+     *
      * @param bookToDelete a Book object representing the book to delete
      */
     public static void deleteBook(Book bookToDelete) {
@@ -145,7 +152,7 @@ public class DatabaseManager {
     }
 
     // User database interactions begin
-    public static void createUser(final User user){
+    public static void createUser(final User user) {
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         usersDatabase.document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -182,7 +189,7 @@ public class DatabaseManager {
         });
     }
 
-    public static void editContactInfo(String currentEmail, String newEmail){
+    public static void editContactInfo(String currentEmail, String newEmail) {
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         usersDatabase.document(currentEmail).update("email", newEmail)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -201,7 +208,8 @@ public class DatabaseManager {
 
     /**
      * Make a request as a borrower. Creates a request object and attaches it to the book
-     * @param request   The request object to be added to the database
+     *
+     * @param request The request object to be added to the database
      */
     public static void addRequest(Request request) {
         // add the request to the requests collection in the database
@@ -214,7 +222,18 @@ public class DatabaseManager {
                         documentReference.update("requestId", documentReference.getId());
                         addRequestToBook(documentReference.getId(), request.getBookId());
                         addRequestToUser(documentReference.getId(), request.getBookId(), request.getBorrowerEmail());
-                        //addNotificationToUser(documentReference, request.getOwnerEmail);
+                        documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Request requestObj = documentSnapshot.toObject(Request.class);
+                                addNotification(new Notification(requestObj.getBorrowerEmail(),
+                                        requestObj.getOwnerEmail(),
+                                        Notification.NotificationType.NEW_REQUEST,
+                                        requestObj.getBookId()));
+                            }
+                        });
+
+                        //create notification and add it
                         changeBookStatus(Status.REQUESTED, request.getBookId());
                     }
                 })
@@ -245,7 +264,7 @@ public class DatabaseManager {
 
     public static void addRequestToUser(String requestId, String bid, String userEmail) {
         db.collection("users").document(userEmail).collection("borrowerCatalogue").document(bid)
-                .set( new RequestReference(Status.REQUESTED, requestId))
+                .set(new RequestReference(Status.REQUESTED, requestId))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -278,38 +297,50 @@ public class DatabaseManager {
                 });
     }
 
-    public static void deleteRequest(Request requestToDelete, Status newStatus) {
-        String bid = requestToDelete.getBookId();
-        DocumentReference bookRef = db.collection("books").document(bid);
-        DocumentReference requestRef = db.collection("requests").document(requestToDelete.getRequestId());
+    public static void deleteRequest(String userId, String bid) {
+        //get user's request id for that book from their borrowerCatalogue
+        DocumentReference borrowerCatReqRef = db.collection("users").document(userId).collection("borrowerCatalogue").document(bid);
+        if (borrowerCatReqRef != null) {
+            borrowerCatReqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    String requestId = (String) documentSnapshot.get("requestRefId");
+                    DocumentReference bookRef = db.collection("books").document(bid);
 
-        // send notification to borrower on request status
+                    //delete request from books request list
+                    bookRef.update("requests", FieldValue.arrayRemove(requestId));
 
+                    //if that was the last request (get null object and fail getting requests), change book status to available
+                    bookRef.get().addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            changeBookStatus(Status.AVAILABLE, bid);
+                        }
+                    });
 
-        // delete request from its books request list //TODO: add a check for if the request exists
-        bookRef.update("requests", FieldValue.arrayRemove(requestToDelete.getRequestId()));
-
-        //handle the book status to its new status
-        changeBookStatus(newStatus, bid);
-
-        // delete request from database
-        requestRef.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Request " + requestToDelete.getRequestId() + " successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting request " + requestToDelete.getRequestId(), e);
-                    }
-                });
-
+                    //delete user's request from db
+                    DocumentReference reqRef = db.collection("requests").document(userId).collection("borrowerCatalogue").document(requestId);
+                    reqRef.delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Request " + requestId + " successfully deleted!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error deleting request " + requestId, e);
+                                }
+                            });
+                }
+            });
+            //delete request from user's borrowerCatalogue
+            borrowerCatReqRef.delete();
+        }
     }
 
-    public static void addNotification(Context context, Notification notification) {
+    public static void addNotification(Notification notification) {
         // add the request to the requests collection in the database
         db.collection("notifications")
                 .add(notification)
@@ -319,7 +350,7 @@ public class DatabaseManager {
                         Log.d(TAG, "Notification added successfully, written with ID: " + documentReference.getId());
                         documentReference.update("notificationId", documentReference.getId());
                         notification.setNotificationId(documentReference.getId());
-                        addNotificationToUser(context, notification);
+                        addNotificationToUser(notification);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -330,8 +361,7 @@ public class DatabaseManager {
                 });
     }
 
-    private static void addNotificationToUser(Context context, Notification notification)
-    {
+    private static void addNotificationToUser(Notification notification) {
         // adds to receiver's notification array
         db.collection("users")
                 .document(notification.getReceiverEmail())
@@ -348,7 +378,7 @@ public class DatabaseManager {
                         Log.w(TAG, "Error adding notification to user" + notification.getReceiverEmail(), e);
                     }
                 });
-
+/*
         // TODO: create a notification to be displayed as a popup
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
                 App.CHANNEL_ID)
@@ -359,6 +389,8 @@ public class DatabaseManager {
         // TODO: create the notification alert on receiver's phone
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(1, builder.build());
+
+ */
     }
 
     public static void deleteNotification(Notification not) {
@@ -386,4 +418,53 @@ public class DatabaseManager {
 
     }
 
+    public static void acceptRequest(String bid, Request request) {
+        //change book status to accepted
+        changeBookStatus(Status.ACCEPTED, bid);
+
+        //change accepted borrower's request in borrowerCatalogue to have status of accepted
+        DocumentReference borrowerRequest = db.collection("users")
+                .document(request.getBorrowerEmail())
+                .collection("borrowerCatalogue")
+                .document(request.getBookId());
+        borrowerRequest.update("requestRefStatus", Status.ACCEPTED);
+
+        //send notification to borrower that their request has been accepted
+        addNotification(new Notification(request.getOwnerEmail(), request.getBorrowerEmail(), Notification.NotificationType.ACCEPT_REQUEST, bid));
+
+        //delete all other requests of other borrowers of that book
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    ArrayList<String> userList = new ArrayList<String>();
+
+                    for (QueryDocumentSnapshot document : task.getResult())  //add rejected borrowers to a list
+                        if (!document.getId().equals(request.getBorrowerEmail())) //exclude accepted borrower
+                            userList.add(document.getId());
+
+                    userList.forEach(user -> deleteRequest(user, bid));
+                } else {
+                    Log.d(TAG, "Error getting users: ", task.getException());
+                }
+            }
+        });
+
+        /* //not needed, but could be useful as a final check to ensure no other requests exist at the moment of accepting a request
+        // delete all other requests from book's request list
+        DocumentReference bookRef = db.collection("books").document(bid);
+        bookRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                ArrayList<String> requestsToRemove = (ArrayList<String>) documentSnapshot.get("requests");
+                requestsToRemove.remove(request.getRequestId()); //remove accepted request from requestsToRemove
+                requestsToRemove.forEach(request -> {
+                    bookRef.update("requests", FieldValue.arrayRemove(request));
+                });
+            }
+        });
+        */
+    }
 }

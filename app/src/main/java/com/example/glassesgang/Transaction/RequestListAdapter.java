@@ -8,23 +8,30 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ContentFrameLayout;
 
 import com.example.glassesgang.R;
-
 import javax.annotation.Nullable;
 
 public class RequestListAdapter extends ArrayAdapter<Request> {
 
     private ArrayList<Request> requests;
     private Context context;
+    private OnRequestInteractionListener listener;
 
-    public RequestListAdapter(Context context, ArrayList<Request> requests) {
+    public RequestListAdapter(Context context, ArrayList<Request> requests, OnRequestInteractionListener listener) {
         super(context, 0, requests);
         this.requests = requests;
         this.context = context;
+        this.listener = listener;
     }
+
+    public interface OnRequestInteractionListener {
+        void OnDeclineRequest(Request request);
+        void OnAcceptRequest(Request request);
+    }
+
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
@@ -42,14 +49,16 @@ public class RequestListAdapter extends ArrayAdapter<Request> {
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //delete request
+                // transition to the transaction fragment in parent
+                //TODO: transaction fragment, sending switch command to parent through interface
+                listener.OnDeclineRequest(request);
             }
         });
         Button acceptButton = view.findViewById(R.id.request_accept_button);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //accept request by
+                listener.OnAcceptRequest(request);
             }
         });
 

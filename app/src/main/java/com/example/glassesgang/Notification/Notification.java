@@ -24,6 +24,8 @@ public class Notification {
     private String popupText;
     private String notificationId;
 
+    public Notification() {}
+
     /**
      *  This is the constructor for a Notification object
      *

@@ -38,7 +38,7 @@ import java.net.URL;
 /**
  * Book profile for Owner View (edit book functionality)
  */
-public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener, RequestHandlingFragment.OnFragmentInteractionListener{
+public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener, RequestHandlingFragment.OnRequestFragmentInteractionListener, TransactionFragment.OnTransactionInteractionListener{
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
@@ -96,7 +96,17 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 }
                 updateTextViews();
                 setBookImage(book);
-                if (requests != null && requests.size() > 0) inflateRequestFragment();
+                if (book.getStatus() == Status.ACCEPTED && requests != null && requests.size() == 1) {
+                    //get borrower
+                    db.collection("requests").document(requests.get(0)).get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    inflateTransactionFragment(requests.get(0), (String)documentSnapshot.get("borrowerEmail"));
+                                }
+                            });
+                }
+                else if (requests != null && requests.size() > 0) inflateRequestFragment();
             }
         });
 
@@ -180,10 +190,21 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private void inflateRequestFragment() {
         //inflate requestList fragment inside framelayout fragment container
         Bundle bundle = new Bundle();
-        bundle.putString("bin", book.getBID()); //store bin for later use in request handling
+        bundle.putString("bid", book.getBID()); //store bin for later use in request handling
         Fragment requestFragment = new RequestHandlingFragment();
         requestFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, requestFragment).commit();
+    }
+
+    private void inflateTransactionFragment(String requestId, String borrowerEmail) {
+        //inflate requestList fragment inside framelayout fragment container
+        Bundle bundle = new Bundle();
+        bundle.putString("requestId", requestId); //store bin for later use in request handling
+        bundle.putString("userEmail", borrowerEmail);
+        bundle.putString("userType", "o");
+        Fragment transactionFragment = new TransactionFragment();
+        transactionFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 
     /**
@@ -197,13 +218,17 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
     
     @Override
-    public void onDeclineRequest(Request request) {
+    public void OnDeclineRequest(Request request) {
         DatabaseManager databaseManager = new DatabaseManager();
-        databaseManager.deleteRequest(request, Status.AVAILABLE);
+        databaseManager.deleteRequest(request.getBorrowerEmail(), request.getBookId());
     }
     
     @Override
-    public void onAcceptRequest(Request request) {
+    public void OnAcceptRequest(Request request) {
+        //delete all other requests
+        DatabaseManager dbm = new DatabaseManager();
+        dbm.acceptRequest(bid, request);
+
         //inflate requestList fragment inside framelayout fragment container
         Bundle bundle = new Bundle();
         bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
@@ -246,5 +271,11 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         } else {
             bookImageView.setImageBitmap(null);
         }
+    }
+
+    @Override
+    public void onTransactionPressed() {
+        //TODO: scanner
+        finish();
     }
 }
