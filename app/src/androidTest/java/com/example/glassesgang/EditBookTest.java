@@ -65,7 +65,6 @@ public class EditBookTest {
         if (user == null) {
             signInMockUser();
         }
-        solo.waitForActivity(OwnerHomeActivity.class, timeout);
     }
 
     /**
@@ -80,6 +79,7 @@ public class EditBookTest {
         solo.enterText((EditText) solo.getView(R.id.email), email);
         solo.enterText((EditText) solo.getView(R.id.password), password);
         solo.clickOnButton("SIGN IN");
+        solo.waitForActivity(OwnerHomeActivity.class, timeout);
     }
 
     /**
