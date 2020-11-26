@@ -1,0 +1,211 @@
+package com.example.glassesgang;
+
+import android.view.View;
+import android.widget.EditText;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.robotium.solo.Solo;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class EditBookTest {
+    private static FirebaseAuth mAuth;
+    private static DatabaseManager databaseManager;
+    private String email = "mockuser@gmail.com";
+    private String password = "12345678";
+    private Solo solo;
+    @Rule
+    public ActivityTestRule<MainActivity> rule =
+            new ActivityTestRule<>(MainActivity.class, true, true);
+
+    /**
+     * intialize FireBaseAuth and DatabaseManager
+     * sign out any logged in user
+     */
+    @BeforeClass
+    public static void initialize() {
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        databaseManager = new DatabaseManager();
+        mAuth.signOut();
+    }
+
+    /**
+     * Sign out the mock user
+     */
+    @AfterClass
+    public static void signOut() {
+        mAuth.signOut();
+    }
+
+    /**
+     * Runs before all tests and creates solo instance.
+     * Signs in the mock user if not signed in already
+     * @throws Exception
+     */
+    @Before
+    public void setUp() throws Exception{
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+
+        // if  no one is signed, sign the mock user
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            signInMockUser();
+        }
+        solo.waitForActivity(OwnerHomeActivity.class, 3000);
+    }
+
+    /**
+     * removes all the books of the mock user from the database
+     */
+    @After
+    public void clearCollection() {
+        databaseManager.clearOwnerCatalogue(email);
+    }
+
+    public void signInMockUser() {
+        solo.enterText((EditText) solo.getView(R.id.email), email);
+        solo.enterText((EditText) solo.getView(R.id.password), password);
+        solo.clickOnButton("SIGN IN");
+    }
+
+
+    /**
+     * Checks if clicking a book from list view opens up the correct book profile
+     */
+    @Test
+    public void checkBookClick() {
+        String title = "Original Title";
+        String author = "Original Author";
+        String isbn = "1234567890123";
+        addBook(title, author, isbn);
+        solo.clickOnText(title);
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+
+        // check if info is correct
+        assertTrue(solo.waitForText(title, 1, 2000));
+        assertTrue(solo.waitForText(author, 1, 2000));
+        assertTrue(solo.waitForText(isbn, 1, 2000));
+    }
+
+    /**
+     * Check if edits made on the book are reflected in profile
+     */
+    @Test
+    public void checkEditShowsInProfile() {
+        String origTitle = "Original Title";
+        String origAuthor = "Original Author";
+        String origISBN = "1234567890123";
+        String editedTitle = "Edited Title";
+        String editedAuthor = "Edited Author";
+        String editedISBN = "1231231231231";
+
+        // add a book and open up its profile
+        addBook(origTitle, origAuthor, origISBN);
+        solo.clickOnText(origTitle);
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+
+        // click edit button
+        solo.clickOnButton("EDIT");
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+
+        // edit the book and save changes
+        EditText titleField = (EditText) solo.getView(R.id.book_title_bar);
+        EditText authorField = (EditText) solo.getView(R.id.author_name_bar);
+        EditText isbnField = (EditText) solo.getView(R.id.isbn_bar);
+        solo.clearEditText(titleField);
+        solo.clearEditText(authorField);
+        solo.clearEditText(isbnField);
+        solo.waitForText("", 3, 2000);
+        solo.enterText(titleField, editedTitle);
+        solo.enterText(authorField, editedAuthor);
+        solo.enterText(isbnField, editedISBN);
+        solo.clickOnButton("SAVE");
+
+        // check if changes are reflected in the book profile
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+        assertTrue(solo.waitForText(editedTitle, 1, 2000));
+        assertTrue(solo.waitForText(editedAuthor, 1, 2000));
+        assertTrue(solo.waitForText(editedISBN, 1, 2000));
+    }
+
+    @Test
+    public void checkEditShowsInListView() {
+        String origTitle = "Original Title";
+        String origAuthor = "Original Author";
+        String origISBN = "1234567890123";
+        String editedTitle = "Edited Title";
+        String editedAuthor = "Edited Author";
+        String editedISBN = "1231231231231";
+
+        // add a book and open up its profile
+        addBook(origTitle, origAuthor, origISBN);
+        solo.clickOnText(origTitle);
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+
+        // click edit button
+        solo.clickOnButton("EDIT");
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+
+        // edit the book and save changes
+        EditText titleField = (EditText) solo.getView(R.id.book_title_bar);
+        EditText authorField = (EditText) solo.getView(R.id.author_name_bar);
+        EditText isbnField = (EditText) solo.getView(R.id.isbn_bar);
+        solo.clearEditText(titleField);
+        solo.clearEditText(authorField);
+        solo.clearEditText(isbnField);
+        solo.waitForText("", 3, 2000);
+        solo.enterText(titleField, editedTitle);
+        solo.enterText(authorField, editedAuthor);
+        solo.enterText(isbnField, editedISBN);
+        solo.waitForText(editedTitle, 1, 2000);
+        solo.waitForText(editedAuthor, 1, 2000);
+        solo.waitForText(editedISBN, 1, 2000);
+        solo.clickOnButton("SAVE");
+
+        // return to the list view
+        solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+        solo.clickOnActionBarHomeButton();
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+
+        // check if changes were reflected in the list view
+        assertTrue(solo.waitForText(editedTitle, 1, 2000));
+        assertTrue(solo.waitForText(editedAuthor, 1, 2000));
+        assertTrue(solo.waitForText(editedISBN, 1, 2000));
+
+    }
+
+
+
+
+
+    /**
+     * adding a test Book
+     * @param title title of the book to add
+     * @param author author of the book to add
+     * @param isbn isbn of the book to add
+     */
+    public void addBook(String title, String author, String isbn) {
+        solo.clickOnView(solo.getView(R.id.add_button));
+        solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.book_title_bar), title);
+        solo.enterText((EditText) solo.getView(R.id.author_name_bar), author);
+        solo.enterText((EditText) solo.getView(R.id.isbn_bar), isbn);
+        solo.clickOnButton("SAVE");
+
+        solo.waitForText(title, 1, 2000);
+
+    }
+}
