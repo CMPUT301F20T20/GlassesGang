@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -191,4 +193,47 @@ public class DatabaseManager {
                     }
                 });
     }
+
+
+    /**
+     * Remove all the books that a user owns
+     * @param email A string, the email of the user whose books must be cleared.
+     */
+    public static void clearOwnerCatalogue(String email) {
+        CollectionReference booksRef = db.collection("books");
+
+        // delete books from db
+        booksRef
+                .whereEqualTo("owner", email)   // get books owned by the owner
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                booksRef.document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents when clearing owner Catalogue: ", task.getException());
+                        }
+                    }
+                });
+
+        // delete books from owner Catalogue
+        db.collection("users").document(email)
+                .update("ownerCatalogue", new ArrayList<String>())  // set owner Catalogue to an empty string
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Owner Catalogue cleared");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error clearing Owner catalogue", e);
+                    }
+                });
+    }
+
 }
