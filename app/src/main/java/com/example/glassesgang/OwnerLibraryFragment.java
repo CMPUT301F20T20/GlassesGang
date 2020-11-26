@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class OwnerLibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;
-    private ArrayList<Book> bookArrayList;
+    private BookList bookList;
     private ArrayList<String> bidList; // list containing the bids of books that the owner owns
     private ToggleButton availableTogButton;
     private ToggleButton requestedTogButton;
@@ -63,8 +63,8 @@ public class OwnerLibraryFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         // setting up the array adapter
-        bookArrayList = new ArrayList<Book>();
-        bookArrayAdapter = new CustomBookList(getActivity(), bookArrayList, "o");
+        bookList = new BookList();
+        bookArrayAdapter = new CustomBookList(getActivity(), bookList.getBooks(), "o");
 
     }
 
@@ -141,7 +141,7 @@ public class OwnerLibraryFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
                                 @Nullable FirebaseFirestoreException e) {
-                bookArrayList.clear();
+                bookList.clearBookList();
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
@@ -151,7 +151,7 @@ public class OwnerLibraryFragment extends Fragment {
                     // if a book's bid is in bidList, add it to the bookArrayList to be displayed
                     if (bidList.contains(doc.getId())) {
                         Book book = doc.toObject(Book.class);
-                        bookArrayList.add(book);
+                        bookList.addBook(book);
                     }
                 }
                 bookArrayAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
