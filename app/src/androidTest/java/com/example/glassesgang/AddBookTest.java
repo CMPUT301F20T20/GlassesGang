@@ -25,6 +25,8 @@ public class AddBookTest {
     private String email = "mockuser@gmail.com";
     private String password = "12345678";
     private Solo solo;
+    private int timeout = 3000;
+
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class, true, true);
@@ -63,6 +65,7 @@ public class AddBookTest {
         if (user == null) {
             signInMockUser();
         }
+        solo.waitForActivity(OwnerHomeActivity.class, timeout);
     }
 
     /**
@@ -71,6 +74,12 @@ public class AddBookTest {
     @After
     public void clearCollection() {
         databaseManager.clearOwnerCatalogue(email);
+    }
+
+    public void signInMockUser() {
+        solo.enterText((EditText) solo.getView(R.id.email), email);
+        solo.enterText((EditText) solo.getView(R.id.password), password);
+        solo.clickOnButton("SIGN IN");
     }
 
 
@@ -107,9 +116,9 @@ public class AddBookTest {
         // check if the book is added in the list view
         solo.assertCurrentActivity("Wrong activity after pressing SAVE button", OwnerHomeActivity.class);
 
-        assertTrue(solo.waitForText(title, 1, 2000));
-        assertTrue(solo.waitForText(author, 1, 2000));
-        assertTrue(solo.waitForText(isbn, 1, 2000));
+        assertTrue(solo.waitForText(title, 1, timeout));
+        assertTrue(solo.waitForText(author, 1, timeout));
+        assertTrue(solo.waitForText(isbn, 1, timeout));
     }
 
     /**
@@ -219,20 +228,5 @@ public class AddBookTest {
         solo.enterText(isbnField, shortISBN);
         solo.clickOnButton("SAVE");
         solo.assertCurrentActivity("Wrong activity", AddBookActivity.class);
-
-
-
     }
-
-
-    public void signInMockUser() {
-        solo.enterText((EditText) solo.getView(R.id.email), email);
-        solo.enterText((EditText) solo.getView(R.id.password), password);
-        solo.clickOnButton("SIGN IN");
-    }
-
-
-
-
-
 }

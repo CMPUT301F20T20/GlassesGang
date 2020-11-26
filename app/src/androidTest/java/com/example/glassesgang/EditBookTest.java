@@ -26,6 +26,7 @@ public class EditBookTest {
     private String email = "mockuser@gmail.com";
     private String password = "12345678";
     private Solo solo;
+    private int timeout = 3000;
     @Rule
     public ActivityTestRule<MainActivity> rule =
             new ActivityTestRule<>(MainActivity.class, true, true);
@@ -64,7 +65,7 @@ public class EditBookTest {
         if (user == null) {
             signInMockUser();
         }
-        solo.waitForActivity(OwnerHomeActivity.class, 3000);
+        solo.waitForActivity(OwnerHomeActivity.class, timeout);
     }
 
     /**
@@ -81,6 +82,22 @@ public class EditBookTest {
         solo.clickOnButton("SIGN IN");
     }
 
+    /**
+     * adding a test Book
+     * @param title title of the book to add
+     * @param author author of the book to add
+     * @param isbn isbn of the book to add
+     */
+    public void addBook(String title, String author, String isbn) {
+        solo.clickOnView(solo.getView(R.id.add_button));
+        solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.book_title_bar), title);
+        solo.enterText((EditText) solo.getView(R.id.author_name_bar), author);
+        solo.enterText((EditText) solo.getView(R.id.isbn_bar), isbn);
+        solo.clickOnButton("SAVE");
+
+        solo.waitForText(title, 1, timeout);
+    }
 
     /**
      * Checks if clicking a book from list view opens up the correct book profile
@@ -95,9 +112,9 @@ public class EditBookTest {
         solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
 
         // check if info is correct
-        assertTrue(solo.waitForText(title, 1, 2000));
-        assertTrue(solo.waitForText(author, 1, 2000));
-        assertTrue(solo.waitForText(isbn, 1, 2000));
+        assertTrue(solo.waitForText(title, 1, timeout));
+        assertTrue(solo.waitForText(author, 1, timeout));
+        assertTrue(solo.waitForText(isbn, 1, timeout));
     }
 
     /**
@@ -125,10 +142,11 @@ public class EditBookTest {
         EditText titleField = (EditText) solo.getView(R.id.book_title_bar);
         EditText authorField = (EditText) solo.getView(R.id.author_name_bar);
         EditText isbnField = (EditText) solo.getView(R.id.isbn_bar);
+        solo.waitForText(origTitle, 1, timeout);
         solo.clearEditText(titleField);
         solo.clearEditText(authorField);
         solo.clearEditText(isbnField);
-        solo.waitForText("", 3, 2000);
+        solo.waitForText("", 3, timeout);
         solo.enterText(titleField, editedTitle);
         solo.enterText(authorField, editedAuthor);
         solo.enterText(isbnField, editedISBN);
@@ -136,9 +154,9 @@ public class EditBookTest {
 
         // check if changes are reflected in the book profile
         solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
-        assertTrue(solo.waitForText(editedTitle, 1, 2000));
-        assertTrue(solo.waitForText(editedAuthor, 1, 2000));
-        assertTrue(solo.waitForText(editedISBN, 1, 2000));
+        assertTrue(solo.waitForText(editedTitle, 1, timeout));
+        assertTrue(solo.waitForText(editedAuthor, 1, timeout));
+        assertTrue(solo.waitForText(editedISBN, 1, timeout));
     }
 
     @Test
@@ -163,16 +181,17 @@ public class EditBookTest {
         EditText titleField = (EditText) solo.getView(R.id.book_title_bar);
         EditText authorField = (EditText) solo.getView(R.id.author_name_bar);
         EditText isbnField = (EditText) solo.getView(R.id.isbn_bar);
+        solo.waitForText(origTitle, 1, timeout);
         solo.clearEditText(titleField);
         solo.clearEditText(authorField);
         solo.clearEditText(isbnField);
-        solo.waitForText("", 3, 2000);
+        solo.waitForText("", 3, timeout);
         solo.enterText(titleField, editedTitle);
         solo.enterText(authorField, editedAuthor);
         solo.enterText(isbnField, editedISBN);
-        solo.waitForText(editedTitle, 1, 2000);
-        solo.waitForText(editedAuthor, 1, 2000);
-        solo.waitForText(editedISBN, 1, 2000);
+        solo.waitForText(editedTitle, 1, timeout);
+        solo.waitForText(editedAuthor, 1, timeout);
+        solo.waitForText(editedISBN, 1, timeout);
         solo.clickOnButton("SAVE");
 
         // return to the list view
@@ -181,31 +200,9 @@ public class EditBookTest {
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
 
         // check if changes were reflected in the list view
-        assertTrue(solo.waitForText(editedTitle, 1, 2000));
-        assertTrue(solo.waitForText(editedAuthor, 1, 2000));
-        assertTrue(solo.waitForText(editedISBN, 1, 2000));
-
-    }
-
-
-
-
-
-    /**
-     * adding a test Book
-     * @param title title of the book to add
-     * @param author author of the book to add
-     * @param isbn isbn of the book to add
-     */
-    public void addBook(String title, String author, String isbn) {
-        solo.clickOnView(solo.getView(R.id.add_button));
-        solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.book_title_bar), title);
-        solo.enterText((EditText) solo.getView(R.id.author_name_bar), author);
-        solo.enterText((EditText) solo.getView(R.id.isbn_bar), isbn);
-        solo.clickOnButton("SAVE");
-
-        solo.waitForText(title, 1, 2000);
+        assertTrue(solo.waitForText(editedTitle, 1, timeout));
+        assertTrue(solo.waitForText(editedAuthor, 1, timeout));
+        assertTrue(solo.waitForText(editedISBN, 1, timeout));
 
     }
 }
