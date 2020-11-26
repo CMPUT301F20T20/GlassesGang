@@ -1,7 +1,5 @@
 package com.example.glassesgang;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -82,7 +80,7 @@ public class AddBookTest {
     @Test
     public void checkAddButton() {
         // check if pressing add button goes to add book activity
-        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
     }
 
@@ -96,7 +94,7 @@ public class AddBookTest {
         String isbn = "1234567890123";
 
         // click add button
-        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
 
         // enter book description
@@ -130,7 +128,7 @@ public class AddBookTest {
         assertFalse(solo.waitForText(isbn, 1, 2000));
 
         // click add button
-        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
 
         // enter book description
@@ -158,7 +156,7 @@ public class AddBookTest {
         String isbn = "1234567890123";
 
         // click add button
-        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
 
         EditText titleField = (EditText) solo.getView(R.id.book_title_bar);
@@ -202,7 +200,7 @@ public class AddBookTest {
         String shortISBN = "123";
 
         // click add button
-        solo.clickOnImageButton(0);
+        solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
 
         EditText isbnField = (EditText) solo.getView(R.id.isbn_bar);
