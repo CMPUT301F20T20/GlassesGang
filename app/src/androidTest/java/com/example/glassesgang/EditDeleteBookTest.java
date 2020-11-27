@@ -20,7 +20,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class EditBookTest {
+public class EditDeleteBookTest {
     private static FirebaseAuth mAuth;
     private static DatabaseManager databaseManager;
     private String email = "mockuser@gmail.com";
@@ -159,6 +159,9 @@ public class EditBookTest {
         assertTrue(solo.waitForText(editedISBN, 1, timeout));
     }
 
+    /**
+     * Check if edits made in the book is reflected on the listview
+     */
     @Test
     public void checkEditShowsInListView() {
         String origTitle = "Original Title";
@@ -203,6 +206,58 @@ public class EditBookTest {
         assertTrue(solo.waitForText(editedTitle, 1, timeout));
         assertTrue(solo.waitForText(editedAuthor, 1, timeout));
         assertTrue(solo.waitForText(editedISBN, 1, timeout));
-
     }
+
+    /**
+     * Checks if deleteing a book is revmoed from the list view
+     */
+    @Test
+    public void testBookRemovedFromListView() {
+        // add a book
+        String title = "book to delete";
+        String author = "Author";
+        String isbn = "1234567890123";
+        addBook(title, author, isbn);
+        solo.waitForText(title, 1, timeout);
+
+        // delete the added book
+        solo.clickOnText(title);
+        solo.assertCurrentActivity("Wrong Activity", OwnerBookProfileActivity.class);
+        solo.clickOnButton("DELETE");
+        solo.clickOnText("Confirm");
+
+        // check if the book is removed from the list view
+        assertTrue(solo.waitForActivity(OwnerBookProfileActivity.class, timeout));
+        assertFalse(solo.waitForText(title, 1, timeout));
+        assertFalse(solo.waitForText(author, 1, timeout));
+        assertFalse(solo.waitForText(isbn, 1, timeout));
+    }
+
+    /**
+     * Test if the cancel button works for deletion
+     */
+    @Test
+    public void testDeleteCancelButton() {
+        // add a book
+        String title = "book to delete";
+        String author = "Author";
+        String isbn = "1234567890123";
+        addBook(title, author, isbn);
+        solo.waitForText(title, 1, timeout);
+
+        // attempt to delete the added book, but cancel
+        solo.clickOnText(title);
+        solo.assertCurrentActivity("Wrong Activity", OwnerBookProfileActivity.class);
+        solo.clickOnButton("DELETE");
+        solo.clickOnText("Cancel");
+
+        // check that book is not deleted
+        solo.assertCurrentActivity("Wrong Activity", OwnerBookProfileActivity.class);
+        solo.clickOnActionBarHomeButton();
+        assertTrue(solo.waitForText(title, 1, timeout));
+        assertTrue(solo.waitForText(author, 1, timeout));
+        assertTrue(solo.waitForText(isbn, 1, timeout));
+    }
+
+
 }
