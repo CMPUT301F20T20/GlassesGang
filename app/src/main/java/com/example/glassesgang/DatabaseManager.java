@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -117,7 +119,29 @@ public class DatabaseManager {
                     }
                 });
 
-        // check request list as well once requesting is implemented
+        if (bookToDelete.getStatus().equals("REQUESTED") || bookToDelete.getStatus().equals("ACCEPTED")) {
+            // delete requests associated with book and the book from borrower catalogues
+            CollectionReference requestsRef = db.collection("requests");
+            requestsRef
+                    .whereEqualTo("bookID", bid)   // get requests associated with the book
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            ArrayList<String> borrowerList = new ArrayList<>();
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    requestsRef.document(document.getId()).delete();
+                                    borrowerList.add((String) document.get("borrowerEmail"));
+                                }
+                                clearBorrowerCatalogues(borrowerList, bid);
+                            } else {
+                                Log.d(TAG, "Error getting documents when clearing owner Catalogue: ", task.getException());
+                            }
+                        }
+                    });
+        }
+
     }
 
     private static void addBookInOwnerCatalogue(String bid, String user) {
@@ -190,5 +214,18 @@ public class DatabaseManager {
                         Log.w(TAG, "Error updating contact information", e);
                     }
                 });
+    }
+
+    /**
+     * removes the specified book from the catalogye of the give borrowers
+     * @param borrowers an array list of borrowers
+     * @param bid the bid of the book to remove from the borrowers catalogue
+     */
+    private static void clearBorrowerCatalogues(ArrayList<String> borrowers, String bid) {
+        for (String borrower: borrowers) {
+            DocumentReference borrowerRef = db.collection("users").document(borrower);
+            borrowerRef.delete();
+        }
+
     }
 }
