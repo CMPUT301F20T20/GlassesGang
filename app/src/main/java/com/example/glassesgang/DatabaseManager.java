@@ -309,17 +309,28 @@ public class DatabaseManager {
 
                     //delete request from books request list
                     bookRef.update("requests", FieldValue.arrayRemove(requestId));
-
-                    //if that was the last request (get null object and fail getting requests), change book status to available
-                    bookRef.get().addOnFailureListener(new OnFailureListener() {
+                    bookRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-                            changeBookStatus(Status.AVAILABLE, bid);
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    ArrayList<String> requests = (ArrayList<String>) document.get("requests");
+                                    if (requests.size() == 0) { // it means the book has no more requests and so its status must be set to available
+                                        changeBookStatus(Status.AVAILABLE, bid);
+                                    }
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
+                            }
                         }
                     });
 
                     //delete user's request from db
-                    DocumentReference reqRef = db.collection("requests").document(userId).collection("borrowerCatalogue").document(requestId);
+                    DocumentReference reqRef = db.collection("requests").document(requestId);
                     reqRef.delete()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -333,10 +344,10 @@ public class DatabaseManager {
                                     Log.w(TAG, "Error deleting request " + requestId, e);
                                 }
                             });
+                    //delete request from user's borrowerCatalogue
+                    borrowerCatReqRef.delete();
                 }
             });
-            //delete request from user's borrowerCatalogue
-            borrowerCatReqRef.delete();
         }
     }
 
