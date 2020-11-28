@@ -84,7 +84,9 @@ public class OwnerLibraryTest {
         solo.enterText((EditText) solo.getView(R.id.email), email);
         solo.enterText((EditText) solo.getView(R.id.password), password);
         solo.clickOnButton("SIGN IN");
-        solo.waitForActivity(OwnerHomeActivity.class);
+        if (!solo.waitForActivity(OwnerHomeActivity.class)) {
+            solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
+        }
         solo.clickOnText("Books");
     }
 
@@ -119,9 +121,9 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkListViewAfterAdding() {
-        String title = "Title";
-        String author = "AuthorFirst AuthorLast";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
 
         addBook(title, author, isbn);
 
@@ -138,9 +140,9 @@ public class OwnerLibraryTest {
      */
     @Test
     public void testBackButton() {
-        String title = "Title";
-        String author = "AuthorFirst AuthorLast";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
 
         // verify that the book is not in the list view in the first place
         assertFalse(solo.waitForText(title, 1, 2000));
@@ -169,9 +171,9 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkEmptyFieldVerification() {
-        String title = "Title";
-        String author = "AuthorFirst AuthorLast";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
 
         solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
@@ -211,10 +213,10 @@ public class OwnerLibraryTest {
      */
     @Test
     public void testISBNFieldVerification() {
-        String title = "Title";
-        String author = "AuthorFirst AuthorLast";
-        String longISBN = "12345678901231234567890123";
-        String shortISBN = "123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String longISBN = "978043902348212813912";
+        String shortISBN = "97804390";
 
         solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
@@ -242,9 +244,9 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkBookClick() {
-        String title = "Original Title";
-        String author = "Original Author";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
 
         addBook(title, author, isbn);
 
@@ -260,9 +262,9 @@ public class OwnerLibraryTest {
 
     @Test
     public void testEditFieldHasBookDesc() {
-        String origTitle = "Original Title";
-        String origAuthor = "Original Author";
-        String origISBN = "1234567890123";
+        String origTitle = "The Hunger Games";
+        String origAuthor = "Suzanne Collins";
+        String origISBN = "9780439023481";
 
         // add a book and open up its profile
         addBook(origTitle, origAuthor, origISBN);
@@ -285,12 +287,12 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkEditShowsInProfile() {
-        String origTitle = "Original Title";
-        String origAuthor = "Original Author";
-        String origISBN = "1234567890123";
-        String editedTitle = "Edited Title";
-        String editedAuthor = "Edited Author";
-        String editedISBN = "1231231231231";
+        String origTitle = "Hunger Games";
+        String origAuthor = "Suzan Collins";
+        String origISBN = "1231231231231";
+        String editedTitle = "The Hunger Games";
+        String editedAuthor = "Suzanne Collins";
+        String editedISBN = "9780439023481";
 
         // add a book and open up its profile
         addBook(origTitle, origAuthor, origISBN);
@@ -326,12 +328,12 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkEditShowsInListView() {
-        String origTitle = "Original Title";
-        String origAuthor = "Original Author";
-        String origISBN = "1234567890123";
-        String editedTitle = "Edited Title";
-        String editedAuthor = "Edited Author";
-        String editedISBN = "1231231231231";
+        String origTitle = "Hunger Games";
+        String origAuthor = "Suzan Collins";
+        String origISBN = "1231231231231";
+        String editedTitle = "The Hunger Games";
+        String editedAuthor = "Suzanne Collins";
+        String editedISBN = "9780439023481";
 
         // add a book and open up its profile
         addBook(origTitle, origAuthor, origISBN);
@@ -372,9 +374,9 @@ public class OwnerLibraryTest {
     @Test
     public void testBookRemovedFromListView() {
         // add a book
-        String title = "book to delete";
-        String author = "Author";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
         addBook(title, author, isbn);
 
         // delete the added book
@@ -396,9 +398,9 @@ public class OwnerLibraryTest {
     @Test
     public void testDeleteCancelButton() {
         // add a book
-        String title = "book to delete";
-        String author = "Author";
-        String isbn = "1234567890123";
+        String title = "The Hunger Games";
+        String author = "Suzanne Collins";
+        String isbn = "9780439023481";
         addBook(title, author, isbn);
         solo.waitForText(title, 1, timeout);
 
