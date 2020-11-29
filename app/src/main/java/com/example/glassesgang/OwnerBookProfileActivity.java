@@ -1,7 +1,9 @@
 package com.example.glassesgang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +18,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
 
+import com.example.glassesgang.Transaction.Request;
+import com.example.glassesgang.Transaction.RequestHandlingFragment;
+import com.example.glassesgang.Transaction.TransactionFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,16 +31,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+
 import java.net.URL;
 
 /**
  * Book profile for Owner View (edit book functionality)
  */
-public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener{
+public class OwnerBookProfileActivity extends AppCompatActivity implements DeleteBookDialogFragment.DeleteBookDialogListener, RequestHandlingFragment.OnRequestFragmentInteractionListener, TransactionFragment.OnTransactionInteractionListener{
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
-    private TextView statusTextView;
+    private Button statusButton;
     private TextView borrowerTextView;
     private Button deleteButton;
     private Button editButton;
@@ -41,11 +50,12 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String author;
     private String title;
     private String isbn;
-    private String status;
+    private Status status;
     private String bid;
     private String borrower;
     private Book book;
     private String owner;
+    private ArrayList<String> requests;
     private  FirebaseFirestore db;
     private static final String TAG = "OwnerBkProfileActivity";
 
@@ -71,6 +81,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
         // convert the book document to a Book object
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @SuppressLint("ResourceType") //bypass layout check for request_list_layout
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 book = documentSnapshot.toObject(Book.class);
@@ -79,11 +90,23 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 isbn = book.getISBN();
                 status = book.getStatus();
                 borrower = book.getBorrower();
+                requests = book.getRequests();
                 if (borrower == null || borrower.equals("")) {
                     borrower = "None";
                 }
                 updateTextViews();
                 setBookImage(book);
+                if (book.getStatus() == Status.ACCEPTED && requests != null && requests.size() == 1) {
+                    //get borrower
+                    db.collection("requests").document(requests.get(0)).get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    inflateTransactionFragment(requests.get(0), (String)documentSnapshot.get("borrowerEmail"));
+                                }
+                            });
+                }
+                else if (requests != null && requests.size() > 0) inflateRequestFragment();
             }
         });
 
@@ -112,7 +135,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusTextView = findViewById(R.id.status_textView);
+        statusButton = findViewById(R.id.status_button);
         borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
@@ -126,7 +149,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
-        statusTextView.setText(status);
+        statusButton.setText(stringStatus(status));
         borrowerTextView.setText(borrower);
     }
 
@@ -154,7 +177,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         if (borrower == null || borrower.equals("")) {
                             borrower = "None";
                         }
-                        updateTextViews();
+//                        updateTextViews();
                         setBookImage(book);
                         updateTextViews();
 
@@ -162,6 +185,26 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 });
             }
         }
+    }
+
+    private void inflateRequestFragment() {
+        //inflate requestList fragment inside framelayout fragment container
+        Bundle bundle = new Bundle();
+        bundle.putString("bid", book.getBID()); //store bin for later use in request handling
+        Fragment requestFragment = new RequestHandlingFragment();
+        requestFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, requestFragment).commit();
+    }
+
+    private void inflateTransactionFragment(String requestId, String borrowerEmail) {
+        //inflate requestList fragment inside framelayout fragment container
+        Bundle bundle = new Bundle();
+        bundle.putString("requestId", requestId); //store bin for later use in request handling
+        bundle.putString("userEmail", borrowerEmail);
+        bundle.putString("userType", "o");
+        Fragment transactionFragment = new TransactionFragment();
+        transactionFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 
     /**
@@ -172,6 +215,28 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     public void onConfirmPressed() {
         DatabaseManager databaseManager = new DatabaseManager();
         databaseManager.deleteBook(book);
+    }
+    
+    @Override
+    public void OnDeclineRequest(Request request) {
+        DatabaseManager databaseManager = new DatabaseManager();
+        databaseManager.deleteRequest(request.getBorrowerEmail(), request.getBookId());
+    }
+    
+    @Override
+    public void OnAcceptRequest(Request request) {
+        //delete all other requests
+        DatabaseManager dbm = new DatabaseManager();
+        dbm.acceptRequest(bid, request);
+
+        //inflate requestList fragment inside framelayout fragment container
+        Bundle bundle = new Bundle();
+        bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
+        bundle.putString("userEmail", request.getBorrowerEmail());
+        bundle.putString("userType", "o");
+        Fragment transactionFragment = new TransactionFragment();
+        transactionFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 
     private void setBookImage(Book book) {
@@ -206,5 +271,11 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         } else {
             bookImageView.setImageBitmap(null);
         }
+    }
+
+    @Override
+    public void onTransactionPressed() {
+        //TODO: scanner
+        finish();
     }
 }

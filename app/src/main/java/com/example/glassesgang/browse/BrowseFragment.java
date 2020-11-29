@@ -2,7 +2,6 @@ package com.example.glassesgang.browse;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -18,15 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.glassesgang.Book;
+import static com.example.glassesgang.BookStatus.Status;
 import com.example.glassesgang.BorrowerBookProfileActivity;
 import com.example.glassesgang.CustomBookList;
-import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Fragment for browsing books that are available or requested
@@ -146,9 +142,9 @@ public class BrowseFragment extends Fragment {
                     if (bookData.get("status").equals("REQUESTED") || bookData.get("status").equals("AVAILABLE")) {
                         Book book = document.toObject(Book.class);
                         if (borrowerCatalogue.containsKey(document.getId())) {  // if book is the borrower catalogue, overwrite the book status
-                            book.setStatus(borrowerCatalogue.get(document.getId()));
+                            book.setStringStatus(borrowerCatalogue.get(document.getId()));
                         } else {
-                            book.setStatus("AVAILABLE");   // if book is not in the borrower catalogue, then borrower hasn't interacted with book yet, so set it to available
+                            book.setStatus(Status.AVAILABLE);   // if book is not in the borrower catalogue, then borrower hasn't interacted with book yet, so set it to available
                         }
                         bookDataList.add(book);
                     }

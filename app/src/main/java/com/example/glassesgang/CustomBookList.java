@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -21,6 +22,9 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
+
 import java.util.ArrayList;
 
 /**
@@ -78,7 +82,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
         TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
-        TextView statusTextView = view.findViewById(R.id.book_temp_status);   // implementing status as a text view for now, might change to image view in the future
+        TextView statusTextView = view.findViewById(R.id.book_temp_status);
         ImageView bookImage = view.findViewById(R.id.login_book_image_view);
 
         setBookImage(book, bookImage);
@@ -86,7 +90,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         titleTexView.setText(book.getTitle());
         authorTexView.setText(book.getAuthor());
         isbnTextView.setText(book.getISBN());
-        statusTextView.setText(book.getStatus());
+        statusTextView.setText(stringStatus(book.getStatus()));
 
         // if user is an owner, display the borrower of a book
         // if user is a borrower, display the owner of a book
@@ -174,7 +178,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
             origBooks.addAll(bookList);
             ArrayList<Book> filteredBooks = new ArrayList<>();
             for(Book book: origBooks) {  // if book's status is in status filter, add it to the filtered book list
-                if (statusFilterList.contains(book.getStatus())) {
+                if (statusFilterList.contains(stringStatus(book.getStatus()))) {
                     filteredBooks.add(book);
                 }
             }
