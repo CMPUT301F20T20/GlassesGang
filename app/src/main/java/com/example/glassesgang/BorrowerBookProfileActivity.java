@@ -89,42 +89,6 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
                         setBookImage(book, bookImageView);
-                        status = book.getStatus();
-                        switch(status) {
-                            case AVAILABLE: //make a request for this book
-                                statusButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        // get the values for title, author, and isbn from the EditTexts
-                                            Request newRequest = new Request(bid, user, owner);
-                                            DatabaseManager database = new DatabaseManager();
-                                            database.addRequest(newRequest);
-                                            // TODO: somehow add to the system and make sure photos are attached
-                                            finish();
-                                    }
-                                });
-                                break;
-                            case REQUESTED: //cancel request
-                                statusButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        //find request object in db
-                                        //TODO: get requestid from borrower catalogue
-                                        DatabaseManager database = new DatabaseManager();
-                                        database.deleteRequest(user, bid);
-                                        finish();
-                                    }
-                                });
-                                break;
-                            case ACCEPTED: //show transaction fragment to accept book at owner specified location
-                                db.collection("users").document(user).collection("borrowerCatalogue").document(bid).get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
-                                    }
-                                });
-                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -156,6 +120,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         isbnTextView.setText(isbn);
         ownerTextView.setText(owner);
         statusButton.setText(stringStatus(status));
+        setStatusButtonListeners();
     }
 
     private void setBorrowerStatus(Book book) {
@@ -234,6 +199,44 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     ).show();
                 }
             }
+        }
+    }
+
+    public void setStatusButtonListeners() {
+        switch(status) {
+            case AVAILABLE: //make a request for this book
+                statusButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // get the values for title, author, and isbn from the EditTexts
+                        Request newRequest = new Request(bid, user, owner);
+                        DatabaseManager database = new DatabaseManager();
+                        database.addRequest(newRequest);
+                        // TODO: somehow add to the system and make sure photos are attached
+                        finish();
+                    }
+                });
+                break;
+            case REQUESTED: //cancel request
+                statusButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //find request object in db
+                        //TODO: get requestid from borrower catalogue
+                        DatabaseManager database = new DatabaseManager();
+                        database.deleteRequest(user, bid);
+                        finish();
+                    }
+                });
+                break;
+            case ACCEPTED: //show transaction fragment to accept book at owner specified location
+                db.collection("users").document(user).collection("borrowerCatalogue").document(bid).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
+                            }
+                        });
         }
     }
 

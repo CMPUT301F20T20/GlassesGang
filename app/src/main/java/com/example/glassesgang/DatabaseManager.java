@@ -304,39 +304,52 @@ public class DatabaseManager {
             borrowerCatReqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    String requestId = (String) documentSnapshot.get("requestRefId");
-                    DocumentReference bookRef = db.collection("books").document(bid);
+                    if (documentSnapshot.exists()) {
+                        String requestId = (String) documentSnapshot.get("requestRefId");
+                        DocumentReference bookRef = db.collection("books").document(bid);
 
-                    //delete request from books request list
-                    bookRef.update("requests", FieldValue.arrayRemove(requestId));
-
-                    //if that was the last request (get null object and fail getting requests), change book status to available
-                    bookRef.get().addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            changeBookStatus(Status.AVAILABLE, bid);
-                        }
-                    });
-
-                    //delete user's request from db
-                    DocumentReference reqRef = db.collection("requests").document(userId).collection("borrowerCatalogue").document(requestId);
-                    reqRef.delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "Request " + requestId + " successfully deleted!");
+                        //delete request from books request list
+                        bookRef.update("requests", FieldValue.arrayRemove(requestId));
+                        bookRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        ArrayList<String> requests = (ArrayList<String>) document.get("requests");
+                                        if (requests.size() == 0) { // it means the book has no more requests and so its status must be set to available
+                                            changeBookStatus(Status.AVAILABLE, bid);
+                                        }
+                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                    }
+                                } else {
+                                    Log.d(TAG, "get failed with ", task.getException());
                                 }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error deleting request " + requestId, e);
-                                }
-                            });
+                            }
+                        });
+
+                        //delete user's request from db
+                        DocumentReference reqRef = db.collection("requests").document(requestId);
+                        reqRef.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "Request " + requestId + " successfully deleted!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error deleting request " + requestId, e);
+                                    }
+                                });
+                        //delete request from user's borrowerCatalogue
+                        borrowerCatReqRef.delete();
+                    }
                 }
             });
-            //delete request from user's borrowerCatalogue
-            borrowerCatReqRef.delete();
         }
     }
 
@@ -439,11 +452,10 @@ public class DatabaseManager {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     ArrayList<String> userList = new ArrayList<String>();
-
-                    for (QueryDocumentSnapshot document : task.getResult())  //add rejected borrowers to a list
+                    for (QueryDocumentSnapshot document : task.getResult()) {  //add rejected borrowers to a list
                         if (!document.getId().equals(request.getBorrowerEmail())) //exclude accepted borrower
                             userList.add(document.getId());
-
+                    }
                     userList.forEach(user -> deleteRequest(user, bid));
                 } else {
                     Log.d(TAG, "Error getting users: ", task.getException());
