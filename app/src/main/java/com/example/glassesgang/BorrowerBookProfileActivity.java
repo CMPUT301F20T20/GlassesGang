@@ -79,7 +79,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                         isbn = book.getISBN();
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
-                        setBookImage(book, bookImageView);
+                        setBookImage(book);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -113,6 +113,10 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         statusTextView.setText(status);
     }
 
+    /**
+     *
+     * @param book
+     */
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
         borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -142,7 +146,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
+    private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -162,7 +170,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,

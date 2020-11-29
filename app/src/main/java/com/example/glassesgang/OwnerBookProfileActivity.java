@@ -174,6 +174,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         databaseManager.deleteBook(book);
     }
 
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
     private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
