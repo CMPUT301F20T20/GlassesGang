@@ -1,7 +1,7 @@
 package com.example.glassesgang.Transaction;
 
 import com.example.glassesgang.BookStatus.Status;
-
+// TODO: add javadocs
 public class RequestReference {
     private Status bookStatus;
     private String requestId;
