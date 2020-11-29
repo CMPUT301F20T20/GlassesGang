@@ -95,28 +95,9 @@ public class DatabaseManager {
         DocumentReference ownerRef = db.collection("users").document(owner);
         ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bid));
 
-        // delete from borrower Catalogue if book is borrowed
-        if (!borrower.equals("")) {
-            // get reference to the borrower catalogue
-            CollectionReference borrowerCatRef = db.collection("users").document(borrower).collection("borrowerCatalogue");
-            // delete the book document from borrower catalogue
-            borrowerCatRef.document(bid)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error deleting document", e);
-                        }
-                    });
-        }
-
-        if (bookToDelete.getStatus().equals(Status.REQUESTED) || bookToDelete.getStatus().equals(Status.ACCEPTED)) {
+        // delete requests associated with the book and the book from borrower catalogues
+        // if book is either REQUESTED, ACCEPTED, or BORROWED
+        if (!bookToDelete.getStatus().equals(Status.AVAILABLE)) {
             // delete requests associated with book and the book from borrower catalogues
             CollectionReference requestsRef = db.collection("requests");
             requestsRef
