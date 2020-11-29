@@ -27,10 +27,18 @@ public class Request {
 
     public Request() {}
 
+    /**
+     * This sets the location of the pick up
+     */
     public void setLocation(LatLng location) {
         this.location = location;
     }
 
+    /**
+     * This returns the meet up location
+     *
+     * @return the location
+     */
     public LatLng getLocation() {
         return location;
     }
@@ -70,6 +78,9 @@ public class Request {
         return this.requestId;
     }
 
+    /**
+     * This sets the requestId
+     */
     public void setRequestId(String requestId) { this.requestId = requestId; }
 
 }
