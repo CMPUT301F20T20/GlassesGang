@@ -19,6 +19,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Contains test for the Owner Library
+ * which contains all the books that a user owns.
+ */
 public class OwnerLibraryTest {
     private static FirebaseAuth mAuth;
     private static DatabaseManager databaseManager;
