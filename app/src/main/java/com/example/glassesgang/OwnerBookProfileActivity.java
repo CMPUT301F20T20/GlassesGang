@@ -177,7 +177,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                         if (borrower == null || borrower.equals("")) {
                             borrower = "None";
                         }
-                        updateTextViews();
+//                        updateTextViews();
                         setBookImage(book);
                         updateTextViews();
 
