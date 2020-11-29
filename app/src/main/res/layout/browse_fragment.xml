@@ -7,9 +7,27 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/borrowerSecondary"
+        android:iconifiedByDefault="false"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.785" />
+
     <ListView
         android:id="@+id/browse_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00FFFFFF" />
+        android:divider="#00FFFFFF" >
+
+    </ListView>
+
 </LinearLayout>

@@ -16,12 +16,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.glassesgang.Book;
 import com.example.glassesgang.BorrowerBookProfileActivity;
 import com.example.glassesgang.CustomBookList;
 import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
+import com.example.glassesgang.ResultsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +79,22 @@ public class BrowseFragment extends Fragment {
         browseBookList = v.findViewById(R.id.browse_list_view);
         browseBookList.setAdapter(browseBookAdapter);
 
+        // setting up search view
+        SearchView searchView = v.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //firebaseSearch(query.toLowerCase());
+                getResult(query.toLowerCase());
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //System.out.println(newText);
+                return true;
+            }
+        });
+
         borrowerCatalogueRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
@@ -111,6 +129,12 @@ public class BrowseFragment extends Fragment {
 
         return v;
     }
+
+    private void getResult(final String query) {
+        Intent resultIntent = new Intent(getContext(), ResultsActivity.class);
+        resultIntent.putExtra("query", query);
+        startActivity(resultIntent);
+    };
 
     /**
      * Get current user email they used to log in
