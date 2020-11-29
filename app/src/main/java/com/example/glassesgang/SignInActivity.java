@@ -19,6 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity for signing in using Firebase authentication
+ */
 public class SignInActivity extends AppCompatActivity {
 
     private String TAG = "SignInActivity";

@@ -120,8 +120,15 @@ public class DatabaseManager {
         // check request list as well once requesting is implemented
     }
 
+    /**
+     * Helper function for addBook function to update a book in
+     * the ownerCatalogue's field for a specific user
+     * @param bid book id
+     * @param user user id
+     */
     private static void addBookInOwnerCatalogue(String bid, String user) {
-        db.collection("users").document(user)
+        db.collection("users")
+                .document(user)
                 .update("ownerCatalogue", FieldValue.arrayUnion(bid))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -137,7 +144,10 @@ public class DatabaseManager {
                 });
     }
 
-    // User database interactions begin
+    /**
+     * Creates user in the database
+     * @param user user id
+     */
     public static void createUser(final User user){
         final CollectionReference usersDatabase = FirebaseFirestore.getInstance().collection("users");
         usersDatabase.document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

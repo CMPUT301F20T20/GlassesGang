@@ -32,6 +32,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Library Fragment for Borrower
+ * (they are not allowed to edit any book)
+ */
 public class BorrowerLibraryFragment extends Fragment {
     private ListView bookListView;
     private ArrayAdapter<Book> bookArrayAdapter;
@@ -128,6 +132,9 @@ public class BorrowerLibraryFragment extends Fragment {
 
     }
 
+    /**
+     * Updates the list view with real-time updates
+     */
     private void updateListView() {
         // get a reference to books collection
         CollectionReference booksRef = db.collection("books");
@@ -155,6 +162,11 @@ public class BorrowerLibraryFragment extends Fragment {
         });
     }
 
+    /**
+     * Set up filter for book statuses
+     * @param view corresponding view where widget elements are located
+     * @param adapter object to updates the fragment
+     */
     private void setUpFilter(View view, CustomBookList adapter) {
         // setting up the buttons
         requestedTogButton = view.findViewById(R.id.requestedToggleButton);
