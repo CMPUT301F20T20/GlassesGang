@@ -30,7 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of request.
  */
 public class RequestHandlingFragment extends Fragment implements RequestListAdapter.OnRequestInteractionListener {
 

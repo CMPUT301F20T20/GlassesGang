@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.DatabaseManager;
 import com.example.glassesgang.R;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +36,7 @@ public class TransactionFragment extends Fragment{
     private String requestId;
     private String userEmail;
     private String userType;
+    private Request request;
     private LatLng givenLocation;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
@@ -78,6 +80,7 @@ public class TransactionFragment extends Fragment{
         requestId = getArguments().getString("requestId");
         userEmail = getArguments().getString("userEmail");
         userType = getArguments().getString("userType");
+        request = getArguments().getParcelable("request");
         if (getArguments().getParcelable("givenLocation") != null)
             givenLocation = getArguments().getParcelable("givenLocation");
     }
@@ -117,7 +120,9 @@ public class TransactionFragment extends Fragment{
                     Fragment mapFragment = new MapFragment(); //initialized as an owner map fragment (no params)
                     mapFragment.setArguments(bundle);
                     getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
-
+                    //delete all other requests
+                    DatabaseManager dbm = new DatabaseManager();
+                    dbm.acceptRequest(request.getBookId(), request);
                     //destroy button
                     showLocationButton.setVisibility(View.GONE);
                 }
@@ -133,6 +138,7 @@ public class TransactionFragment extends Fragment{
                     }
                     else if (transactionButton.getText().toString().equals("OFFER")){
                         //TODO: open scanner and initiate transaction
+
                         listener.onTransactionPressed();
                     }
                 }

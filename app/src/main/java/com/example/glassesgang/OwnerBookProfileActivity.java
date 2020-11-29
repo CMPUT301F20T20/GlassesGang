@@ -226,14 +226,15 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     @Override
     public void OnAcceptRequest(Request request) {
         //delete all other requests
-        DatabaseManager dbm = new DatabaseManager();
-        dbm.acceptRequest(bid, request);
+        //DatabaseManager dbm = new DatabaseManager();
+        //dbm.acceptRequest(bid, request);
 
         //inflate requestList fragment inside framelayout fragment container
         Bundle bundle = new Bundle();
         bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
         bundle.putString("userEmail", request.getBorrowerEmail());
         bundle.putString("userType", "o");
+        bundle.putParcelable("request", request);
         Fragment transactionFragment = new TransactionFragment();
         transactionFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();

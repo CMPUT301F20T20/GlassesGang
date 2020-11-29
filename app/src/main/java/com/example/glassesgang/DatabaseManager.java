@@ -442,6 +442,7 @@ public class DatabaseManager {
                 .document(request.getBookId());
         borrowerRequest.update("requestRefStatus", Status.ACCEPTED);
 
+
         //send notification to borrower that their request has been accepted
         addNotification(new Notification(request.getOwnerEmail(), request.getBorrowerEmail(), Notification.NotificationType.ACCEPT_REQUEST, bid));
 
