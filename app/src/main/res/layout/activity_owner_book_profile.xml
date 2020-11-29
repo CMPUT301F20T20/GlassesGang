@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,32 +7,68 @@
     android:orientation="vertical"
     tools:context=".OwnerBookProfileActivity">
 
-    <include layout="@layout/book_profile"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/book_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/borrowerTitle_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/Book_image_view"
+            android:layout_width="126dp"
+            android:layout_height="186dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/book_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/Book_image_view"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView
         android:id="@+id/borrowerTitle_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/owner_book_profile_fragment_type" />
+        android:text="@string/owner_book_profile_fragment_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/book_details"
+        app:layout_constraintBottom_toTopOf="@id/owner_book_profile_fragment_container"/>
 
     <FrameLayout
         android:id="@+id/owner_book_profile_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="350dp">
+        android:layout_height="350dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/borrowerTitle_textView"
+        app:layout_constraintBottom_toTopOf="@id/edit_delete_buttons">
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/borrowerBook_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
     <LinearLayout
+        android:id="@+id/edit_delete_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/owner_book_profile_fragment_container"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp">
 
         <Button
             android:id="@+id/delete_button"
@@ -50,4 +86,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

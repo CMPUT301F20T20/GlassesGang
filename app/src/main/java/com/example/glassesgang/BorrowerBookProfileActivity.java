@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -108,7 +107,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         isbnTextView = findViewById(R.id.isbn_textView);
         statusButton = findViewById(R.id.status_button);
         ownerTextView = findViewById(R.id.bookOwner_textView);
-        bookImageView = findViewById(R.id.borrowerBook_image_view);
+        bookImageView = findViewById(R.id.Book_image_view);
     }
 
     /**
@@ -199,6 +198,9 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     ).show();
                 }
             }
+        } else {
+            bookImage.setImageBitmap(null);
+            bookImage.setVisibility(View.GONE);
         }
     }
 
