@@ -116,26 +116,11 @@ public class DatabaseManager {
                     });
         }
 
-        // delete book from database
-        bookRef.delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
-
-        if (bookToDelete.getStatus().equals("REQUESTED") || bookToDelete.getStatus().equals("ACCEPTED")) {
+        if (bookToDelete.getStatus().equals(Status.REQUESTED) || bookToDelete.getStatus().equals(Status.ACCEPTED)) {
             // delete requests associated with book and the book from borrower catalogues
             CollectionReference requestsRef = db.collection("requests");
             requestsRef
-                    .whereEqualTo("bookID", bid)   // get requests associated with the book
+                    .whereEqualTo("bookId", bid)   // get requests associated with the book
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -153,6 +138,21 @@ public class DatabaseManager {
                         }
                     });
         }
+
+        // delete book from database
+        bookRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
 
     }
 
@@ -229,14 +229,14 @@ public class DatabaseManager {
     }
 
     /**
-     * removes the specified book from the catalogye of the give borrowers
+     * removes the specified book from the catalogue of the give borrowers
      * @param borrowers an array list of borrowers
      * @param bid the bid of the book to remove from the borrowers catalogue
      */
     private static void clearBorrowerCatalogues(ArrayList<String> borrowers, String bid) {
         for (String borrower: borrowers) {
-            DocumentReference borrowerRef = db.collection("users").document(borrower);
-            borrowerRef.delete();
+            DocumentReference bookRef = db.collection("users").document(borrower).collection("borrowerCatalogue").document(bid);
+            bookRef.delete();
         }
 
     }
