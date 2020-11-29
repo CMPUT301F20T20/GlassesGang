@@ -7,7 +7,31 @@
     android:orientation="vertical"
     tools:context=".BorrowerBookProfileActivity">
 
-    <include layout="@layout/book_profile"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/book_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/Book_image_view"
+            android:layout_width="126dp"
+            android:layout_height="186dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/book_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/Book_image_view"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <FrameLayout
         android:id="@+id/borrower_book_profile_fragment_container"
         android:layout_width="match_parent"
@@ -19,11 +43,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Book Owner Email: "/>
-
-    <ImageView
-        android:id="@+id/borrowerBook_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </LinearLayout>

@@ -139,7 +139,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         borrowerTextView = findViewById(R.id.borrower_textView);
         deleteButton = findViewById(R.id.delete_button);
         editButton = findViewById(R.id.edit_button);
-        bookImageView = findViewById(R.id.borrowerBook_image_view);
+        bookImageView = findViewById(R.id.Book_image_view);
     }
 
     /**
@@ -270,6 +270,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
             }
         } else {
             bookImageView.setImageBitmap(null);
+            bookImageView.setVisibility(View.GONE);
         }
     }
 
