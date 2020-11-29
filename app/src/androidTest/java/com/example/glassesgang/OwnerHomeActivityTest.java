@@ -114,7 +114,7 @@ public class OwnerHomeActivityTest {
 
         // switch to User fragment
         solo.clickOnText("User");
-        assertTrue(solo.waitForText("Email:", 1, 3000));
+        assertTrue(solo.waitForText("Email:", 1, timeout));
         assertTrue(solo.isSpinnerTextSelected("Owner"));
     }
 
@@ -123,7 +123,7 @@ public class OwnerHomeActivityTest {
     public void checkSwitch() {
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
         solo.clickOnText("User");
-        assertTrue(solo.waitForText("Email:", 1, 3000));
+        assertTrue(solo.waitForText("Email:", 1, timeout));
         solo.pressSpinnerItem(0, 1);
         solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
     }

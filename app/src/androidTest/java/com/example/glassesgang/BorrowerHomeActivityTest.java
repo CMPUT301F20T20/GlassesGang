@@ -9,21 +9,27 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertFalse;
+
 
 public class BorrowerHomeActivityTest {
     private static FirebaseAuth mAuth;
     private Solo solo;
-    private String mockUserEmail = "mockuser@gmail.com";
+    private String mockUserEmail = "mockuser2@gmail.com";
     private String password = "password";
-    private int timeout = 3000;
+    private int timeout = 2000;
 
 
     @Rule
-    public ActivityTestRule<OwnerHomeActivity> rule = new ActivityTestRule<>(OwnerHomeActivity.class, true, true);
+    public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class, true, true);
 
     /**
      * intialize FireBaseAuth and DatabaseManager
@@ -43,7 +49,7 @@ public class BorrowerHomeActivityTest {
      */
     @AfterClass
     public static void signOut() {
-        mAuth.signOut();
+        signOut();
     }
 
     @Before
@@ -55,6 +61,12 @@ public class BorrowerHomeActivityTest {
         if (user == null) {
             signInMockUser();
         }
+        switchToBorrower();
+    }
+
+    @After
+    public void tearDown() {
+        solo.finishOpenedActivities();
     }
 
     /**
@@ -67,8 +79,61 @@ public class BorrowerHomeActivityTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
-        solo.clickOnText("Books");
     }
 
+    public void switchToBorrower() {
+        solo.clickOnText("User");
+        solo.waitForText("Email:", 1, timeout);
+        solo.pressSpinnerItem(0, 1);
+    }
 
+    @Test
+    public void checkBorrowerHomeActivity() {
+        solo.assertCurrentActivity("Wrong Activity", BorrowerHomeActivity.class);
+
+        // switch to Home fragment
+        solo.clickOnText("Home");
+
+        String bookIsbn = "1234567890123";
+        String mockAuthor = "testAuthor";
+
+        // check if search bar exists
+        assertTrue(solo.waitForView(R.id.search_view, 1, timeout));
+
+        // click on information about a book
+        solo.clickOnText("testBook");
+
+        // check ISBN
+        assertTrue(solo.waitForText(bookIsbn, 1, timeout));
+
+        // check Owner
+        assertTrue(solo.waitForText(mockAuthor,1, timeout));
+    }
+
+    @Test
+    public void checkLibraryFragment() {
+        // Asserts that the current activity is the MainActivity. Otherwise, show “Wrong Activity”
+        solo.assertCurrentActivity( "Wrong Activity" , BorrowerHomeActivity.class);
+
+        // switch to Library fragment
+        solo.clickOnText("Books");
+
+        // TODO: implement when Jerry's PR gets merged
+
+    }
+
+    @Test
+    public void checkUserFragment() {
+        // Asserts that the current activity is the MainActivity. Otherwise, show “Wrong Activity”
+        solo.assertCurrentActivity( "Wrong Activity" , BorrowerHomeActivity.class);
+
+        // switch to User fragment
+        solo.clickOnText("User");
+
+        // Assert if email shows up
+        assertTrue(solo.searchText("Email:"));
+        // Assert role for user is borrower
+        assertTrue(solo.waitForText("Borrower"));
+
+    }
 }
