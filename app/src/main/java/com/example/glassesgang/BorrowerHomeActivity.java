@@ -31,22 +31,6 @@ public class BorrowerHomeActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationListener);
 
-        // setting up search view
-        SearchView searchView = (SearchView) findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //firebaseSearch(query.toLowerCase());
-                getResult(query.toLowerCase());
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //System.out.println(newText);
-                return true;
-            }
-        });
-
         bottomNavigation.setSelectedItemId(R.id.nav_home);
     }
 
@@ -79,11 +63,4 @@ public class BorrowerHomeActivity extends AppCompatActivity {
             return true; //clicked item marked as selected. not selected = false
         }
     };
-
-    private void getResult(final String query) {
-        Intent resultIntent = new Intent(this, ResultsActivity.class);
-        resultIntent.putExtra("query", query);
-        startActivity(resultIntent);
-    };
-
 }

@@ -1,32 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingTop="20dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:id="@+id/title_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="Title"
+        android:textColor="@color/borrowerText"
         android:textSize="30sp" />
 
     <TextView
         android:id="@+id/author_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="Author"
+        android:textColor="@color/borrowerText"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/isbn_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="ISBN"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/status_button"
+        android:layout_width="137dp"
+        android:layout_height="30dp"
+        android:background="@drawable/grey_shape"
+        android:textColor="@color/borrowerPrimary"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/borrowerTitle_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="Borrower:"
+        android:textColor="@color/borrowerText"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/borrower_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/grey_card"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:gravity="center"
+        android:text="STATUS"
+        android:textColor="@color/borrowerText"
+        android:textSize="24sp" />
 
 </LinearLayout>

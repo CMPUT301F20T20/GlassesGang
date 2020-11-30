@@ -7,23 +7,64 @@
     android:orientation="vertical"
     tools:context=".BorrowerBookProfileActivity">
 
-    <include layout="@layout/book_profile"/>
-    <FrameLayout
-        android:id="@+id/borrower_book_profile_fragment_container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="350dp">
+        android:layout_height="match_parent">
 
-    </FrameLayout>
-    <TextView
-        android:id="@+id/bookOwner_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Book Owner Email: "/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/borrowerBook_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        tools:srcCompat="@tools:sample/avatars" />
+            <ImageView
+                android:id="@+id/borrowerBook_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:background="@color/borrowerSecondary"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <include layout="@layout/book_profile" />
+
+            <TextView
+                android:id="@+id/ownerTitle_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="Owner:"
+                android:textColor="@color/borrowerText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/owner_textView"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/grey_card"
+                android:fontFamily="@font/source_sans_pro_bold"
+                android:gravity="center"
+                android:text="Email"
+                android:textColor="@color/borrowerText"
+                android:textSize="24sp" />
+
+            <FrameLayout
+                android:id="@+id/borrower_book_profile_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="350dp">
+
+            </FrameLayout>
+            <TextView
+                android:id="@+id/bookOwner_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Book Owner Email: "/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
