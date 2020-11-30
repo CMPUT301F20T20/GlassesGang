@@ -304,10 +304,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                 if (scannedIsbn.equals(isbn)) {
                     DatabaseManager dbm = new DatabaseManager();
                     dbm.transactionAction(transactionReqId, "b", transactionTypeRes);
+
                 } else {
                     Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
                 }
-
+                setTextViews();
                 finish();
             }
         }

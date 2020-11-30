@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.DatabaseManager;
 import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
@@ -121,8 +123,28 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
 
         //if owner, then transaction is offering a requested book. involves map and scan
         if (userType.equals("o")) {
-            transactionButton.setText("CONFIRM LOCATION");
-            transactionButton.setEnabled(false);
+            DatabaseManager dbm = new DatabaseManager();
+            int resultCode = dbm.checkTransactionStatus(requestId);
+            if (resultCode < 4) {
+                transactionButton.setText("CONFIRM LOCATION");
+                transactionButton.setEnabled(false);
+                if (resultCode == 2) {
+                    infoTextView.setText("Scan to offer book to borrower");
+                    transactionButton.setText("OFFER");
+                    transactionButton.setEnabled(true);
+                }
+            }
+            else {
+                transactionButton.setText("RETRIEVE");
+                if (resultCode == 4) {
+                    infoTextView.setText("Waiting for borrower to scan");
+                    transactionButton.setEnabled(false);
+                }
+                else if (resultCode == 5) {
+                    infoTextView.setText("Scan to retrieve book");
+                    transactionButton.setEnabled(true);
+                }
+            }
 
             if (givenLocation == null) {
                 //owner has not specified a location yet
@@ -165,9 +187,29 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             });
         }
 
-        //if borrower, then transaction is accepting owners offer. load map fragment
+        //if borrower, then transaction is accepting owners offer or returning book. load map fragment
         else if (userType.equals("b")) {
-            transactionButton.setText("ACCEPT"); //transaction button enabled by default, location button uninteractable
+            DatabaseManager dbm = new DatabaseManager();
+            int resultCode = dbm.checkTransactionStatus(requestId);
+            if (resultCode < 4) {
+                infoTextView.setText("Waiting for owner to offer book");
+                transactionButton.setText("ACCEPT");
+                transactionButton.setEnabled(false);
+                if (resultCode == 2) {
+                    infoTextView.setText("Scan to accept book");
+                    transactionButton.setEnabled(true);
+                }
+            }
+            else {
+                transactionButton.setText("RETURN");
+                infoTextView.setText("Scan to return book to owner");
+                transactionButton.setEnabled(true);
+                if (resultCode == 5) {
+                    infoTextView.setText("Waiting for owner to scan to complete return");
+                    transactionButton.setEnabled(false);
+                }
+            }
+
             //display map  if owner has specified a location
             if (givenLocation != null)
             {
@@ -183,7 +225,13 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             transactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onTransactionPressed(requestId, TransactionType.REQUEST);
+                    if (transactionButton.getText().toString().equals("RETURN")) {
+                        listener.onTransactionPressed(requestId, TransactionType.RETURN);
+                    }
+                    else if (transactionButton.getText().toString().equals("ACCEPT")) {
+                        listener.onTransactionPressed(requestId, TransactionType.REQUEST);
+                    }
+
                 }
             });
         }

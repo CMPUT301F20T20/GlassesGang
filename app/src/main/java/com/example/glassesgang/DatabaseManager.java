@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -15,7 +16,6 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.glassesgang.Notification.App;
 import com.example.glassesgang.Notification.Notification;
 import com.example.glassesgang.Transaction.TransactionType;
-import com.google.android.gms.tasks.Continuation;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.BookStatus.Status;
 import com.example.glassesgang.Transaction.RequestReference;
@@ -26,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,6 +43,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import kotlin.coroutines.Continuation;
+
+import static com.example.glassesgang.BookStatus.statusString;
+import static com.example.glassesgang.BookStatus.stringStatus;
 
 /**
  * Object for handling transactions in the database
@@ -517,5 +524,32 @@ public class DatabaseManager {
             //delete the request, end of request lifecycle
             deleteRequest(userId, bookId);
         }
+    }
+
+    public static int checkTransactionStatus(String requestId) {
+        //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
+        //4 = ", 5 = ", 6 = ", 7 = ", codes for returns
+        final int[] resultCode = {0};
+        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot req) {
+                boolean borrowerOk = (boolean) req.get("borrowerAction");
+                boolean ownerOk = (boolean) req.get("ownerAction");
+                if (borrowerOk && ownerOk) resultCode[0] = 3;
+                else if (borrowerOk && !ownerOk) resultCode[0] = 1;
+                else if (!borrowerOk && ownerOk) resultCode[0] = 2;
+                else resultCode[0] = 0;
+                String bookId = req.get("bookId").toString();
+                db.collection("books").document(bookId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        Status bookStatus = statusString(value.get("status").toString());
+                        if (bookStatus == Status.BORROWED) resultCode[0] += 4;
+                    }
+                });
+
+            }
+        });
+        return resultCode[0];
     }
 }

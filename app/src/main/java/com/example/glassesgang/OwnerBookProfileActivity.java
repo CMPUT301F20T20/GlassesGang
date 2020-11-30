@@ -223,7 +223,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 } else {
                     Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
                 }
-
+                updateTextViews();
                 finish();
             }
         }
@@ -258,7 +258,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.transaction_fragment_container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.transaction_layout);
         if (!(fragment instanceof OverrideBackPressed) || ((OverrideBackPressed) fragment).onBackPressed()) super.onBackPressed();
     }
 
@@ -360,6 +360,6 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         transactionReqId = requestId;
         Intent intent = new Intent(OwnerBookProfileActivity.this, ScannerActivity.class);
         startActivityForResult(intent, SCAN_TAKEN);
-//        finish();
+
     }
 }
