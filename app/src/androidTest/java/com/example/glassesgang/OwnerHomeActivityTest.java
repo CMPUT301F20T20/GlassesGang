@@ -91,6 +91,7 @@ public class OwnerHomeActivityTest {
 
         String bookIsbn = "1234567891011";
         String mockAuthor = "Mock Author";
+        String bookTitle = "Book for testing";
 
         // check filter buttons
         assertTrue(solo.waitForView(R.id.availableToggleButton, 1, timeout));
@@ -99,7 +100,7 @@ public class OwnerHomeActivityTest {
         assertTrue(solo.waitForView(R.id.borrowedToggleButton));
 
         // click on information about a book
-        solo.clickOnText("Book for testing");
+        solo.clickOnText(bookTitle);
 
         // check ISBN
         assertTrue(solo.waitForText(bookIsbn, 1, timeout));

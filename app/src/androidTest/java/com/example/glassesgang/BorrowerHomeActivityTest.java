@@ -96,12 +96,13 @@ public class BorrowerHomeActivityTest {
 
         String bookIsbn = "1234567890123";
         String mockAuthor = "testAuthor";
+        String mockBookTest = "testBook";
 
         // check if search bar exists
         assertTrue(solo.waitForView(R.id.search_view, 1, timeout));
 
         // click on information about a book
-        solo.clickOnText("testBook");
+        solo.clickOnText(mockBookTest);
 
         // check ISBN
         assertTrue(solo.waitForText(bookIsbn, 1, timeout));
@@ -118,7 +119,8 @@ public class BorrowerHomeActivityTest {
         // switch to Library fragment
         solo.clickOnText("Books");
 
-        // TODO: implement when Jerry's PR gets merged
+        assertTrue(solo.waitForView(R.id.requestedToggleButton));
+        assertTrue(solo.waitForView(R.id.acceptedToggleButton));
 
     }
 
