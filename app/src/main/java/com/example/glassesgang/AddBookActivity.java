@@ -31,6 +31,9 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
@@ -139,6 +142,14 @@ public class AddBookActivity extends AppCompatActivity {
             if (data != null) {
                 ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
                 // TODO implment google books API here
+                GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest();
+                JSONObject jsonObject = apiRequest.doInBackground(ISBN);
+                try {
+                    String title = (String) jsonObject.get("title");
+                    titleEditText.setText(title);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 isbnEditText.setText(ISBN);
             }
         }
