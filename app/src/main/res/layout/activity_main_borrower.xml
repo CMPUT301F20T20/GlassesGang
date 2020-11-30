@@ -10,7 +10,7 @@
 
     <FrameLayout
         android:id="@+id/fragment_container"
-        android:layout_width="413dp"
+        android:layout_width="411dp"
         android:layout_height="0dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/borrowerSecondary"
-        app:itemTextColor="@color/borrowerPrimary"
+        app:itemTextColor="#00FFFFFF"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

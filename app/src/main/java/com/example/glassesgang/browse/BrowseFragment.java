@@ -75,22 +75,6 @@ public class BrowseFragment extends Fragment {
         browseBookList = v.findViewById(R.id.browse_list_view);
         browseBookList.setAdapter(browseBookAdapter);
 
-        // setting up search view
-        SearchView searchView = v.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //firebaseSearch(query.toLowerCase());
-                getResult(query.toLowerCase());
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //System.out.println(newText);
-                return true;
-            }
-        });
-
         borrowerCatalogueRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
@@ -123,14 +107,24 @@ public class BrowseFragment extends Fragment {
             }
         });
 
+        // setting up search view
+        SearchView searchView = v.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //firebaseSearch(query.toLowerCase());
+                getResult(query.toLowerCase());
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //System.out.println(newText);
+                return true;
+            }
+        });
+
         return v;
     }
-
-    private void getResult(final String query) {
-        Intent resultIntent = new Intent(getContext(), ResultsActivity.class);
-        resultIntent.putExtra("query", query);
-        startActivity(resultIntent);
-    };
 
     /**
      * Get current user email they used to log in
@@ -178,4 +172,14 @@ public class BrowseFragment extends Fragment {
             }
         });
     }
+
+    /**
+     * redirects user to new activity containing search result
+     * @param query to filter books
+     */
+    private void getResult(final String query) {
+        Intent resultIntent = new Intent(this.getContext(), ResultsActivity.class);
+        resultIntent.putExtra("query", query);
+        startActivity(resultIntent);
+    };
 }

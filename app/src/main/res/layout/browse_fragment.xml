@@ -10,10 +10,9 @@
     <SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/borrowerSecondary"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/grey_card"
         android:iconifiedByDefault="false"
         app:layout_constraintBottom_toTopOf="@+id/fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +25,5 @@
         android:id="@+id/browse_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00FFFFFF" >
-
-    </ListView>
-
+        android:divider="#00FFFFFF" />
 </LinearLayout>
