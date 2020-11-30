@@ -130,6 +130,22 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
             }
         });
 
+        borrowerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = borrowerTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(OwnerBookProfileActivity.this,
+                            ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                } else {
+                    Toast.makeText(OwnerBookProfileActivity.this, "There is no user",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     /**
