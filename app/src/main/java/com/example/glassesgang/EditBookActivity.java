@@ -60,6 +60,9 @@ public class EditBookActivity extends AppCompatActivity {
     private final int CAMERA_PHOTO_TAKEN = 102;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String bookImageUrl;
+    // scanner variables
+    private String ISBN;
+    private final int SCAN_TAKEN = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +119,8 @@ public class EditBookActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: implement scanning
+                Intent intent = new Intent(EditBookActivity.this, ScannerActivity.class);
+                startActivityForResult(intent, SCAN_TAKEN);
             }
         });
 
@@ -146,6 +150,13 @@ public class EditBookActivity extends AppCompatActivity {
             Bitmap bookImage = CameraActivity.getBookImage();
             bookImageView.setImageBitmap(bookImage);
             uploadPictureToStorage(bookImage);
+        }
+        if (requestCode == SCAN_TAKEN){
+            if (data != null) {
+                ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+                isbnEditText.setText(ISBN);
+            }
         }
     }
 
