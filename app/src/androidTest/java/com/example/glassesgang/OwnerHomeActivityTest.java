@@ -57,11 +57,11 @@ public class OwnerHomeActivityTest {
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
 
-        // if  no one is signed, sign the mock user
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) {
-            signInMockUser();
-        }
+//        // if  no one is signed, sign the mock user
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user == null) {
+//            signInMockUser();
+//        }
     }
 
 //    @After
@@ -86,6 +86,9 @@ public class OwnerHomeActivityTest {
     public void checkOwnerHomeActivity() {
 //        solo.waitForActivity(OwnerHomeActivity.class);
 //        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+
+        signInMockUser();
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
 
         // switch to Library fragment
         solo.clickOnText("Books");
