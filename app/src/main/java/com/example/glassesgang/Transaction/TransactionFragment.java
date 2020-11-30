@@ -150,7 +150,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 transactionButton.setText("RETRIEVE");
                 if (resultCode == 4) {
                     infoTextView.setText("Waiting for borrower to scan");
-                    transactionButton.setBackgroundColor(Color.RED);
+                    //transactionButton.setBackgroundColor(Color.RED);
                     transactionButton.setEnabled(false);
                 }
                 else if (resultCode == 5) {
@@ -205,7 +205,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             if (resultCode < 4) {
                 infoTextView.setText("Waiting for owner to offer book");
                 transactionButton.setText("ACCEPT");
-                transactionButton.setBackgroundColor(Color.RED);
+                //transactionButton.setBackgroundColor(Color.RED);
                 transactionButton.setEnabled(false);
                 if (resultCode == 2) {
                     infoTextView.setText("Scan to accept book");
@@ -243,7 +243,6 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                     else if (transactionButton.getText().toString().equals("ACCEPT")) {
                         listener.onTransactionPressed(requestId, TransactionType.REQUEST);
                     }
-
                 }
             });
         }
