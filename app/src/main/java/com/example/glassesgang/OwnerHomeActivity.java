@@ -87,11 +87,14 @@ public class OwnerHomeActivity extends AppCompatActivity {
                                 break;
                             case MODIFIED:
                                 Toast.makeText(getApplicationContext(), "MODIFIED NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                NotificationCompat.Builder builder1 = new NotificationCompat.Builder(getApplicationContext(),
+                                        App.CHANNEL_ID)
+                                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                                        .setContentTitle((String)dc.getDocument().get("popupTitle"))
+                                        .setContentText((String)dc.getDocument().get("body"));
+                                NotificationManagerCompat notificationManagerCompat1 = NotificationManagerCompat.from(getApplicationContext());
+                                notificationManagerCompat1.notify(1, builder1.build());
                                 Log.d(TAG, "Modified city: " + dc.getDocument().getData());
-                                break;
-                            case REMOVED:
-                                Toast.makeText(getApplicationContext(), "REMOVED NOTIFICATION", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "Removed city: " + dc.getDocument().getData());
                                 break;
                         }
                     }
