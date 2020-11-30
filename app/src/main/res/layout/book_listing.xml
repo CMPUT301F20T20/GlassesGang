@@ -14,7 +14,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="16dp"
+        app:cardBackgroundColor="#00FFFFFF"
         app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,7 +24,7 @@
             android:id="@+id/login_book_image_view"
             android:layout_width="105dp"
             android:layout_height="155dp"
-            android:background="@color/borrowerSecondary"
+            android:background="@drawable/book_placeholder"
             android:scaleType="fitXY"
             tools:layout_editor_absoluteX="24dp"
             tools:layout_editor_absoluteY="16dp" />
