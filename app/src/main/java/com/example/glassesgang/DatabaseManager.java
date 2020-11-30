@@ -520,7 +520,19 @@ public class DatabaseManager {
     private static void clearBorrowerCatalogues(ArrayList<String> borrowers, String bid) {
         for (String borrower: borrowers) {
             DocumentReference bookRef = db.collection("users").document(borrower).collection("borrowerCatalogue").document(bid);
-            bookRef.delete();
+            bookRef.delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
+                        }
+                    });
         }
     }
 }
