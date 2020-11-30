@@ -140,6 +140,7 @@ public class AddBookActivity extends AppCompatActivity {
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
                 ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
                 isbnEditText.setText(ISBN);
             }
         }
