@@ -88,9 +88,9 @@ public class OwnerLibraryTest {
      * manually signs in the mock user
      */
     public void signInMockUser() {
+        assertTrue(solo.waitForActivity(SignInActivity.class));
         solo.enterText((EditText) solo.getView(R.id.email), email);
         solo.enterText((EditText) solo.getView(R.id.password), password);
-        solo.clickOnButton("SIGN IN");
         solo.clickOnButton("SIGN IN");
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
