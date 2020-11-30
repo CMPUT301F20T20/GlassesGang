@@ -11,12 +11,13 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="411dp"
-        android:layout_height="497dp"
+        android:layout_height="0dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -31,20 +32,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/borrower_bottom_navigation" />
-
-    <SearchView
-        android:id="@+id/search_view"
-        android:layout_width="338dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/borrowerSecondary"
-        android:iconifiedByDefault="false"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.785" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

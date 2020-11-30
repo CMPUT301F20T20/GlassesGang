@@ -3,12 +3,6 @@
 
     <solid android:color="@color/borrowerSecondary" />
 
-    <padding
-        android:bottom="5dp"
-        android:left="5dp"
-        android:right="5dp"
-        android:top="5dp" />
-
     <corners android:radius="30dp" />
 
 </shape>
