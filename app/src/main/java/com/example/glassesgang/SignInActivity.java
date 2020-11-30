@@ -71,6 +71,12 @@ public class SignInActivity extends AppCompatActivity {
         final String email = user_email.getText().toString();
         final String password = user_password.getText().toString();
 
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(SignInActivity.this, "Email or password is empty",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // sign in user
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

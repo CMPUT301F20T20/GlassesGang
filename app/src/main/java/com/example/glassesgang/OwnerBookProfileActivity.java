@@ -255,6 +255,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
     private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {

@@ -17,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * Activity that handles Camera actions
+ * (request camera permissions, open camera, and save picture taken)
+ */
 public class CameraActivity extends AppCompatActivity {
     public ImageView bookImageView;
     private static Bitmap bitmap;

@@ -145,7 +145,10 @@ public class EditBookActivity extends AppCompatActivity {
         if (requestCode == CAMERA_PHOTO_TAKEN) {
             Bitmap bookImage = CameraActivity.getBookImage();
             bookImageView.setImageBitmap(bookImage);
-            uploadPictureToStorage(bookImage);
+
+            if (bookImage != null) {
+                uploadPictureToStorage(bookImage);
+            }
         }
     }
 
