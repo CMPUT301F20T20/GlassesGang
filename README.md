@@ -11,5 +11,5 @@ Attribution Links:
 App home image - https://dribbble.com/shots/6860262-Window
 
 Documentation:
-https://github.com/CMPUT301F20T20/GlassesGang/wiki/Project-Part-3-UML-diagram-changes
+https://github.com/CMPUT301F20T20/GlassesGang/wiki/Project-Part-4-Submission
 
