@@ -95,27 +95,23 @@ public class DatabaseManager {
         DocumentReference ownerRef = db.collection("users").document(owner);
         ownerRef.update("ownerCatalogue", FieldValue.arrayRemove(bid));
 
-        // delete requests associated with the book and the book from borrower catalogues
-        // if book is either REQUESTED, ACCEPTED, or BORROWED
-        if (!bookToDelete.getStatus().equals(Status.AVAILABLE)) {
-            // delete requests associated with book and the book from borrower catalogues
-            CollectionReference requestsRef = db.collection("requests");
-            requestsRef
-                    .whereEqualTo("bookId", bid)   // get requests associated with the book
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // delete from borrower Catalogue if book is borrowed
+        if (!borrower.equals("")) {
+            // get reference to the borrower catalogue
+            CollectionReference borrowerCatRef = db.collection("users").document(borrower).collection("borrowerCatalogue");
+            // delete the book document from borrower catalogue
+            borrowerCatRef.document(bid)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            ArrayList<String> borrowerList = new ArrayList<>();
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    requestsRef.document(document.getId()).delete();
-                                    borrowerList.add((String) document.get("borrowerEmail"));
-                                }
-                                clearBorrowerCatalogues(borrowerList, bid);
-                            } else {
-                                Log.d(TAG, "Error getting documents when clearing owner Catalogue: ", task.getException());
-                            }
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
                         }
                     });
         }
@@ -135,6 +131,7 @@ public class DatabaseManager {
                     }
                 });
 
+        // check request list as well once requesting is implemented
     }
 
 
@@ -532,29 +529,5 @@ public class DatabaseManager {
             }
         });
         */
-    }
-
-    /**
-     * removes the specified book from the catalogue of the give borrowers
-     * @param borrowers an array list of borrowers
-     * @param bid the bid of the book to remove from the borrowers catalogue
-     */
-    private static void clearBorrowerCatalogues(ArrayList<String> borrowers, String bid) {
-        for (String borrower: borrowers) {
-            DocumentReference bookRef = db.collection("users").document(borrower).collection("borrowerCatalogue").document(bid);
-            bookRef.delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error deleting document", e);
-                        }
-                    });
-        }
     }
 }
