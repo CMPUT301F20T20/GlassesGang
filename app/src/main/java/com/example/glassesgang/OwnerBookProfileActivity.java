@@ -1,5 +1,6 @@
 package com.example.glassesgang;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -61,6 +62,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String owner;
     private ArrayList<String> requests;
     private  FirebaseFirestore db;
+    private final int SCAN_TAKEN = 111;
     private static final String TAG = "OwnerBkProfileActivity";
 
     @Override
@@ -189,6 +191,17 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 });
             }
         }
+
+        if (requestCode == SCAN_TAKEN){
+            if (data != null) {
+                String ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+                System.out.println("SCANNER " + ISBN);
+                Log.d(TAG, ISBN);
+//                isbnEditText.setText(ISBN);
+                finish();
+            }
+        }
     }
 
     private void inflateRequestFragment() {
@@ -293,6 +306,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     @Override
     public void onTransactionPressed(String requestId, TransactionType transactionType) {
         //TODO: add scanner implementation
+        //isbn
+//        Intent intent = new Intent(OwnerBookProfileActivity.this, ScannerActivity.class);
+//        startActivityForResult(intent, SCAN_TAKEN);
+        System.out.println("ISBN "+ isbn);
         DatabaseManager dbm = new DatabaseManager();
         dbm.transactionAction(requestId, "o", transactionType);
         finish();

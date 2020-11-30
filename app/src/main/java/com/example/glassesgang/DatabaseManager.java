@@ -392,19 +392,6 @@ public class DatabaseManager {
                         Log.w(TAG, "Error adding notification to user" + notification.getReceiverEmail(), e);
                     }
                 });
-/*
-        // TODO: create a notification to be displayed as a popup
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
-                App.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                .setContentTitle(notification.getPopupTitle())
-                .setContentText(notification.getPopupText());
-
-        // TODO: create the notification alert on receiver's phone
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(1, builder.build());
-
- */
     }
 
     public static void deleteNotification(Notification not) {

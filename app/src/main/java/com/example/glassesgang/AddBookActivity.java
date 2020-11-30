@@ -115,7 +115,6 @@ public class AddBookActivity extends AppCompatActivity {
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Encapsulate Camera in its own class
                 Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
                 startActivityForResult(intent, CAMERA_PHOTO_TAKEN);
             }

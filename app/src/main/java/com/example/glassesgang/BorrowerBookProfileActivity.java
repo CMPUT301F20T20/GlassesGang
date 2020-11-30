@@ -1,10 +1,12 @@
 package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +59,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     private Book book;
     private FirebaseFirestore db;
     private String user;
+    private final int SCAN_TAKEN = 111;
     final String TAG = "Database error";
 
     @Override
@@ -241,8 +244,26 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SCAN_TAKEN){
+            if (data != null) {
+                String ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+                System.out.println("SCANNER " + ISBN);
+                Log.d(TAG, ISBN);
+//                isbnEditText.setText(ISBN);
+                finish();
+            }
+        }
+    }
+
     @Override
     public void onTransactionPressed(String requestId, TransactionType transactionType) {
+        //TODO: open scanner
+//        Intent intent = new Intent(BorrowerBookProfileActivity.this, ScannerActivity.class);
+//        startActivityForResult(intent, SCAN_TAKEN);
+        System.out.println("ISBN " + isbn);
         //TODO: add scanner implementation
         DatabaseManager dbm = new DatabaseManager();
         dbm.transactionAction(requestId, "o", transactionType);
