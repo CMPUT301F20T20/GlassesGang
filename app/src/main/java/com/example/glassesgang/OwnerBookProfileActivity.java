@@ -1,5 +1,6 @@
 package com.example.glassesgang;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,7 @@ import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.Transaction.RequestHandlingFragment;
 import com.example.glassesgang.Transaction.TransactionFragment;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -61,6 +63,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String owner;
     private ArrayList<String> requests;
     private  FirebaseFirestore db;
+    private String transactionReqId;
+    private TransactionType transactionTypeRes;
+    private final int SCAN_TAKEN = 111;
     private static final String TAG = "OwnerBkProfileActivity";
 
     @Override
@@ -206,6 +211,22 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 });
             }
         }
+
+        if (requestCode == SCAN_TAKEN){
+            if (data != null) {
+                String scannedIsbn = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+
+                if (scannedIsbn.equals(isbn)) {
+                    DatabaseManager dbm = new DatabaseManager();
+                    dbm.transactionAction(transactionReqId, "o", transactionTypeRes);
+                } else {
+                    Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
+                }
+                updateTextViews();
+                finish();
+            }
+        }
     }
 
     private void inflateRequestFragment() {
@@ -226,6 +247,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", borrowerEmail);
                 bundle.putString("userType", "o");
+                bundle.putString("bookStatus", book.getStatus().toString());
                 Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
                 if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();
@@ -237,7 +259,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.transaction_fragment_container);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.transaction_layout);
         if (!(fragment instanceof OverrideBackPressed) || ((OverrideBackPressed) fragment).onBackPressed()) super.onBackPressed();
     }
 
@@ -333,8 +355,12 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
 
     @Override
-    public void onTransactionPressed() {
-        //TODO: scanner
-        finish();
+    public void onTransactionPressed(String requestId, TransactionType transactionType) {
+        //TODO: add scanner implementation
+        transactionTypeRes = transactionType;
+        transactionReqId = requestId;
+        Intent intent = new Intent(OwnerBookProfileActivity.this, ScannerActivity.class);
+        startActivityForResult(intent, SCAN_TAKEN);
+
     }
 }

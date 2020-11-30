@@ -1,6 +1,7 @@
 package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.glassesgang.Transaction.TransactionFragment;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.example.glassesgang.BookStatus.Status;
@@ -58,6 +60,9 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     private Book book;
     private FirebaseFirestore db;
     private String user;
+    private final int SCAN_TAKEN = 111;
+    private String transactionReqId;
+    private TransactionType transactionTypeRes;
     final String TAG = "Database error";
 
     @Override
@@ -184,6 +189,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", ownerEmail);
                 bundle.putString("userType", "b");
+                bundle.putString("bookStatus", book.getStatus().toString());
                 Map<String, Double> locationHashMap = (Map<String, Double>) req.get("location");
                 if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();
@@ -289,8 +295,32 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     }
 
     @Override
-    public void onTransactionPressed() {
-        //TODO: open scanner
-        finish();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SCAN_TAKEN) {
+            if (data != null) {
+                String scannedIsbn = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+
+                if (scannedIsbn.equals(isbn)) {
+                    DatabaseManager dbm = new DatabaseManager();
+                    dbm.transactionAction(transactionReqId, "b", transactionTypeRes);
+
+                } else {
+                    Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
+                }
+                setTextViews();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onTransactionPressed(String requestId, TransactionType transactionType) {
+        //TODO: add scanner implementation
+        transactionTypeRes = transactionType;
+        transactionReqId = requestId;
+        Intent intent = new Intent(BorrowerBookProfileActivity.this, ScannerActivity.class);
+        startActivityForResult(intent, SCAN_TAKEN);
     }
 }

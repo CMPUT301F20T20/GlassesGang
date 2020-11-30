@@ -18,7 +18,21 @@ public class BookStatus {
                 return "ACCEPTED";
             case BORROWED:
                 return "BORROWED";
+            default: return "";
         }
-        return "";
+    }
+
+    public static Status statusString(String status) {
+        switch (status) {
+            case "AVAILABLE":
+                return Status.AVAILABLE;
+            case "REQUESTED":
+                return Status.REQUESTED;
+            case "ACCEPTED":
+                return Status.ACCEPTED;
+            case "BORROWED":
+                return Status.BORROWED;
+            default: return Status.AVAILABLE;
+        }
     }
 }

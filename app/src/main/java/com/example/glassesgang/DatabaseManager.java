@@ -8,13 +8,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.glassesgang.Notification.App;
 import com.example.glassesgang.Notification.Notification;
-import com.google.android.gms.tasks.Continuation;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.BookStatus.Status;
 import com.example.glassesgang.Transaction.RequestReference;
@@ -25,8 +26,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +43,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import kotlin.coroutines.Continuation;
+
+import static com.example.glassesgang.BookStatus.statusString;
+import static com.example.glassesgang.BookStatus.stringStatus;
 
 /**
  * Object for handling transactions in the database
@@ -465,19 +473,6 @@ public class DatabaseManager {
                         Log.w(TAG, "Error adding notification to user" + notification.getReceiverEmail(), e);
                     }
                 });
-/*
-        // TODO: create a notification to be displayed as a popup
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
-                App.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                .setContentTitle(notification.getPopupTitle())
-                .setContentText(notification.getPopupText());
-
-        // TODO: create the notification alert on receiver's phone
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(1, builder.build());
-
- */
     }
 
     public static void deleteNotification(Notification not) {
@@ -554,21 +549,43 @@ public class DatabaseManager {
                 }
             }
         });
+    }
 
-        /* //not needed, but could be useful as a final check to ensure no other requests exist at the moment of accepting a request
-        // delete all other requests from book's request list
-        DocumentReference bookRef = db.collection("books").document(bid);
-        bookRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void transactionAction(String requestId, String userType, TransactionType transactionType) {
+        DocumentReference reqRef = db.collection("requests").document(requestId);
+        reqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ArrayList<String> requestsToRemove = (ArrayList<String>) documentSnapshot.get("requests");
-                requestsToRemove.remove(request.getRequestId()); //remove accepted request from requestsToRemove
-                requestsToRemove.forEach(request -> {
-                    bookRef.update("requests", FieldValue.arrayRemove(request));
-                });
+            public void onSuccess(DocumentSnapshot req) {
+                if (userType == "o") {
+                    reqRef.update("ownerAction", true);
+                }
+                else if (userType == "b") {
+                    reqRef.update("borrowerAction", true);
+                }
+                if (req.get("borrowerAction").equals(true) && req.get("ownerAction").equals(true)) {
+                    String bookId = req.get("bookId").toString();
+                    String userId = req.get("borrowerEmail").toString();
+                    completeTransaction(requestId, bookId, userId, transactionType);
+                }
             }
         });
-        */
+    }
+
+    public static void completeTransaction(String requestId, String bookId, String userId, TransactionType transactionType) {
+        if (transactionType == TransactionType.REQUEST) {
+            //request has been processed (both users have scanned)
+            changeBookStatus(Status.BORROWED, bookId);
+
+            //update borrower's catalogue to have book as borrowed
+            db.collection("users").document(userId).collection("borrowerCatalogue").document(bookId).update("requestRefStatus", Status.BORROWED);
+
+        }
+        else if (transactionType == TransactionType.RETURN) {
+            //return has been processed
+            changeBookStatus(Status.AVAILABLE, bookId);
+
+            //delete the request, end of request lifecycle
+            deleteRequest(userId, bookId);
+        }
     }
 }

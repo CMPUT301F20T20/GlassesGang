@@ -119,15 +119,6 @@ public class MapFragment extends Fragment {
                     map.addMarker(marker);
                 }
             }
-                /* //optional camera settings for zooming to a location //TODO: remove camera settings once team has chosen camera options
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(location.getLatitude(), location.getLongitude())) //sets center of map to users location
-                        .zoom(zoomAmount) //sets the zoom
-                        .bearing(90) //sets the orientation of the camera
-                        .tilt(40) //sets tilt of camera to 30 degrees
-                        .build();
-                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                */
         }
         else {
             //user is borrower, givenLocation must exist beforehand
