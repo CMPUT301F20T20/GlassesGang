@@ -94,9 +94,7 @@ public class OwnerLibraryTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
-        BottomNavigationView bnv = solo.getCurrentActivity().findViewById(R.id.bottom_navigation);
-        bnv.setSelectedItemId(R.id.nav_books);
-        solo.clickOnText("Books");
+        solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
     }
 
     /**
@@ -121,6 +119,7 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkAddButton() {
+        solo.clickOnMenuItem("Books");
         solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
     }
