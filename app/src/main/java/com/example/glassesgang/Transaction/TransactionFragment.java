@@ -132,11 +132,17 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
         //if owner, then transaction is offering a requested book. involves map and scan
         if (userType.equals("o")) {
             if (resultCode < 4) {
-                transactionButton.setText("CONFIRM LOCATION");
-                transactionButton.setEnabled(false);
+                if (givenLocation != null)
+                {
+                    transactionButton.setText("OFFER");
+                    transactionButton.setEnabled(true);
+                } else {
+                    transactionButton.setText("CONFIRM LOCATION");
+                    transactionButton.setEnabled(false);
+                }
+
                 if (resultCode == 2) {
                     infoTextView.setText("Scan to offer book to borrower");
-                    transactionButton.setText("OFFER");
                     transactionButton.setEnabled(true);
                 }
             }
@@ -144,6 +150,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 transactionButton.setText("RETRIEVE");
                 if (resultCode == 4) {
                     infoTextView.setText("Waiting for borrower to scan");
+                    transactionButton.setBackgroundColor(Color.RED);
                     transactionButton.setEnabled(false);
                 }
                 else if (resultCode == 5) {
@@ -171,7 +178,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 });
             } else {
                 //owner has already put in location. display this location
-                infoTextView.setVisibility(View.GONE);
+                //infoTextView.setVisibility(View.GONE);
                 Fragment mapFragment = new MapFragment(userType, givenLocation);
                 getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
             }
@@ -198,6 +205,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             if (resultCode < 4) {
                 infoTextView.setText("Waiting for owner to offer book");
                 transactionButton.setText("ACCEPT");
+                transactionButton.setBackgroundColor(Color.RED);
                 transactionButton.setEnabled(false);
                 if (resultCode == 2) {
                     infoTextView.setText("Scan to accept book");
@@ -217,7 +225,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             //display map  if owner has specified a location
             if (givenLocation != null)
             {
-                infoTextView.setVisibility(View.GONE);
+                //infoTextView.setVisibility(View.GONE);
                 Fragment mapFragment = new MapFragment(userType, givenLocation); //initialized as a borrower map fragment
                 getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
             } else {
