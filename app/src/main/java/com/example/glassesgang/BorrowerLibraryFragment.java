@@ -18,11 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -152,7 +148,7 @@ public class BorrowerLibraryFragment extends Fragment {
                     // if a book's bid is a key in borrowerCatalogue hashmap, add it to the bookArrayList to be displayed
                     if (borrowerCatalogue.containsKey(doc.getId())) {
                         Book book = doc.toObject(Book.class);
-                        book.setStatus(borrowerCatalogue.get(doc.getId()));    // setting the status of the book to match its status under the borrower
+                        book.setStringStatus(borrowerCatalogue.get(doc.getId()));    // setting the status of the book to match its status under the borrower
                         bookArrayList.add(book);
                     }
                 }

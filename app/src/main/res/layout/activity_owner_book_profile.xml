@@ -14,22 +14,24 @@
         android:id="@+id/borrowerTitle_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Borrower:" />
+        android:text="@string/owner_book_profile_fragment_type" />
 
-    <TextView
-        android:id="@+id/borrower_textView"
+    <FrameLayout
+        android:id="@+id/owner_book_profile_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="350dp">
+
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/borrowerBook_image_view"
         android:layout_width="match_parent"
-        android:layout_height="254dp"
+        android:layout_height="180dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button

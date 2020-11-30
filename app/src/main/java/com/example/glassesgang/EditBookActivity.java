@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.glassesgang.BookStatus.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,6 +53,7 @@ public class EditBookActivity extends AppCompatActivity {
     private EditText authorEditText;
     private EditText isbnEditText;
     private ImageView bookImageView;
+    private Status status;
     private Book book;
     FirebaseFirestore db;
     private static final String TAG = "EditBookActivity";

@@ -157,6 +157,7 @@ public class OwnerLibraryFragment extends Fragment {
                         bookArrayList.add(book);
                     }
                 }
+                //TODO: fix bug where books you own only appear for a split second
                 bookArrayAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
                 bookArrayAdapter.getFilter().filter("");  // refilter the new list of books
             }
