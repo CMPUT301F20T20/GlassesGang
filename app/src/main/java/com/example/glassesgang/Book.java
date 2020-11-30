@@ -228,5 +228,39 @@ public class Book implements Serializable {
     }
 
 
+    /**
+     * returns true if this book is equal to another book oject
+     * @param object the object to check whether it is equals the book
+     * @return result true if the books are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object object) {
+
+        boolean result = false;
+        if (object == null || object.getClass() != getClass()) {
+            result = false;
+        } else {
+            Book otherBook = (Book) object;
+            if (title.equals(otherBook.getTitle())
+                && author.equals(otherBook.getAuthor())
+                && ISBN.equals(otherBook.getISBN())
+                && BID.equals(otherBook.getBID())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the requests of the book
+     *
+     * @return an array of requests that are attached to the book
+     */
+    /*
+    public ArrayList<Request> getRequests() {
+        return requests;
+    }
+    */
+
 
 }

@@ -125,7 +125,6 @@ public class AddBookActivity extends AppCompatActivity {
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Encapsulate Camera in its own class
                 Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
                 startActivityForResult(intent, CAMERA_PHOTO_TAKEN);
             }
@@ -142,6 +141,11 @@ public class AddBookActivity extends AppCompatActivity {
         }
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
+<<<<<<< HEAD
+                ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                // TODO implment google books API here
+                isbnEditText.setText(ISBN);
+=======
                 ConnectivityManager connMgr = (ConnectivityManager)
                         getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -158,6 +162,7 @@ public class AddBookActivity extends AppCompatActivity {
                     Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
                             Toast.LENGTH_SHORT).show();
                     }
+>>>>>>> f74cd56745e9c013aa7a6a5d0eda20c0995b4e29
             }
         }
     }

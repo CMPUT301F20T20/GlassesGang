@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+<<<<<<< HEAD
+    android:layout_height="match_parent"
+    android:id="@+id/transaction_layout">
+=======
+    android:layout_height="match_parent">
+>>>>>>> f74cd56745e9c013aa7a6a5d0eda20c0995b4e29
+
+    <Button
+        android:id="@+id/show_location_button"
+        android:layout_width="137dp"
+        android:layout_height="30dp"
+        android:background="@drawable/blue_shape"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:text="LOCATION"
+        android:textColor="@color/borrowerPrimary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/transaction_fragment_container"
+        app:layout_constraintEnd_toEndOf="@+id/transaction_fragment_container"
+        app:layout_constraintStart_toStartOf="@+id/transaction_fragment_container"
+        app:layout_constraintTop_toTopOf="@+id/transaction_fragment_container" />
+
+    <TextView
+        android:id="@+id/email_textview"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/grey_card"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:gravity="center"
+        android:text="Borrower or Owner email"
+        android:textColor="@color/borrowerText"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/email_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/info_textview"
+        android:layout_width="351dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:gravity="center"
+        android:text="Please specify a pick-up location"
+        android:textColor="@color/green"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/transaction_fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_textview" />
+
+    <FrameLayout
+        android:id="@+id/transaction_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498">
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/transaction_button"
+        android:layout_width="137dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/green_shape"
+        android:fontFamily="@font/source_sans_pro_semibold"
+        android:gravity="center"
+        android:text="TRANSACTION"
+        android:textColor="@color/borrowerPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/transaction_fragment_container" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

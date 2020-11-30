@@ -181,9 +181,10 @@ public class DatabaseManager {
                     if (document.exists()) {
                         Log.d(TAG, "User already exist: " + document.getData());
                     } else {
-                        Map<String, ArrayList<String>> userCatalogue = new HashMap<>();
+                        Map<String, Object> userCatalogue = new HashMap<>();
                         userCatalogue.put("ownerCatalogue", new ArrayList<String>());
                         userCatalogue.put("notificationCatalogue", new ArrayList<String>());
+                        userCatalogue.put("phoneNumber", "");
                         //userCatalogue.put("email", new String());
                         // adding the user
                         usersDatabase.document(user.getEmail())
@@ -225,6 +226,68 @@ public class DatabaseManager {
                 });
     }
 
+    public static void editPhoneNumber(String email, String phoneNumber) {
+        DocumentReference userRef = db.collection("users").document(email);
+        HashMap<String, Object> contactInfoHash = new HashMap<>();
+        contactInfoHash.put("phoneNumber", phoneNumber);
+
+        userRef.update(contactInfoHash)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+
+    /**
+     * Remove all the books that a user owns
+     * @param email A string, the email of the user whose books must be cleared.
+     */
+    public static void clearOwnerCatalogue(String email) {
+        CollectionReference booksRef = db.collection("books");
+
+        // delete books from db
+        booksRef
+                .whereEqualTo("owner", email)   // get books owned by the owner
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                booksRef.document(document.getId()).delete();
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents when clearing owner Catalogue: ", task.getException());
+                        }
+                    }
+                });
+
+        // delete books from owner Catalogue
+        db.collection("users").document(email)
+                .update("ownerCatalogue", new ArrayList<String>())  // set owner Catalogue to an empty string
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Owner Catalogue cleared");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error clearing Owner catalogue", e);
+                    }
+                });
+    }
+    
     /**
      * Make a request as a borrower. Creates a request object and attaches it to the book
      *

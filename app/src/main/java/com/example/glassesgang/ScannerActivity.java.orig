@@ -21,8 +21,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 public class ScannerActivity extends AppCompatActivity {
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> f74cd56745e9c013aa7a6a5d0eda20c0995b4e29
     private SurfaceView surfaceView;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
