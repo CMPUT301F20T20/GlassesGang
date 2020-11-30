@@ -2,6 +2,7 @@ package com.example.glassesgang.Transaction;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -20,7 +21,9 @@ import android.widget.Toast;
 
 import com.example.glassesgang.Book;
 import com.example.glassesgang.Helpers.OverrideBackPressed;
+import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
+import com.example.glassesgang.ViewUserActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -184,5 +187,17 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 }
             });
         }
+
+        emailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = emailTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(getContext(), ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                }
+            }
+        });
     }
 }

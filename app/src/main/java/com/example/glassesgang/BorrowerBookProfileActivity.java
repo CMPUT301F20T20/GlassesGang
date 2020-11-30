@@ -2,9 +2,11 @@ package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -88,7 +90,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         isbn = book.getISBN();
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
-                        setBookImage(book, bookImageView);
+                        setBookImage(book);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -97,6 +99,22 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     Log.d(TAG, "Data could not be fetched " + e.toString());
                     }
                 });
+
+        ownerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = ownerTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(BorrowerBookProfileActivity.this,
+                            ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                } else {
+                    Toast.makeText(BorrowerBookProfileActivity.this, "There is no user",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**
@@ -120,12 +138,16 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         isbnTextView.setText(isbn);
         ownerTextView.setText(owner);
         statusButton.setText(stringStatus(status));
-        setStatusButtonListeners();
+        setStatusButtonListeners(title);
     }
 
+    /**
+     * Sets the status of a book checking if book is in borrower's catalogue
+     * @param book object that contains the necessary status
+     */
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
-        //TODO: fix bug, for some reason it keeps failing here...
+
         borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -145,6 +167,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     // set the text for status text view and update all the text views
                     status = book.getStatus();
                     setTextViews();
+                    setButtonColor();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -170,7 +193,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         });
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
+    private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -190,7 +217,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,
@@ -202,7 +229,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         }
     }
 
-    public void setStatusButtonListeners() {
+    public void setStatusButtonListeners(String bookTitle) {
         switch(status) {
             case AVAILABLE: //make a request for this book
                 statusButton.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +238,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         // get the values for title, author, and isbn from the EditTexts
                         Request newRequest = new Request(bid, user, owner);
                         DatabaseManager database = new DatabaseManager();
-                        database.addRequest(newRequest);
+                        database.addRequest(newRequest, bookTitle);
                         // TODO: somehow add to the system and make sure photos are attached
                         finish();
                     }
@@ -237,6 +264,27 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                                 inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
                             }
                         });
+        }
+    }
+
+    public void setButtonColor () {
+        switch(status) {
+            case REQUESTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.green_shape));
+                break;
         }
     }
 

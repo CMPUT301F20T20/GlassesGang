@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,6 +39,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
     private ArrayList<String> statusFilterList;
     private BookStatusFilter bookStatusFilter;
     private String TAG = "Book properties";
+    TextView statusTextView;
 
     @Override
     public int getCount() {
@@ -82,7 +84,7 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         TextView authorTexView = view.findViewById(R.id.book_author);
         TextView isbnTextView = view.findViewById(R.id.book_isbn);
         TextView borrowerOwnerTextView = view.findViewById(R.id.book_borrower_owner);
-        TextView statusTextView = view.findViewById(R.id.book_temp_status);
+        statusTextView = view.findViewById(R.id.book_temp_status);
         ImageView bookImage = view.findViewById(R.id.login_book_image_view);
 
         setBookImage(book, bookImage);
@@ -91,6 +93,9 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         authorTexView.setText(book.getAuthor());
         isbnTextView.setText(book.getISBN());
         statusTextView.setText(stringStatus(book.getStatus()));
+        setButtonColor(book.getStatus());
+
+
 
         // if user is an owner, display the borrower of a book
         // if user is a borrower, display the owner of a book
@@ -191,6 +196,27 @@ public class CustomBookList extends ArrayAdapter<Book> implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredBookList = (ArrayList<Book>) results.values;
             notifyDataSetChanged();
+        }
+    }
+
+    public void setButtonColor (Status status) {
+        switch(status) {
+            case REQUESTED:
+                statusTextView.setBackground(ContextCompat.getDrawable(this.getContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusTextView.setBackground(ContextCompat.getDrawable(this.getContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusTextView.setBackground(ContextCompat.getDrawable(this.getContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusTextView.setBackground(ContextCompat.getDrawable(this.getContext(),
+                        R.drawable.green_shape));
+                break;
         }
     }
 }
