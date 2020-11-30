@@ -547,7 +547,6 @@ public class DatabaseManager {
                         if (bookStatus == Status.BORROWED) resultCode[0] += 4;
                     }
                 });
-
             }
         });
         return resultCode[0];

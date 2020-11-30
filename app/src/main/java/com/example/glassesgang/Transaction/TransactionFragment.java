@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.BookStatus;
 import com.example.glassesgang.DatabaseManager;
 import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.OwnerBookProfileActivity;
@@ -29,7 +30,11 @@ import com.example.glassesgang.ViewUserActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import static com.example.glassesgang.BookStatus.statusString;
 
 /**
  * A fragment representing a list of Items.
@@ -45,6 +50,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
     private String userEmail;
     private String userType;
     private LatLng givenLocation;
+    private int resultCode;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
     private LatLng mapMarker;
@@ -111,6 +117,9 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //generate a result code for the transaction
+        getResultCode(requestId);
+
         //get email displayed based on userType
         emailTextView = view.findViewById(R.id.email_textview);
         infoTextView = view.findViewById(R.id.info_textview);
@@ -123,8 +132,6 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
 
         //if owner, then transaction is offering a requested book. involves map and scan
         if (userType.equals("o")) {
-            DatabaseManager dbm = new DatabaseManager();
-            int resultCode = dbm.checkTransactionStatus(requestId);
             if (resultCode < 4) {
                 transactionButton.setText("CONFIRM LOCATION");
                 transactionButton.setEnabled(false);
@@ -189,8 +196,6 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
 
         //if borrower, then transaction is accepting owners offer or returning book. load map fragment
         else if (userType.equals("b")) {
-            DatabaseManager dbm = new DatabaseManager();
-            int resultCode = dbm.checkTransactionStatus(requestId);
             if (resultCode < 4) {
                 infoTextView.setText("Waiting for owner to offer book");
                 transactionButton.setText("ACCEPT");
@@ -245,6 +250,29 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                     viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
                     startActivityForResult(viewUserProf, 1);
                 }
+            }
+        });
+    }
+    private void getResultCode(String requestId)
+    {   //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
+        //4 = ", 5 = ", 6 = ", 7 = ", codes for returns
+        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot req) {
+                boolean borrowerOk = (boolean) req.get("borrowerAction");
+                boolean ownerOk = (boolean) req.get("ownerAction");
+                if (borrowerOk && ownerOk) resultCode = 3;
+                else if (borrowerOk && !ownerOk) resultCode = 1;
+                else if (!borrowerOk && ownerOk) resultCode = 2;
+                else resultCode = 0;
+                String bookId = req.get("bookId").toString();
+                db.collection("books").document(bookId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        BookStatus.Status bookStatus = statusString(value.get("status").toString());
+                        if (bookStatus == BookStatus.Status.BORROWED) resultCode += 4;
+                    }
+                });
             }
         });
     }
