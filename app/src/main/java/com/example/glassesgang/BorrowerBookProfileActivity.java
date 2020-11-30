@@ -120,7 +120,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         isbnTextView.setText(isbn);
         ownerTextView.setText(owner);
         statusButton.setText(stringStatus(status));
-        setStatusButtonListeners();
+        setStatusButtonListeners(title);
     }
 
     private void setBorrowerStatus(Book book) {
@@ -202,7 +202,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         }
     }
 
-    public void setStatusButtonListeners() {
+    public void setStatusButtonListeners(String bookTitle) {
         switch(status) {
             case AVAILABLE: //make a request for this book
                 statusButton.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +211,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         // get the values for title, author, and isbn from the EditTexts
                         Request newRequest = new Request(bid, user, owner);
                         DatabaseManager database = new DatabaseManager();
-                        database.addRequest(newRequest);
+                        database.addRequest(newRequest, bookTitle);
                         // TODO: somehow add to the system and make sure photos are attached
                         finish();
                     }

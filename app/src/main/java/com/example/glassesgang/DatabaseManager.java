@@ -211,7 +211,7 @@ public class DatabaseManager {
      *
      * @param request The request object to be added to the database
      */
-    public static void addRequest(Request request) {
+    public static void addRequest(Request request, String bookTitle) {
         // add the request to the requests collection in the database
         db.collection("requests")
                 .add(request)
@@ -229,7 +229,7 @@ public class DatabaseManager {
                                 addNotification(new Notification(requestObj.getBorrowerEmail(),
                                         requestObj.getOwnerEmail(),
                                         Notification.NotificationType.NEW_REQUEST,
-                                        requestObj.getBookId()));
+                                        bookTitle));
                             }
                         });
 
@@ -442,8 +442,26 @@ public class DatabaseManager {
                 .document(request.getBookId());
         borrowerRequest.update("requestRefStatus", Status.ACCEPTED);
 
-        //send notification to borrower that their request has been accepted
-        addNotification(new Notification(request.getOwnerEmail(), request.getBorrowerEmail(), Notification.NotificationType.ACCEPT_REQUEST, bid));
+        // get book name from bid
+        DocumentReference docRef = db.collection("books").document(bid);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        //send notification to borrower that their request has been accepted
+                        addNotification(new Notification(request.getOwnerEmail(), request.getBorrowerEmail(), Notification.NotificationType.ACCEPT_REQUEST, (String)document.get("title")));
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
         //delete all other requests of other borrowers of that book
         db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
