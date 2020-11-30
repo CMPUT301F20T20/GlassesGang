@@ -14,6 +14,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,17 +34,17 @@ import java.util.Objects;
 public class MapFragment extends Fragment {
 
     public static final int REQUEST_LOCATION_CODE = 99;
-    private static final int zoomAmount = 20;
-    private LatLng givenLocation;
+    private static final int zoomAmount = 15;
+    private com.google.android.gms.maps.model.LatLng givenLocation;
     private String userType;
 
-    public MapFragment() {
-        userType = "o";
+    public MapFragment(String givenUserType) {
+        userType = givenUserType;
     }
 
-    public MapFragment(LatLng latLng) {
-        givenLocation = latLng;
-        userType = "b"; //must be borrower to receive location
+    public MapFragment(String givenUserType, LatLng latLng) {
+        givenLocation = new com.google.android.gms.maps.model.LatLng(latLng.getLatitude(), latLng.getLongitude());
+        userType = givenUserType; //must be borrower to receive location
     }
 
     @Override
@@ -59,11 +59,12 @@ public class MapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 if (userType.equals("o")) {
-                    goToLocation(googleMap, null);
+                    if (givenLocation != null) goToLocation(googleMap, givenLocation);
+                    else goToLocation(googleMap, null);
                     //after map is loaded
                     googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override
-                        public void onMapClick(LatLng latLng) {
+                        public void onMapClick(com.google.android.gms.maps.model.LatLng latLng) {
                             //Creating Marker and setting its position
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.position(latLng);
@@ -75,14 +76,14 @@ public class MapFragment extends Fragment {
                             googleMap.clear();
 
                             //Zoom to marker location
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomAmount));
 
                             //Add marker to the map
                             googleMap.addMarker(markerOptions);
 
                             //send to transaction fragment to be added into request
                             Bundle bundle = new Bundle();
-                            bundle.putParcelable("location", latLng);
+                            bundle.putParcelable("location", new LatLng(latLng));
                             getParentFragmentManager().setFragmentResult("location", bundle);
                         }
                     });
@@ -94,7 +95,7 @@ public class MapFragment extends Fragment {
         return view;
     }
 
-    private void goToLocation(GoogleMap map, @Nullable LatLng givenLocation) {
+    private void goToLocation(GoogleMap map, @Nullable com.google.android.gms.maps.model.LatLng givenLocation) {
         if (givenLocation == null) {
             //user is owner, zoom to current location if has location permissions on
             LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -110,7 +111,13 @@ public class MapFragment extends Fragment {
             }
             else {
                 Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-                if (location != null) map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), zoomAmount));
+                if (location != null) {
+                    com.google.android.gms.maps.model.LatLng mapLocation = new com.google.android.gms.maps.model.LatLng(location.getLatitude(), location.getLongitude());
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(mapLocation, zoomAmount));
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.title(mapLocation.latitude + " : " + mapLocation.longitude);
+                    map.addMarker(marker);
+                }
             }
                 /* //optional camera settings for zooming to a location //TODO: remove camera settings once team has chosen camera options
                 CameraPosition cameraPosition = new CameraPosition.Builder()

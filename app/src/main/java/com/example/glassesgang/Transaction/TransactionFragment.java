@@ -1,5 +1,6 @@
 package com.example.glassesgang.Transaction;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,10 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.glassesgang.Book;
+import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.R;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * A fragment representing a list of Items.
  */
-public class TransactionFragment extends Fragment{
+public class TransactionFragment extends Fragment implements OverrideBackPressed {
 
     private OnTransactionInteractionListener listener;
     private TextView emailTextView;
@@ -39,8 +41,6 @@ public class TransactionFragment extends Fragment{
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
     private LatLng mapMarker;
-
-
 
     public interface OnTransactionInteractionListener {
         void onTransactionPressed();
@@ -78,8 +78,20 @@ public class TransactionFragment extends Fragment{
         requestId = getArguments().getString("requestId");
         userEmail = getArguments().getString("userEmail");
         userType = getArguments().getString("userType");
-        if (getArguments().getParcelable("givenLocation") != null)
-            givenLocation = getArguments().getParcelable("givenLocation");
+        if (getArguments().getParcelable("givenLocation") != null){
+            com.google.android.gms.maps.model.LatLng location = getArguments().getParcelable("givenLocation");
+            givenLocation = new LatLng(location);
+        }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (userType == "o" && mapMarker != null) return true;
+        else if (userType == "o" && mapMarker == null) {
+            Toast.makeText(getContext(), "Please specify a location to accept this request", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else return true;
     }
 
     @Override
@@ -103,25 +115,29 @@ public class TransactionFragment extends Fragment{
 
         //if owner, then transaction is offering a requested book. involves map and scan
         if (userType.equals("o")) {
-            //enable location button and enable scanning
             transactionButton.setText("CONFIRM LOCATION");
-            //offer button for scanning only after location is chosen
             transactionButton.setEnabled(false);
-            showLocationButton.setVisibility(View.VISIBLE);
-            showLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //display map fragment
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userType", userType);
-                    Fragment mapFragment = new MapFragment(); //initialized as an owner map fragment (no params)
-                    mapFragment.setArguments(bundle);
-                    getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
 
-                    //destroy button
-                    showLocationButton.setVisibility(View.GONE);
-                }
-            });
+            if (givenLocation == null) {
+                //owner has not specified a location yet
+                showLocationButton.setVisibility(View.VISIBLE);
+                showLocationButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //display map fragment
+                        Fragment mapFragment = new MapFragment(userType); //initialized as an owner map fragment (no params)
+                        getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+
+                        //destroy button
+                        showLocationButton.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                //owner has already put in location. display this location
+                Fragment mapFragment = new MapFragment(userType, givenLocation);
+                getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+            }
+
             transactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -143,10 +159,7 @@ public class TransactionFragment extends Fragment{
         else if (userType.equals("b")) {
             transactionButton.setText("ACCEPT"); //transaction button enabled by default, location button uninteractable
             //display map fragment
-            Bundle bundle = new Bundle();
-            bundle.putString("userType", userType); //store bin for later use in request handling
-            Fragment mapFragment = new MapFragment(givenLocation); //initialized as a borrower map fragment
-            mapFragment.setArguments(bundle);
+            Fragment mapFragment = new MapFragment(userType, givenLocation); //initialized as a borrower map fragment
             getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
             transactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,7 +168,5 @@ public class TransactionFragment extends Fragment{
                 }
             });
         }
-
     }
-
 }

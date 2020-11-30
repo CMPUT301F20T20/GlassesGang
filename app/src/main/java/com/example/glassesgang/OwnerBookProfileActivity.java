@@ -21,9 +21,11 @@ import android.widget.Toast;
 import com.example.glassesgang.BookStatus.Status;
 import static com.example.glassesgang.BookStatus.stringStatus;
 
+import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.Transaction.RequestHandlingFragment;
 import com.example.glassesgang.Transaction.TransactionFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +36,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Book profile for Owner View (edit book functionality)
@@ -198,13 +201,26 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
     private void inflateTransactionFragment(String requestId, String borrowerEmail) {
         //inflate requestList fragment inside framelayout fragment container
-        Bundle bundle = new Bundle();
-        bundle.putString("requestId", requestId); //store bin for later use in request handling
-        bundle.putString("userEmail", borrowerEmail);
-        bundle.putString("userType", "o");
-        Fragment transactionFragment = new TransactionFragment();
-        transactionFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
+        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Bundle bundle = new Bundle();
+                bundle.putString("requestId", requestId); //store bin for later use in request handling
+                bundle.putString("userEmail", borrowerEmail);
+                bundle.putString("userType", "o");
+                Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
+                if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
+                Fragment transactionFragment = new TransactionFragment();
+                transactionFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.transaction_fragment_container);
+        if (!(fragment instanceof OverrideBackPressed) || ((OverrideBackPressed) fragment).onBackPressed()) super.onBackPressed();
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.example.glassesgang.Transaction;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.example.glassesgang.Transaction.LatLng;
 
 /**
  * This is a class that represents the Request object, allowing for comparison of requests by bookId
