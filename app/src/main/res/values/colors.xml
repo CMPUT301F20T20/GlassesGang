@@ -17,4 +17,5 @@
     <color name="green">#03AA00</color>
     <color name="blue">#0094FF</color>
     <color name="yellow">#FFC700</color>
+    <color name="requestGrey">#BFBFBF</color>
 </resources>
