@@ -5,6 +5,7 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.robotium.solo.Solo;
@@ -91,7 +92,9 @@ public class OwnerLibraryTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
-        solo.clickOnText("Books");
+//        BottomNavigationView bnv = solo.getCurrentActivity().findViewById(R.id.bottom_navigation);
+//        bnv.setSelectedItemId(R.id.nav_books);
+        solo.clickOnMenuItem("Books");
     }
 
     /**
