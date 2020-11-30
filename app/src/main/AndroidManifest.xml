@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-feature android:name="android.hardware.camera" />
 
-
+    <uses-feature android:name="android.hardware.camera" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -25,16 +25,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".editContactInfoActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
+
         <activity
             android:name=".ResultsActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
+        <activity android:name=".ViewUserActivity" />
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
-            tools:replace="android:launchMode"
-            android:launchMode="standard" />
+            android:launchMode="standard"
+            tools:replace="android:launchMode" />
         <activity
             android:name=".BorrowerBookProfileActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
@@ -46,7 +50,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -62,25 +65,31 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".BorrowerHomeActivity"
+        <activity
+            android:name=".SignInActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".BorrowerHomeActivity"
             android:exported="true" />
         <activity
             android:name=".OwnerHomeActivity"
             android:exported="true" />
-        <activity android:name=".AddBookActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".EditBookActivity"
+        <activity
+            android:name=".AddBookActivity"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".EditBookActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".CameraActivity" />
+
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />  <!--So keyboard doesn't push up the save button-->
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

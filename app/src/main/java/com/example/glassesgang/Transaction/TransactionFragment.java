@@ -2,6 +2,8 @@ package com.example.glassesgang.Transaction;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,9 @@ import android.widget.Toast;
 
 import com.example.glassesgang.Book;
 import com.example.glassesgang.Helpers.OverrideBackPressed;
+import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
+import com.example.glassesgang.ViewUserActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,6 +36,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
 
     private OnTransactionInteractionListener listener;
     private TextView emailTextView;
+    private TextView infoTextView;
     private Button transactionButton;
     private Button showLocationButton;
     private String requestId;
@@ -106,6 +111,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
 
         //get email displayed based on userType
         emailTextView = view.findViewById(R.id.email_textview);
+        infoTextView = view.findViewById(R.id.info_textview);
         emailTextView.setText(userEmail);
 
         //location button, default gone. if owner, enable. if borrower, disabled permanently
@@ -124,6 +130,9 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 showLocationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //remove info message
+                        infoTextView.setVisibility(View.GONE);
+
                         //display map fragment
                         Fragment mapFragment = new MapFragment(userType); //initialized as an owner map fragment (no params)
                         getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
@@ -134,6 +143,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 });
             } else {
                 //owner has already put in location. display this location
+                infoTextView.setVisibility(View.GONE);
                 Fragment mapFragment = new MapFragment(userType, givenLocation);
                 getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
             }
@@ -158,9 +168,18 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
         //if borrower, then transaction is accepting owners offer. load map fragment
         else if (userType.equals("b")) {
             transactionButton.setText("ACCEPT"); //transaction button enabled by default, location button uninteractable
-            //display map fragment
-            Fragment mapFragment = new MapFragment(userType, givenLocation); //initialized as a borrower map fragment
-            getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+            //display map  if owner has specified a location
+            if (givenLocation != null)
+            {
+                infoTextView.setVisibility(View.GONE);
+                Fragment mapFragment = new MapFragment(userType, givenLocation); //initialized as a borrower map fragment
+                getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
+            } else {
+                //owner has not given location. show debug label
+                infoTextView.setText("Please wait for the owner to specify a pick-up location");
+                infoTextView.setTextColor(Color.RED);
+                transactionButton.setEnabled(false);
+            }
             transactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -168,5 +187,17 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                 }
             });
         }
+
+        emailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = emailTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(getContext(), ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                }
+            }
+        });
     }
 }

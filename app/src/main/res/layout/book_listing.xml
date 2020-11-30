@@ -116,17 +116,21 @@
 
     <TextView
         android:id="@+id/book_temp_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="137dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginRight="128dp"
         android:background="#00FFFFFF"
         android:fontFamily="@font/source_sans_pro_semibold"
-        android:padding="5dp"
+        android:gravity="center"
         android:text="Book Status"
-        android:textColor="#000000"
+        android:textColor="@color/borrowerPrimary"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/book_status"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/book_borrower_owner" />
 </androidx.constraintlayout.widget.ConstraintLayout>
