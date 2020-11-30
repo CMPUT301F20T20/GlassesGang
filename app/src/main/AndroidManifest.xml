@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" />
 
 
     <!--
@@ -23,9 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
         <activity
             android:name=".ResultsActivity"
             android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".ViewUserActivity" />
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             tools:replace="android:launchMode"
@@ -36,6 +42,7 @@
         <activity
             android:name=".OwnerBookProfileActivity"
             android:parentActivityName=".OwnerHomeActivity" />
+        <activity android:name=".ScannerActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

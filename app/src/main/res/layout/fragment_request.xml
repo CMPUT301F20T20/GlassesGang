@@ -5,28 +5,36 @@
     android:id="@+id/request_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="16dp"
-    android:background="@color/requestGrey">
+    android:layout_margin="20dp"
+    android:background="@drawable/grey_card"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/request_email"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_margin="6dp"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:gravity="center"
         android:text="sampletext@gmail.com"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@color/borrowerText" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/request_buttons_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <Button
             android:id="@+id/request_decline_button"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
+            android:background="@drawable/red_shape"
+            android:fontFamily="@font/source_sans_pro_semibold"
             android:text="DECLINE"
+            android:textColor="@color/borrowerPrimary"
             android:textSize="@dimen/button_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/request_accept_button"
@@ -37,7 +45,10 @@
             android:id="@+id/request_accept_button"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
+            android:background="@drawable/green_shape"
+            android:fontFamily="@font/source_sans_pro_semibold"
             android:text="ACCEPT"
+            android:textColor="@color/borrowerPrimary"
             android:textSize="@dimen/button_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -2,6 +2,7 @@ package com.example.glassesgang;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
@@ -62,6 +63,8 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     private String owner;
     private ArrayList<String> requests;
     private  FirebaseFirestore db;
+    private String transactionReqId;
+    private TransactionType transactionTypeRes;
     private final int SCAN_TAKEN = 111;
     private static final String TAG = "OwnerBkProfileActivity";
 
@@ -132,6 +135,22 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
             }
         });
 
+        borrowerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = borrowerTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(OwnerBookProfileActivity.this,
+                            ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                } else {
+                    Toast.makeText(OwnerBookProfileActivity.this, "There is no user",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     /**
@@ -152,6 +171,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
      * just set each TextViews text with the appropriate text
      */
     private void updateTextViews() {
+        setButtonColor();
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
@@ -194,11 +214,16 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
 
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
-                String ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                String scannedIsbn = data.getStringExtra("ISBN");  // data returned from scanner activity
                 // TODO implment google books API here
-                System.out.println("SCANNER " + ISBN);
-                Log.d(TAG, ISBN);
-//                isbnEditText.setText(ISBN);
+
+                if (scannedIsbn.equals(isbn)) {
+                    DatabaseManager dbm = new DatabaseManager();
+                    dbm.transactionAction(transactionReqId, "o", transactionTypeRes);
+                } else {
+                    Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
+                }
+
                 finish();
             }
         }
@@ -269,6 +294,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();
     }
 
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
     private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
@@ -303,15 +332,34 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         }
     }
 
+    public void setButtonColor () {
+        switch(status) {
+            case REQUESTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.green_shape));
+                break;
+        }
+    }
+
     @Override
     public void onTransactionPressed(String requestId, TransactionType transactionType) {
         //TODO: add scanner implementation
-        //isbn
-//        Intent intent = new Intent(OwnerBookProfileActivity.this, ScannerActivity.class);
-//        startActivityForResult(intent, SCAN_TAKEN);
-        System.out.println("ISBN "+ isbn);
-        DatabaseManager dbm = new DatabaseManager();
-        dbm.transactionAction(requestId, "o", transactionType);
-        finish();
+        transactionTypeRes = transactionType;
+        transactionReqId = requestId;
+        Intent intent = new Intent(OwnerBookProfileActivity.this, ScannerActivity.class);
+        startActivityForResult(intent, SCAN_TAKEN);
+//        finish();
     }
 }

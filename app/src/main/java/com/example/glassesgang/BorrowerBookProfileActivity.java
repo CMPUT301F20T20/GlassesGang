@@ -3,6 +3,7 @@ package com.example.glassesgang;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -60,6 +61,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     private FirebaseFirestore db;
     private String user;
     private final int SCAN_TAKEN = 111;
+    private String transactionReqId;
+    private TransactionType transactionTypeRes;
     final String TAG = "Database error";
 
     @Override
@@ -92,7 +95,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         isbn = book.getISBN();
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
-                        setBookImage(book, bookImageView);
+                        setBookImage(book);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -101,6 +104,22 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     Log.d(TAG, "Data could not be fetched " + e.toString());
                     }
                 });
+
+        ownerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String user_info = ownerTextView.getText().toString();
+                if (!user_info.equals("None")) {
+                    Intent viewUserProf = new Intent(BorrowerBookProfileActivity.this,
+                            ViewUserActivity.class);
+                    viewUserProf.putExtra("user_info", user_info);   // pass in the bid of the book
+                    startActivityForResult(viewUserProf, 1);
+                } else {
+                    Toast.makeText(BorrowerBookProfileActivity.this, "There is no user",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**
@@ -124,12 +143,16 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         isbnTextView.setText(isbn);
         ownerTextView.setText(owner);
         statusButton.setText(stringStatus(status));
-        setStatusButtonListeners();
+        setStatusButtonListeners(title);
     }
 
+    /**
+     * Sets the status of a book checking if book is in borrower's catalogue
+     * @param book object that contains the necessary status
+     */
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
-        //TODO: fix bug, for some reason it keeps failing here...
+
         borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -149,6 +172,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     // set the text for status text view and update all the text views
                     status = book.getStatus();
                     setTextViews();
+                    setButtonColor();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -160,13 +184,13 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         //inflate requestList fragment inside framelayout fragment container
         db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            public void onSuccess(DocumentSnapshot req) {
                 Bundle bundle = new Bundle();
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", ownerEmail);
                 bundle.putString("userType", "b");
-                Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
-                bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
+                Map<String, Double> locationHashMap = (Map<String, Double>) req.get("location");
+                if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();
                 transactionFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.borrower_book_profile_fragment_container, transactionFragment).commit();
@@ -174,7 +198,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         });
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
+    private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -194,7 +222,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,
@@ -206,7 +234,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         }
     }
 
-    public void setStatusButtonListeners() {
+    public void setStatusButtonListeners(String bookTitle) {
         switch(status) {
             case AVAILABLE: //make a request for this book
                 statusButton.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +243,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         // get the values for title, author, and isbn from the EditTexts
                         Request newRequest = new Request(bid, user, owner);
                         DatabaseManager database = new DatabaseManager();
-                        database.addRequest(newRequest);
+                        database.addRequest(newRequest, bookTitle);
                         // TODO: somehow add to the system and make sure photos are attached
                         finish();
                     }
@@ -244,15 +272,42 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         }
     }
 
+    public void setButtonColor () {
+        switch(status) {
+            case REQUESTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.green_shape));
+                break;
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SCAN_TAKEN){
+        if (requestCode == SCAN_TAKEN) {
             if (data != null) {
-                String ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                String scannedIsbn = data.getStringExtra("ISBN");  // data returned from scanner activity
                 // TODO implment google books API here
-                System.out.println("SCANNER " + ISBN);
-                Log.d(TAG, ISBN);
-//                isbnEditText.setText(ISBN);
+
+                if (scannedIsbn.equals(isbn)) {
+                    DatabaseManager dbm = new DatabaseManager();
+                    dbm.transactionAction(transactionReqId, "b", transactionTypeRes);
+                } else {
+                    Toast.makeText(this, "Scanned ISBN does not correspond the isbn of the book posting. Request was not accepted", Toast.LENGTH_LONG).show();
+                }
+
                 finish();
             }
         }
@@ -260,13 +315,10 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
 
     @Override
     public void onTransactionPressed(String requestId, TransactionType transactionType) {
-        //TODO: open scanner
-//        Intent intent = new Intent(BorrowerBookProfileActivity.this, ScannerActivity.class);
-//        startActivityForResult(intent, SCAN_TAKEN);
-        System.out.println("ISBN " + isbn);
         //TODO: add scanner implementation
-        DatabaseManager dbm = new DatabaseManager();
-        dbm.transactionAction(requestId, "o", transactionType);
-        finish();
+        transactionTypeRes = transactionType;
+        transactionReqId = requestId;
+        Intent intent = new Intent(BorrowerBookProfileActivity.this, ScannerActivity.class);
+        startActivityForResult(intent, SCAN_TAKEN);
     }
 }
