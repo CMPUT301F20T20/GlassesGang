@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
@@ -20,6 +22,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import static com.google.android.gms.vision.barcode.Barcode.ISBN;
+
 public class ScannerActivity extends AppCompatActivity {
 
 
@@ -29,8 +33,7 @@ public class ScannerActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     private TextView barcodeText;
     private String barcodeData;
-
-
+    public Intent returnIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,23 +93,20 @@ public class ScannerActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
-
-
                     barcodeText.post(new Runnable() {
-
                         @Override
                         public void run() {
-
                             if (barcodes.valueAt(0).email != null) {
                                 barcodeText.removeCallbacks(null);
                                 barcodeData = barcodes.valueAt(0).email.address;
-                                barcodeText.setText(barcodeData);
                             } else {
-
                                 barcodeData = barcodes.valueAt(0).displayValue;
-                                barcodeText.setText(barcodeData);
-
                             }
+                            barcodeText.setText(barcodeData);
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("ISBN",barcodeData);
+                            setResult(Activity.RESULT_OK,returnIntent);
+                            finish();
                         }
                     });
 

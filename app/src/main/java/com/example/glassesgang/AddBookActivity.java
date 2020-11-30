@@ -50,19 +50,13 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText isbnEditText;
     private String user;
     private final int CAMERA_PHOTO_TAKEN = 102;
-    private final int SCAN_TAKEN = 111;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private String bookImageUrl;
 
     // scanner variables
-    private SurfaceView surfaceView;
-    private BarcodeDetector barcodeDetector;
-    private CameraSource cameraSource;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
-    //This class provides methods to play DTMF tones
-    //private ToneGenerator toneGen1;
-    private TextView barcodeText;
-    private String barcodeData;
+    private String ISBN;
+    private final int SCAN_TAKEN = 111;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +104,9 @@ public class AddBookActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: implement scanning for submission 4
                 Intent intent = new Intent(AddBookActivity.this, ScannerActivity.class);
-                //startActivityForResult(intent, SCAN_TAKEN);
-                startActivity(intent);
+                startActivityForResult(intent, SCAN_TAKEN);
+                //startActivity(intent);
             }
         });
 
@@ -145,7 +138,10 @@ public class AddBookActivity extends AppCompatActivity {
             uploadPictureToStorage(bookImage);
         }
         if (requestCode == SCAN_TAKEN){
-            //TODO: REQUEST WHEN SCAN IS TAKEN
+            if (data != null) {
+                ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
+                isbnEditText.setText(ISBN);
+            }
         }
     }
 
