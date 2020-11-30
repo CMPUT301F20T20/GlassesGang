@@ -150,7 +150,6 @@ public class AddBookActivity extends AppCompatActivity {
                 // TODO implement google books API here
                 //GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest(titleEditText,
                 // authorEditText, isbnEditText);
-                Log.w("GoogleBooks", "Before");
                 if (networkInfo != null && networkInfo.isConnected() && ISBN.length()!=0) {
                     new GoogleBooksAPIRequest(titleEditText, authorEditText, isbnEditText).execute(ISBN);
                 }
@@ -159,23 +158,6 @@ public class AddBookActivity extends AppCompatActivity {
                     Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
                             Toast.LENGTH_SHORT).show();
                     }
-                Log.w("GoogleBooks", "After");
-                //isbnEditText.setText(ISBN);
-                /*
-                JSONObject jsonObject = apiRequest.doInBackground(ISBN);
-                try {
-                    String title = (String) jsonObject.get("title");
-                    titleEditText.setText(title);
-                    isbnEditText.setText(ISBN);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
-                            Toast.LENGTH_SHORT).show();
-                    titleEditText.setText("");
-                    isbnEditText.setText("");
-                }
-
-                 */
             }
         }
     }
