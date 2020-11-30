@@ -141,16 +141,28 @@ public class AddBookActivity extends AppCompatActivity {
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
                 ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
-                // TODO implment google books API here
-                GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest();
+                // TODO implement google books API here
+                //GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest(titleEditText,
+                // authorEditText, isbnEditText);
+                Log.w("HEY", "Before");
+                new GoogleBooksAPIRequest(titleEditText, authorEditText, isbnEditText);
+                Log.w("HEY", "After");
+                isbnEditText.setText(ISBN);
+                /*
                 JSONObject jsonObject = apiRequest.doInBackground(ISBN);
                 try {
                     String title = (String) jsonObject.get("title");
                     titleEditText.setText(title);
+                    isbnEditText.setText(ISBN);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
+                            Toast.LENGTH_SHORT).show();
+                    titleEditText.setText("");
+                    isbnEditText.setText("");
                 }
-                isbnEditText.setText(ISBN);
+
+                 */
             }
         }
     }
