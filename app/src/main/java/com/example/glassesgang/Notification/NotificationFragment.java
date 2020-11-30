@@ -1,5 +1,8 @@
 package com.example.glassesgang.Notification;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,15 +15,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.glassesgang.Book;
+import com.example.glassesgang.BorrowerBookProfileActivity;
+import com.example.glassesgang.CustomBookList;
+import com.example.glassesgang.DatabaseManager;
+import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +46,7 @@ public class NotificationFragment extends Fragment {
     private ListView notificationListView;
     private ArrayAdapter<Notification> notificationAdapter;
     private ArrayList<Notification> notificationList;
+    private String user;
     final String TAG = "NotificationFragment";
     private Button sendNotification;
     private NotificationManagerCompat notificationManagerCompat;
@@ -40,15 +56,21 @@ public class NotificationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //need to get notifications from db here. using dummy for now
+        // get user
+        String filename = getResources().getString(R.string.email_account);
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(filename, Context.MODE_PRIVATE);
+        user = sharedPref.getString("email", "null");
 
-        notificationList = new ArrayList<>();
-        notificationList.add(new Notification("test message"));
+        if (user == "null") {
+            Log.e("Email","No user email recorded");
+        }
 
-        notificationAdapter = new NotificationListAdapter(this.getActivity(), notificationList);
-
-        notificationManagerCompat = NotificationManagerCompat.from(getContext());
+        // connect to the database
         db = FirebaseFirestore.getInstance();
+
+        // setting up the array adapter
+        notificationList = new ArrayList<Notification>();
+        notificationAdapter = new NotificationListAdapter(this.getActivity(), notificationList);
     }
 
     @Override
@@ -67,41 +89,60 @@ public class NotificationFragment extends Fragment {
         notificationListView = view.findViewById(R.id.notification_listview);
         notificationListView.setAdapter(notificationAdapter);
 
-        sendNotification = view.findViewById(R.id.send_notification);
-        sendNotification.setOnClickListener(new View.OnClickListener() {
+        //display notifications TODO: check if notifications are displayed in order
+        DocumentReference userRef = db.collection("users").document(user);
+        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                // creates a notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(),
-                        App.CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                        .setContentTitle("test")
-                        .setContentText("test notification");
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed. ", e);
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "Current data 1: " + snapshot.getData());
+                    ArrayList<String> catalogue = (ArrayList<String>) snapshot.get("notificationCatalogue");
+                    updateListView(catalogue, view);
+                } else {
+                    Log.d(TAG, "Current data 2: null");
+                }
+            }
+        });
 
-                // creates the notification alert on phone
-                notificationManagerCompat.notify(1, builder.build());
+        notificationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // get the book id of the book that was pressed
+                Notification not = (Notification) adapterView.getItemAtPosition(i);
+                String notId = not.getNotificationId();
 
-                // write test data to database
-                Map<String, Object> data = new HashMap<>();
-                data.put("notification_type", "owner");
-                data.put("body", "test");
-                data.put("title", "test");
+                // get notification reference from db
+                DocumentReference notRef = db.collection("notifications").document(notId);
 
-                // adds to database
-                db.collection("notifications")
-                        .add(data)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
+                // delete this notification
+                DatabaseManager dbm = new DatabaseManager();
+                dbm.deleteNotification(not);
+            }
+        });
+    }
+
+    private void updateListView(final ArrayList<String> catalogue, View v) {
+        CollectionReference notificationsRef = db.collection("notifications");
+
+        notificationsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                notificationList.clear();
+
+                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    // if a book is in the catalogue, add it to the bookArrayList for the bookListView to be displayed.
+                    if (catalogue.contains(doc.getId())) {
+                        Notification notification = doc.toObject(Notification.class);
+                        //notification.setNotificationId(doc.getId()); //might not need this as it is already set upon db write
+                        notificationList.add(notification);
+                    }
+                }
+
+                notificationAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
     }
