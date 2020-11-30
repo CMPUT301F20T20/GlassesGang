@@ -1,5 +1,6 @@
 package com.example.glassesgang;
 
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -16,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.assertFalse;
 
@@ -54,7 +56,14 @@ public class BorrowerHomeActivityTest {
 
     @Before
     public void setUp() {
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                rule.getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+            }
+        });
+
+        solo = new Solo(getInstrumentation(),rule.getActivity());
 
         // if  no one is signed, sign the mock user
         FirebaseUser user = mAuth.getCurrentUser();
@@ -79,6 +88,7 @@ public class BorrowerHomeActivityTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
+
     }
 
     public void switchToBorrower() {
