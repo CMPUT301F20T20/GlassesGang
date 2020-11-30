@@ -2,12 +2,14 @@ package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.glassesgang.Transaction.TransactionFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.glassesgang.BookStatus.Status;
+import static com.example.glassesgang.BookStatus.stringStatus;
+import com.example.glassesgang.Transaction.Request;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -27,23 +34,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Book Profile for Borrower view (no edit book functionality)
  */
-public class BorrowerBookProfileActivity extends AppCompatActivity {
+public class BorrowerBookProfileActivity extends AppCompatActivity implements TransactionFragment.OnTransactionInteractionListener{
+    private Button statusButton;
     private TextView titleTextView;
     private TextView authorTextView;
     private TextView isbnTextView;
-    private TextView statusTextView;
     private TextView ownerTextView;
     private ImageView bookImageView;
-    private String author;
+    private Status status;
     private String title;
+    private String author;
     private String isbn;
-    private String status;
-    private String bid;
     private String owner;
+
+    private String bid;
     private Book book;
     private FirebaseFirestore db;
     private String user;
@@ -97,8 +106,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.title_textView);
         authorTextView = findViewById(R.id.author_textView);
         isbnTextView = findViewById(R.id.isbn_textView);
-        statusTextView = findViewById(R.id.status_textView);
-        ownerTextView = findViewById(R.id.owner_textView);
+        statusButton = findViewById(R.id.status_button);
+        ownerTextView = findViewById(R.id.bookOwner_textView);
         bookImageView = findViewById(R.id.borrowerBook_image_view);
     }
 
@@ -110,24 +119,26 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
         ownerTextView.setText(owner);
-        statusTextView.setText(status);
+        statusButton.setText(stringStatus(status));
+        setStatusButtonListeners();
     }
 
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
+        //TODO: fix bug, for some reason it keeps failing here...
         borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        book.setStatus(document.get("requestRefStatus").toString());  // if book is in borrower catalogue, use the status from there
+                        book.setStringStatus(document.get("requestRefStatus").toString());  // if book is in borrower catalogue, use the status from there
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
                         // in this case the book is requested by other borrowers, but not the current borrower
                         // so it should appear as available to them
-                        if (book.getStatus().equals("REQUESTED")) {
-                            book.setStatus("AVAILABLE");
+                        if (book.getStatus() == Status.REQUESTED) {
+                            book.setStatus(Status.AVAILABLE);
                         }
                         Log.d(TAG, "No such document");
                     }
@@ -139,7 +150,24 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void inflateTransactionFragment(String requestId, String ownerEmail) {
+        //inflate requestList fragment inside framelayout fragment container
+        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Bundle bundle = new Bundle();
+                bundle.putString("requestId", requestId); //store bin for later use in request handling
+                bundle.putString("userEmail", ownerEmail);
+                bundle.putString("userType", "b");
+                Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
+                bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
+                Fragment transactionFragment = new TransactionFragment();
+                transactionFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.borrower_book_profile_fragment_container, transactionFragment).commit();
+            }
+        });
     }
 
     private void setBookImage(Book book, ImageView bookImage) {
@@ -172,5 +200,49 @@ public class BorrowerBookProfileActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void setStatusButtonListeners() {
+        switch(status) {
+            case AVAILABLE: //make a request for this book
+                statusButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // get the values for title, author, and isbn from the EditTexts
+                        Request newRequest = new Request(bid, user, owner);
+                        DatabaseManager database = new DatabaseManager();
+                        database.addRequest(newRequest);
+                        // TODO: somehow add to the system and make sure photos are attached
+                        finish();
+                    }
+                });
+                break;
+            case REQUESTED: //cancel request
+                statusButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //find request object in db
+                        //TODO: get requestid from borrower catalogue
+                        DatabaseManager database = new DatabaseManager();
+                        database.deleteRequest(user, bid);
+                        finish();
+                    }
+                });
+                break;
+            case ACCEPTED: //show transaction fragment to accept book at owner specified location
+                db.collection("users").document(user).collection("borrowerCatalogue").document(bid).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
+                            }
+                        });
+        }
+    }
+
+    @Override
+    public void onTransactionPressed() {
+        //TODO: open scanner
+        finish();
     }
 }

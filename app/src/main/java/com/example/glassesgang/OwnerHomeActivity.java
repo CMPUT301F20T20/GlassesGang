@@ -26,6 +26,10 @@ public class OwnerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_owner);
 
+        //first time launch we want to have library open
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new OwnerLibraryFragment()).commit();
+        }
 
         //setup bottom navigation
         addButton = findViewById(R.id.add_button);

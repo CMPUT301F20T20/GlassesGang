@@ -18,6 +18,7 @@ public class NotificationListAdapter extends ArrayAdapter<Notification> {
 
     private ArrayList<Notification> notifications;
     private Context context;
+    private String TAG = "Notification properties";
 
     public NotificationListAdapter(Context context, ArrayList<Notification> notifications) {
         super(context, 0, notifications);
@@ -35,7 +36,7 @@ public class NotificationListAdapter extends ArrayAdapter<Notification> {
         Notification notification = notifications.get(position);
 
         TextView notificationMessage = view.findViewById(R.id.notification_text);
-        notificationMessage.setText(notification.getMessage());
+        notificationMessage.setText(notification.getBody());
 
         return view;
     }

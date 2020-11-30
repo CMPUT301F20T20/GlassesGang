@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.glassesgang">
+
+<<<<<<< HEAD
+=======
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+<<<<<<< HEAD
+<<<<<<< HEAD
+        <activity android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity"></activity>
+        <activity android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity"/>
+=======
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+=======
+        <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+<<<<<<< HEAD
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
+=======
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+        <activity
+            android:name=".BorrowerBookProfileActivity"
+            android:parentActivityName=".BorrowerHomeActivity" />
+        <activity
+            android:name=".OwnerBookProfileActivity"
+            android:parentActivityName=".OwnerHomeActivity" />
+<<<<<<< HEAD
+>>>>>>> 43ec921480c278fcad63339f1ca5362a83385e88
+=======
+>>>>>>> cf5ef89812d71bcd35f87d6a9a3d0f9152806af0
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+<<<<<<< HEAD
+        <activity android:name=".GoogleSignInActivity" />
+=======
+<<<<<<< HEAD
+        <activity android:name=".GoogleSignInActivity" />
+        <activity android:name=".HomeActivity" />
+=======
+        <activity android:name=".GoogleSignInActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+        <activity android:name=".BorrowerHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".OwnerHomeActivity"
+            android:exported="true" />
+        <activity android:name=".AddBookActivity"
+            android:windowSoftInputMode="adjustNothing"/>   <!--So keyboard doesn't push up the save button-->
+        <activity android:name=".EditBookActivity"
+<<<<<<< HEAD
+            android:windowSoftInputMode="adjustNothing"/>  <!--So keyboard doesn't push up the save button-->
+=======
+            android:windowSoftInputMode="adjustNothing"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />  <!--So keyboard doesn't push up the save button-->
+>>>>>>> cf5ef89812d71bcd35f87d6a9a3d0f9152806af0
+>>>>>>> 98a5338bf3f5e2f1054c8d80b8ff71c0fc055039
+    </application>
+
+</manifest>

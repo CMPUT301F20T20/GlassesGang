@@ -7,6 +7,20 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/grey_card"
+        android:iconifiedByDefault="false"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.785" />
+
     <ListView
         android:id="@+id/browse_list_view"
         android:layout_width="match_parent"

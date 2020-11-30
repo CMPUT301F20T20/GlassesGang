@@ -21,8 +21,9 @@
             android:id="@+id/add_button"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_margin="20dp"
             android:layout_weight="1"
-            android:background="@color/borrowerSecondary"
+            android:background="@drawable/grey_card"
             app:srcCompat="@drawable/ic_add" />
     </LinearLayout>
 
@@ -42,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/borrowerSecondary"
-        app:itemTextColor="@color/ownerText"
+        app:itemTextColor="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

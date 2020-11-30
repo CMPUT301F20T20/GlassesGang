@@ -7,45 +7,74 @@
     android:orientation="vertical"
     tools:context=".OwnerBookProfileActivity">
 
-    <include layout="@layout/book_profile"/>
-
-
-    <TextView
-        android:id="@+id/borrowerTitle_textView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Borrower:" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/borrower_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ImageView
-        android:id="@+id/borrowerBook_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="254dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="DELETE" />
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="EDIT" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/borrowerBook_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:background="@color/borrowerSecondary"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <include layout="@layout/book_profile" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/delete_button"
+                    android:layout_width="137dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/red_shape"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:text="DELETE"
+                    android:textColor="@color/borrowerPrimary"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/edit_button"
+                    android:layout_width="137dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/orange_shape"
+                    android:fontFamily="@font/source_sans_pro_semibold"
+                    android:text="EDIT"
+                    android:textColor="@color/borrowerPrimary"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/borrowerTitle_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="@string/owner_book_profile_fragment_type"
+                android:textColor="@color/borrowerText"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/owner_book_profile_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="350dp" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
