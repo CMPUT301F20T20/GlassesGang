@@ -59,7 +59,7 @@
 
     <Button
         android:id="@+id/signoutbutton"
-        android:layout_width="130dp"
+        android:layout_width="137dp"
         android:layout_height="30dp"
         android:layout_marginStart="141dp"
         android:layout_marginLeft="141dp"
