@@ -133,25 +133,6 @@ public class NotificationFragment extends Fragment {
         notificationsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                    if (catalogue.contains(dc.getDocument().getId())) {
-                        switch (dc.getType()) {
-                            case ADDED:
-                                Toast.makeText(getActivity(), "NEW NOTIFICATION", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "New city: " + dc.getDocument().getData());
-                                break;
-                            case MODIFIED:
-                                Toast.makeText(getActivity(), "MODIFIED NOTIFICATION", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "Modified city: " + dc.getDocument().getData());
-                                break;
-                            case REMOVED:
-                                Toast.makeText(getActivity(), "REMOVED NOTIFICATION", Toast.LENGTH_SHORT).show();
-                                Log.d(TAG, "Removed city: " + dc.getDocument().getData());
-                                break;
-                        }
-                    }
-
-                }
                 notificationList.clear();
 
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
@@ -164,8 +145,6 @@ public class NotificationFragment extends Fragment {
                 }
 
                 notificationAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
-
-
             }
 
         });

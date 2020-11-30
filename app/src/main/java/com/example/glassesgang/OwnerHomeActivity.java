@@ -2,22 +2,39 @@ package com.example.glassesgang;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.glassesgang.Notification.Notification;
 import com.example.glassesgang.Notification.NotificationFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.example.glassesgang.Notification.App;
+
 
 /**
  * Home Activity for Owner
  */
 public class OwnerHomeActivity extends AppCompatActivity {
     private ImageButton addButton;
+    private FirebaseFirestore db;
+
 
     private BottomNavigationView bottomNavigation;
 
@@ -44,6 +61,41 @@ public class OwnerHomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent addBookIntent = new Intent(OwnerHomeActivity.this, AddBookActivity.class);
                 startActivity(addBookIntent);
+            }
+        });
+
+        final String TAG = "Listener";
+        db = FirebaseFirestore.getInstance();
+        CollectionReference notificationsRef = db.collection("notifications");
+        notificationsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                    if ( dc.getDocument().get("receiverEmail") != null && ((String)dc.getDocument().get("receiverEmail")).equals("mockuser2@gmail.com")) {
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Toast.makeText(getApplicationContext(), "NEW NOTIFICATION", Toast.LENGTH_SHORT).show();
+//                                Log.d(TAG, "New city: " + dc.getDocument().getData());
+//
+//                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
+//                                        App.CHANNEL_ID)
+//                                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+//                                        .setContentTitle((String)dc.getDocument().get("popupTitle"))
+//                                        .setContentText((String)dc.getDocument().get("popupText"));
+//                                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+//                                notificationManagerCompat.notify(1, builder.build());
+                                break;
+                            case MODIFIED:
+                                Toast.makeText(getApplicationContext(), "MODIFIED NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Modified city: " + dc.getDocument().getData());
+                                break;
+                            case REMOVED:
+                                Toast.makeText(getApplicationContext(), "REMOVED NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Removed city: " + dc.getDocument().getData());
+                                break;
+                        }
+                    }
+                }
             }
         });
     }
