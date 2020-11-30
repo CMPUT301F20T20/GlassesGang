@@ -26,6 +26,33 @@
 
             <include layout="@layout/book_profile" />
 
+            <TextView
+                android:id="@+id/borrowerTitle_textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="Borrower:"
+                android:textColor="@color/borrowerText"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/borrower_textView"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/grey_card"
+                android:fontFamily="@font/source_sans_pro_bold"
+                android:gravity="center"
+                android:text="STATUS"
+                android:textColor="@color/borrowerText"
+                android:textSize="24sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
