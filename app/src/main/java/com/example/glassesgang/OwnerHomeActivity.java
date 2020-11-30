@@ -75,15 +75,15 @@ public class OwnerHomeActivity extends AppCompatActivity {
                         switch (dc.getType()) {
                             case ADDED:
                                 Toast.makeText(getApplicationContext(), "NEW NOTIFICATION", Toast.LENGTH_SHORT).show();
-//                                Log.d(TAG, "New city: " + dc.getDocument().getData());
-//
-//                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
-//                                        App.CHANNEL_ID)
-//                                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-//                                        .setContentTitle((String)dc.getDocument().get("popupTitle"))
-//                                        .setContentText((String)dc.getDocument().get("popupText"));
-//                                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-//                                notificationManagerCompat.notify(1, builder.build());
+                                Log.d(TAG, "New city: " + dc.getDocument().getData());
+
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
+                                        App.CHANNEL_ID)
+                                        .setSmallIcon(R.drawable.ic_baseline_notifications_24)
+                                        .setContentTitle((String)dc.getDocument().get("popupTitle"))
+                                        .setContentText((String)dc.getDocument().get("body"));
+                                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+                                notificationManagerCompat.notify(1, builder.build());
                                 break;
                             case MODIFIED:
                                 Toast.makeText(getApplicationContext(), "MODIFIED NOTIFICATION", Toast.LENGTH_SHORT).show();
