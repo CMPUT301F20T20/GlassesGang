@@ -322,6 +322,7 @@ public class OwnerLibraryTest {
 
         // check if changes are reflected in the book profile
         solo.assertCurrentActivity("Wrong Activity after clicking book", OwnerBookProfileActivity.class);
+        solo.scrollToTop();
         assertTrue(solo.waitForText(editedTitle, 1, timeout));
         assertTrue(solo.waitForText(editedAuthor, 1, timeout));
         assertTrue(solo.waitForText(editedISBN, 1, timeout));

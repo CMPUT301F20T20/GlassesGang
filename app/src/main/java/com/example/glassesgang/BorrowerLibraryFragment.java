@@ -142,7 +142,7 @@ public class BorrowerLibraryFragment extends Fragment {
                     if (borrowerCatalogue.containsKey(doc.getId())) {
                         Book book = doc.toObject(Book.class);
                         book.setStringStatus(borrowerCatalogue.get(doc.getId()));    // setting the status of the book to match its status under the borrower
-                        bookArrayList.add(book);
+                        bookList.addBook(book);
                     }
                 }
                 bookArrayAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
