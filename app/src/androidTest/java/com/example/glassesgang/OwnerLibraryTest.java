@@ -1,5 +1,7 @@
 package com.example.glassesgang;
 
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -92,9 +94,9 @@ public class OwnerLibraryTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
-//        BottomNavigationView bnv = solo.getCurrentActivity().findViewById(R.id.bottom_navigation);
-//        bnv.setSelectedItemId(R.id.nav_books);
-        solo.clickOnMenuItem("Books");
+        BottomNavigationView bnv = solo.getCurrentActivity().findViewById(R.id.bottom_navigation);
+        bnv.setSelectedItemId(R.id.nav_books);
+        solo.clickOnText("Books");
     }
 
     /**
