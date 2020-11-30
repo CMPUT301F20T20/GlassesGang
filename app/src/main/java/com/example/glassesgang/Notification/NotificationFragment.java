@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.glassesgang.Book;
 import com.example.glassesgang.BorrowerBookProfileActivity;
@@ -29,6 +30,7 @@ import com.example.glassesgang.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -131,6 +133,25 @@ public class NotificationFragment extends Fragment {
         notificationsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                    if (catalogue.contains(dc.getDocument().getId())) {
+                        switch (dc.getType()) {
+                            case ADDED:
+                                Toast.makeText(getActivity(), "NEW NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "New city: " + dc.getDocument().getData());
+                                break;
+                            case MODIFIED:
+                                Toast.makeText(getActivity(), "MODIFIED NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Modified city: " + dc.getDocument().getData());
+                                break;
+                            case REMOVED:
+                                Toast.makeText(getActivity(), "REMOVED NOTIFICATION", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Removed city: " + dc.getDocument().getData());
+                                break;
+                        }
+                    }
+
+                }
                 notificationList.clear();
 
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
@@ -143,7 +164,10 @@ public class NotificationFragment extends Fragment {
                 }
 
                 notificationAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+
+
             }
+
         });
     }
 }

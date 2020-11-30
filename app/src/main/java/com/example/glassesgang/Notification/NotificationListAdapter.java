@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.glassesgang.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +20,7 @@ public class NotificationListAdapter extends ArrayAdapter<Notification> {
     private ArrayList<Notification> notifications;
     private Context context;
     private String TAG = "Notification properties";
+    private FirebaseFirestore db;
 
     public NotificationListAdapter(Context context, ArrayList<Notification> notifications) {
         super(context, 0, notifications);
