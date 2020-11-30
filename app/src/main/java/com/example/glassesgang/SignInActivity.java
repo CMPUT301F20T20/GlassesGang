@@ -19,6 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity for signing in using Firebase authentication
+ */
 public class SignInActivity extends AppCompatActivity {
 
     private String TAG = "SignInActivity";
@@ -70,6 +73,12 @@ public class SignInActivity extends AppCompatActivity {
         // grab text
         final String email = user_email.getText().toString();
         final String password = user_password.getText().toString();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(SignInActivity.this, "Email or password is empty",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // sign in user
         mAuth.signInWithEmailAndPassword(email, password)

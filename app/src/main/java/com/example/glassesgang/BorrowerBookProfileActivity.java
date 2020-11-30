@@ -90,7 +90,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                         isbn = book.getISBN();
                         owner = book.getOwner();
                         setBorrowerStatus(book);  // text views updated inside this method after the status is set
-                        setBookImage(book, bookImageView);
+                        setBookImage(book);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -141,9 +141,13 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         setStatusButtonListeners(title);
     }
 
+    /**
+     * Sets the status of a book checking if book is in borrower's catalogue
+     * @param book object that contains the necessary status
+     */
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
-        //TODO: fix bug, for some reason it keeps failing here...
+
         borrowerCatRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -189,7 +193,11 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         });
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
+    private void setBookImage(Book book) {
         String bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -209,7 +217,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,

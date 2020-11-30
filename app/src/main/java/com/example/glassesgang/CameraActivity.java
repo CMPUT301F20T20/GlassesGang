@@ -17,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * Activity that handles Camera actions
+ * (request camera permissions, open camera, and save picture taken)
+ */
 public class CameraActivity extends AppCompatActivity {
     public ImageView bookImageView;
     private static Bitmap bitmap;
@@ -34,6 +38,10 @@ public class CameraActivity extends AppCompatActivity {
         requestCameraPermission();
     }
 
+    /**
+     * Requests for camera permission
+     * if permission was granted, open camera
+     */
     private void requestCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA
@@ -45,7 +53,8 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_PERM_CODE ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERM_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openCamera();
             } else {
@@ -55,6 +64,9 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Open user's camera
+     */
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA_REQ_CODE);
@@ -72,10 +84,17 @@ public class CameraActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Returns the book image
+     * @return bitmap object containing the picture taken from the user's camera
+     */
     public static Bitmap getBookImage() {
         return bitmap;
     }
 
+    /**
+     * Clean static object variable
+     */
     public static void cleanBookImage() {
         bitmap = null;
     }
