@@ -3,6 +3,6 @@
 
     <solid android:color="@color/borrowerSecondary" />
 
-    <corners android:radius="30dp" />
+    <corners android:radius="20dp" />
 
 </shape>
