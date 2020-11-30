@@ -115,7 +115,7 @@ public class MapFragment extends Fragment {
                     com.google.android.gms.maps.model.LatLng mapLocation = new com.google.android.gms.maps.model.LatLng(location.getLatitude(), location.getLongitude());
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(mapLocation, zoomAmount));
                     MarkerOptions marker = new MarkerOptions();
-                    marker.title(mapLocation.latitude + " : " + mapLocation.longitude);
+                    marker.title("Pick-up location: (" + mapLocation.latitude + " : " + mapLocation.longitude + ")");
                     map.addMarker(marker);
                 }
             }
@@ -130,7 +130,7 @@ public class MapFragment extends Fragment {
                 */
         }
         else {
-            //user is borrower, givenLocation exists
+            //user is borrower, givenLocation must exist beforehand
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(givenLocation, zoomAmount));
         }
     }
