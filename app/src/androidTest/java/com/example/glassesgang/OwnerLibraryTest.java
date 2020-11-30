@@ -91,7 +91,7 @@ public class OwnerLibraryTest {
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
-        solo.clickOnText("Books");
+        solo.scrollToTop();
     }
 
     /**
