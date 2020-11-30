@@ -12,5 +12,8 @@
         android:id="@+id/request_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/fragment_request"/>
+        android:layout_margin="20dp"
+        android:divider="@color/borrowerPrimary"
+        android:dividerHeight="20dp"
+        tools:listitem="@layout/fragment_request" />
 </FrameLayout>
