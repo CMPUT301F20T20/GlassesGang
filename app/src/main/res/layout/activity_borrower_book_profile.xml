@@ -38,17 +38,16 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/owner_textView"
+                android:id="@+id/bookOwner_textView"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="30dp"
-                android:layout_marginBottom="30dp"
                 android:background="@drawable/grey_card"
                 android:fontFamily="@font/source_sans_pro_bold"
                 android:gravity="center"
-                android:text="Email"
+                android:text="Book Owner Email: "
                 android:textColor="@color/borrowerText"
                 android:textSize="24sp" />
 
@@ -58,11 +57,6 @@
                 android:layout_height="350dp">
 
             </FrameLayout>
-            <TextView
-                android:id="@+id/bookOwner_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Book Owner Email: "/>
 
         </LinearLayout>
     </ScrollView>
