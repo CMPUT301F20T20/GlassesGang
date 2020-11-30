@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -140,14 +142,25 @@ public class AddBookActivity extends AppCompatActivity {
         }
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
                 ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
                 // TODO implement google books API here
                 //GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest(titleEditText,
                 // authorEditText, isbnEditText);
-                Log.w("HEY", "Before");
-                new GoogleBooksAPIRequest(titleEditText, authorEditText, isbnEditText);
-                Log.w("HEY", "After");
-                isbnEditText.setText(ISBN);
+                Log.w("GoogleBooks", "Before");
+                if (networkInfo != null && networkInfo.isConnected() && ISBN.length()!=0) {
+                    new GoogleBooksAPIRequest(titleEditText, authorEditText, isbnEditText).execute(ISBN);
+                }
+                // Otherwise update the TextView to tell the user there is no connection or no search term.
+                else {
+                    Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
+                            Toast.LENGTH_SHORT).show();
+                    }
+                Log.w("GoogleBooks", "After");
+                //isbnEditText.setText(ISBN);
                 /*
                 JSONObject jsonObject = apiRequest.doInBackground(ISBN);
                 try {
