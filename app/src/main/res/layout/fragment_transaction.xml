@@ -17,26 +17,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/email_label"
+        android:id="@+id/email_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/email_textview"
+        android:text="Borrower or Owner email"
+        android:textSize="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/info_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/email_textview"
+        android:id="@+id/info_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="32dp"
+        android:text="Please specify a pick-up location"
+        android:textSize="20dp"
+        android:textColor="@color/green"
         app:layout_constraintBottom_toTopOf="@+id/transaction_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_label" />
+        app:layout_constraintTop_toBottomOf="@+id/email_textview" />
 
     <FrameLayout
         android:id="@+id/transaction_fragment_container"
