@@ -26,35 +26,6 @@
 
             <include layout="@layout/book_profile" />
 
-            <TextView
-                android:id="@+id/borrowerTitle_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:text="@string/owner_book_profile_fragment_type"
-                android:textColor="@color/borrowerText"
-                android:textSize="18sp" />
-
-            <FrameLayout
-                android:id="@+id/owner_book_profile_fragment_container"
-                android:layout_width="match_parent"
-                android:layout_height="350dp" />
-
-            <TextView
-                android:id="@+id/borrower_textView"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/grey_card"
-                android:fontFamily="@font/source_sans_pro_semibold"
-                android:gravity="center"
-                android:textColor="@color/borrowerText"
-                android:textSize="24sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,6 +57,22 @@
                     android:textColor="@color/borrowerPrimary"
                     android:textSize="18sp" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/borrowerTitle_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="@string/owner_book_profile_fragment_type"
+                android:textColor="@color/borrowerText"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/owner_book_profile_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="350dp" />
         </LinearLayout>
     </ScrollView>
 

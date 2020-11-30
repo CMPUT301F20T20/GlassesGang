@@ -36,15 +36,23 @@
 
     <Button
         android:id="@+id/status_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="137dp"
+        android:layout_height="30dp"
+        android:background="@drawable/grey_shape"
+        android:textColor="@color/borrowerPrimary"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/borrower_textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/source_sans_pro_semibold"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/grey_card"
+        android:fontFamily="@font/source_sans_pro_bold"
+        android:gravity="center"
         android:text="STATUS"
-        android:textSize="18sp" />
+        android:textColor="@color/borrowerText"
+        android:textSize="24sp" />
 
 </LinearLayout>
