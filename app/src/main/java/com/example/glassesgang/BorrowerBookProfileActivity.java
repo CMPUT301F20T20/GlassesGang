@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.glassesgang.Transaction.TransactionFragment;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.example.glassesgang.BookStatus.Status;
@@ -241,8 +242,10 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     }
 
     @Override
-    public void onTransactionPressed() {
-        //TODO: open scanner
+    public void onTransactionPressed(String requestId, TransactionType transactionType) {
+        //TODO: add scanner implementation
+        DatabaseManager dbm = new DatabaseManager();
+        dbm.transactionAction(requestId, "o", transactionType);
         finish();
     }
 }

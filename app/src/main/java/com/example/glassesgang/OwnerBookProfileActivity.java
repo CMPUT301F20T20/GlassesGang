@@ -25,6 +25,7 @@ import com.example.glassesgang.Helpers.OverrideBackPressed;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.Transaction.RequestHandlingFragment;
 import com.example.glassesgang.Transaction.TransactionFragment;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -290,8 +291,10 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
     }
 
     @Override
-    public void onTransactionPressed() {
-        //TODO: scanner
+    public void onTransactionPressed(String requestId, TransactionType transactionType) {
+        //TODO: add scanner implementation
+        DatabaseManager dbm = new DatabaseManager();
+        dbm.transactionAction(requestId, "o", transactionType);
         finish();
     }
 }

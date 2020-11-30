@@ -14,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.glassesgang.Notification.App;
 import com.example.glassesgang.Notification.Notification;
+import com.example.glassesgang.Transaction.TransactionType;
 import com.google.android.gms.tasks.Continuation;
 import com.example.glassesgang.Transaction.Request;
 import com.example.glassesgang.BookStatus.Status;
@@ -462,21 +463,43 @@ public class DatabaseManager {
                 }
             }
         });
+    }
 
-        /* //not needed, but could be useful as a final check to ensure no other requests exist at the moment of accepting a request
-        // delete all other requests from book's request list
-        DocumentReference bookRef = db.collection("books").document(bid);
-        bookRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void transactionAction(String requestId, String userType, TransactionType transactionType) {
+        DocumentReference reqRef = db.collection("requests").document(requestId);
+        reqRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                ArrayList<String> requestsToRemove = (ArrayList<String>) documentSnapshot.get("requests");
-                requestsToRemove.remove(request.getRequestId()); //remove accepted request from requestsToRemove
-                requestsToRemove.forEach(request -> {
-                    bookRef.update("requests", FieldValue.arrayRemove(request));
-                });
+            public void onSuccess(DocumentSnapshot req) {
+                if (userType == "o") {
+                    reqRef.update("ownerAction", true);
+                }
+                else if (userType == "b") {
+                    reqRef.update("borrowerAction", true);
+                }
+                if (req.get("borrowerAction").equals(true) && req.get("ownerAction").equals(true)) {
+                    String bookId = req.get("bookId").toString();
+                    String userId = req.get("borrowerEmail").toString();
+                    completeTransaction(requestId, bookId, userId, transactionType);
+                }
             }
         });
-        */
+    }
+
+    public static void completeTransaction(String requestId, String bookId, String userId, TransactionType transactionType) {
+        if (transactionType == TransactionType.REQUEST) {
+            //request has been processed (both users have scanned)
+            changeBookStatus(Status.BORROWED, bookId);
+
+            //update borrower's catalogue to have book as borrowed
+            db.collection("users").document(userId).collection("borrowerCatalogue").document(bookId).update("requestRefStatus", Status.BORROWED);
+
+        }
+        else if (transactionType == TransactionType.RETURN) {
+            //return has been processed
+            changeBookStatus(Status.AVAILABLE, bookId);
+
+            //delete the request, end of request lifecycle
+            deleteRequest(userId, bookId);
+        }
     }
 }

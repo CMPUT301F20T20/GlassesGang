@@ -43,7 +43,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
     private LatLng mapMarker;
 
     public interface OnTransactionInteractionListener {
-        void onTransactionPressed();
+        void onTransactionPressed(String requestId, TransactionType transactionType);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
                     }
                     else if (transactionButton.getText().toString().equals("OFFER")){
                         //TODO: open scanner and initiate transaction
-                        listener.onTransactionPressed();
+                        listener.onTransactionPressed(userType, TransactionType.REQUEST);
                     }
                 }
             });
@@ -164,7 +164,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             transactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onTransactionPressed();
+                    listener.onTransactionPressed(userType, TransactionType.REQUEST);
                 }
             });
         }

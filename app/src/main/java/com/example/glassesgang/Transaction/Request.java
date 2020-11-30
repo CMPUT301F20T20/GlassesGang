@@ -11,6 +11,8 @@ public class Request {
     private String ownerEmail;
     private String requestId;
     private LatLng location;
+    private boolean borrowerAction = false;
+    private boolean ownerAction = false;
 
     /**
      * This is the constructor for a Request object
@@ -71,5 +73,13 @@ public class Request {
     }
 
     public void setRequestId(String requestId) { this.requestId = requestId; }
+
+    public void setBorrowerAction(boolean isComplete) { this.borrowerAction = isComplete; }
+
+    public boolean getBorrowerAction() {return borrowerAction;}
+
+    public void setOwnerAction(boolean isComplete) {this.ownerAction = isComplete;}
+
+    public boolean getOwnerAction() {return ownerAction;}
 
 }
