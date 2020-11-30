@@ -431,20 +431,20 @@ public class DatabaseManager {
 
     }
 
-    public static void acceptRequest(String bid, Request request) {
+    public static void acceptRequest(String bid, String borrowerEmail, String ownerEmail, String requestId) {
         //change book status to accepted
         changeBookStatus(Status.ACCEPTED, bid);
 
         //change accepted borrower's request in borrowerCatalogue to have status of accepted
         DocumentReference borrowerRequest = db.collection("users")
-                .document(request.getBorrowerEmail())
+                .document(borrowerEmail)
                 .collection("borrowerCatalogue")
-                .document(request.getBookId());
+                .document(bid);
         borrowerRequest.update("requestRefStatus", Status.ACCEPTED);
 
 
         //send notification to borrower that their request has been accepted
-        addNotification(new Notification(request.getOwnerEmail(), request.getBorrowerEmail(), Notification.NotificationType.ACCEPT_REQUEST, bid));
+        addNotification(new Notification(ownerEmail, borrowerEmail, Notification.NotificationType.ACCEPT_REQUEST, bid));
 
         //delete all other requests of other borrowers of that book
         db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -454,7 +454,7 @@ public class DatabaseManager {
                 if (task.isSuccessful()) {
                     ArrayList<String> userList = new ArrayList<String>();
                     for (QueryDocumentSnapshot document : task.getResult()) {  //add rejected borrowers to a list
-                        if (!document.getId().equals(request.getBorrowerEmail())) //exclude accepted borrower
+                        if (!document.getId().equals(borrowerEmail)) //exclude accepted borrower
                             userList.add(document.getId());
                     }
                     userList.forEach(user -> deleteRequest(user, bid));

@@ -42,8 +42,8 @@ public class MapFragment extends Fragment {
         userType = "o";
     }
 
-    public MapFragment(LatLng latLng) {
-        givenLocation = latLng;
+    public MapFragment(LatLngCustom latLng) {
+        givenLocation = new LatLng(latLng.getLatitude(), latLng.getLongitude());
         userType = "b"; //must be borrower to receive location
     }
 

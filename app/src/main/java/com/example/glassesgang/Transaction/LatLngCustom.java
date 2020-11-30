@@ -4,11 +4,11 @@ Used because Google Maps API LatLng lacks a public constructor and cannot be sto
  */
 package com.example.glassesgang.Transaction;
 
-public class LatLng {
+public class LatLngCustom {
     private double latitude;
     private double longitude;
 
-    public LatLng(){}
+    public LatLngCustom(){}
 
     public double getLatitude() {
         return latitude;

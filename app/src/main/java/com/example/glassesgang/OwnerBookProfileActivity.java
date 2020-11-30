@@ -233,8 +233,9 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
         Bundle bundle = new Bundle();
         bundle.putString("requestId", request.getRequestId()); //store bin for later use in request handling
         bundle.putString("userEmail", request.getBorrowerEmail());
+        bundle.putString("ownerEmail", request.getOwnerEmail());
+        bundle.putString("bid", request.getBookId());
         bundle.putString("userType", "o");
-        bundle.putParcelable("request", request);
         Fragment transactionFragment = new TransactionFragment();
         transactionFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.owner_book_profile_fragment_container, transactionFragment).commit();

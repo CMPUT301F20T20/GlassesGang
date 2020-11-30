@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9c1c9043-771a-45ac-934a-1f442c92b5ed" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/LatLngCustom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/OwnerBookProfileActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/OwnerBookProfileActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/MapFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/MapFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_29" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1kkmkETtFQ3RMCvNmJLrfPhTd8x" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_2_API_29" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-11-30T00:21:45.198Z" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SelectDeploymentTargetsDialog.selectedDevices" value="Pixel_3_API_30" />
+    <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
+    <property name="memory.settings.postsync.last.time.stamp" value="1606605847178" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.example.glassesgang" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c1c9043-771a-45ac-934a-1f442c92b5ed" name="Default Changelist" comment="" />
+      <created>1606253104045</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606253104045</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1864" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1606261508799">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="1864" y="33" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606261508799" />
+    <state x="2213" y="88" key="#com.intellij.ide.util.MemberChooser" timestamp="1606696693092">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="2213" y="88" key="#com.intellij.ide.util.MemberChooser/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606696693092" />
+    <state x="2248" y="267" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1606433945947">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="2248" y="267" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606433945947" />
+    <state x="2152" y="238" width="495" height="276" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1606256170312">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="2152" y="238" width="495" height="276" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606256170312" />
+    <state x="2646" y="153" key="#xdebugger.evaluate" timestamp="1606692460977">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="2646" y="153" key="#xdebugger.evaluate/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606692460977" />
+    <state width="1878" height="322" key="GridCell.Tab.0.bottom" timestamp="1606695766251">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="361" key="GridCell.Tab.0.bottom/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606507946250" />
+    <state width="1398" height="285" key="GridCell.Tab.0.bottom/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606621054719" />
+    <state width="1878" height="322" key="GridCell.Tab.0.bottom/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606695766251" />
+    <state width="1878" height="322" key="GridCell.Tab.0.center" timestamp="1606695766250">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="361" key="GridCell.Tab.0.center/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606507946248" />
+    <state width="1398" height="285" key="GridCell.Tab.0.center/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606621054718" />
+    <state width="1878" height="322" key="GridCell.Tab.0.center/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606695766250" />
+    <state width="1878" height="322" key="GridCell.Tab.0.left" timestamp="1606695766250">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="361" key="GridCell.Tab.0.left/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606507946247" />
+    <state width="1398" height="285" key="GridCell.Tab.0.left/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606621054718" />
+    <state width="1878" height="322" key="GridCell.Tab.0.left/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606695766250" />
+    <state width="1878" height="322" key="GridCell.Tab.0.right" timestamp="1606695766251">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="361" key="GridCell.Tab.0.right/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606507946249" />
+    <state width="1398" height="285" key="GridCell.Tab.0.right/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606621054718" />
+    <state width="1878" height="322" key="GridCell.Tab.0.right/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606695766251" />
+    <state width="1878" height="484" key="GridCell.Tab.1.bottom" timestamp="1606693478548">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="484" key="GridCell.Tab.1.bottom/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606693478548" />
+    <state width="1878" height="484" key="GridCell.Tab.1.center" timestamp="1606693478548">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="484" key="GridCell.Tab.1.center/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606693478548" />
+    <state width="1878" height="484" key="GridCell.Tab.1.left" timestamp="1606693478548">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="484" key="GridCell.Tab.1.left/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606693478548" />
+    <state width="1878" height="484" key="GridCell.Tab.1.right" timestamp="1606693478548">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state width="1878" height="484" key="GridCell.Tab.1.right/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606693478548" />
+    <state x="1540" y="-57" width="1720" height="857" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1606266958089">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="1540" y="-57" width="1720" height="857" key="com.android.tools.idea.avdmanager.AvdListDialog/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606266958089" />
+    <state x="2070" y="192" key="com.intellij.ide.util.TipDialog" timestamp="1606605844518">
+      <screen x="1440" y="-180" width="1920" height="1080" />
+    </state>
+    <state x="2070" y="192" key="com.intellij.ide.util.TipDialog/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606605844518" />
+    <state x="1936" y="78" width="927" height="586" key="find.popup" timestamp="1606697124844">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="372" y="218" width="695" height="486" key="find.popup/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606619442275" />
+    <state x="1936" y="78" width="927" height="586" key="find.popup/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606697124844" />
+    <state x="2065" y="22" width="670" height="676" key="search.everywhere.popup" timestamp="1606696244357">
+      <screen x="1440" y="-157" width="1920" height="1057" />
+    </state>
+    <state x="2065" y="3" width="670" height="691" key="search.everywhere.popup/0.0.1440.900/1440.-180.1920.1080@1440.-180.1920.1080" timestamp="1606436316216" />
+    <state x="469" y="172" width="670" height="562" key="search.everywhere.popup/0.23.1440.877/1440.-157.1920.1057@0.23.1440.877" timestamp="1606617549643" />
+    <state x="2065" y="22" width="670" height="676" key="search.everywhere.popup/0.23.1440.877/1440.-157.1920.1057@1440.-157.1920.1057" timestamp="1606696244357" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java</url>
+          <line>135</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/DatabaseManager.java</url>
+          <line>459</line>
+          <properties>
+            <option name="lambda-ordinal" value="-1" />
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java</url>
+          <line>126</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/OwnerBookProfileActivity.java</url>
+          <line>238</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/OwnerBookProfileActivity.java</url>
+          <line>240</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java</url>
+          <line>67</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/TransactionFragment.java</url>
+          <line>65</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/example/glassesgang/Transaction/RequestHandlingFragment.java</url>
+          <line>132</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

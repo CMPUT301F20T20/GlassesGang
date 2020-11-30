@@ -36,7 +36,8 @@ public class TransactionFragment extends Fragment{
     private String requestId;
     private String userEmail;
     private String userType;
-    private Request request;
+    private String ownerEmail;
+    private String bookID;
     private LatLng givenLocation;
     final String TAG = "TransactionFragment";
     private FirebaseFirestore db;
@@ -80,7 +81,8 @@ public class TransactionFragment extends Fragment{
         requestId = getArguments().getString("requestId");
         userEmail = getArguments().getString("userEmail");
         userType = getArguments().getString("userType");
-        request = getArguments().getParcelable("request");
+        ownerEmail = getArguments().getString("ownerEmail");
+        bookID = getArguments().getString("bid");
         if (getArguments().getParcelable("givenLocation") != null)
             givenLocation = getArguments().getParcelable("givenLocation");
     }
@@ -122,7 +124,7 @@ public class TransactionFragment extends Fragment{
                     getParentFragmentManager().beginTransaction().replace(R.id.transaction_fragment_container, mapFragment).commit();
                     //delete all other requests
                     DatabaseManager dbm = new DatabaseManager();
-                    dbm.acceptRequest(request.getBookId(), request);
+                    dbm.acceptRequest(bookID, userEmail, ownerEmail, requestId);
                     //destroy button
                     showLocationButton.setVisibility(View.GONE);
                 }

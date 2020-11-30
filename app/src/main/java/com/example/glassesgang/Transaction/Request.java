@@ -1,19 +1,16 @@
 package com.example.glassesgang.Transaction;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.google.android.gms.maps.model.LatLng;
+//import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This is a class that represents the Request object, allowing for comparison of requests by bookId
  */
-public class Request implements Parcelable {
+public class Request {
     private String bookId;
     private String borrowerEmail;
     private String ownerEmail;
     private String requestId;
-    private LatLng location;
+    private LatLngCustom location;
 
     /**
      * This is the constructor for a Request object
@@ -30,31 +27,11 @@ public class Request implements Parcelable {
 
     public Request() {}
 
-    protected Request(Parcel in) {
-        bookId = in.readString();
-        borrowerEmail = in.readString();
-        ownerEmail = in.readString();
-        requestId = in.readString();
-        location = in.readParcelable(LatLng.class.getClassLoader());
-    }
-
-    public static final Creator<Request> CREATOR = new Creator<Request>() {
-        @Override
-        public Request createFromParcel(Parcel in) {
-            return new Request(in);
-        }
-
-        @Override
-        public Request[] newArray(int size) {
-            return new Request[size];
-        }
-    };
-
-    public void setLocation(LatLng location) {
+    public void setLocation(LatLngCustom location) {
         this.location = location;
     }
 
-    public LatLng getLocation() {
+    public LatLngCustom getLocation() {
         return location;
     }
 
@@ -95,17 +72,4 @@ public class Request implements Parcelable {
 
     public void setRequestId(String requestId) { this.requestId = requestId; }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(bookId);
-        dest.writeString(borrowerEmail);
-        dest.writeString(ownerEmail);
-        dest.writeString(requestId);
-        dest.writeParcelable(location, flags);
-    }
 }
