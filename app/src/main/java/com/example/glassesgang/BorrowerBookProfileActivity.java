@@ -124,8 +124,8 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
     }
 
     /**
-     * sets the status for a book for the borrower
-     * @param book new book status
+     * Sets the status of a book checking if book is in borrower's catalogue
+     * @param book object that contains the necessary status
      */
     private void setBorrowerStatus(Book book) {
         DocumentReference borrowerCatRef = db.collection("users").document(user).collection("borrowerCatalogue").document(bid);
