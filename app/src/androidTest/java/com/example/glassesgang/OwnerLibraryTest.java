@@ -91,10 +91,12 @@ public class OwnerLibraryTest {
         solo.enterText((EditText) solo.getView(R.id.email), email);
         solo.enterText((EditText) solo.getView(R.id.password), password);
         solo.clickOnButton("SIGN IN");
+        solo.clickOnButton("SIGN IN");
         if (!solo.waitForActivity(OwnerHomeActivity.class)) {
             solo.waitForActivity(OwnerHomeActivity.class); // wait again for sign in
         }
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
+        solo.clickOnMenuItem("Books");
     }
 
     /**
@@ -119,7 +121,6 @@ public class OwnerLibraryTest {
      */
     @Test
     public void checkAddButton() {
-        solo.clickOnMenuItem("Books");
         solo.clickOnView(solo.getView(R.id.add_button));
         solo.assertCurrentActivity("Wrong activity after pressing add button", AddBookActivity.class);
     }
