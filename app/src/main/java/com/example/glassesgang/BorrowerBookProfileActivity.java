@@ -2,6 +2,7 @@ package com.example.glassesgang;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -145,6 +146,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                     // set the text for status text view and update all the text views
                     status = book.getStatus();
                     setTextViews();
+                    setButtonColor();
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -237,6 +239,27 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                                 inflateTransactionFragment(documentSnapshot.get("requestRefId").toString(), book.getOwner());
                             }
                         });
+        }
+    }
+
+    public void setButtonColor () {
+        switch(status) {
+            case REQUESTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.green_shape));
+                break;
         }
     }
 

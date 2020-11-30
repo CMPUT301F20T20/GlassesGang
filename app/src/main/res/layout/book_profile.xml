@@ -38,7 +38,7 @@
         android:id="@+id/status_button"
         android:layout_width="137dp"
         android:layout_height="30dp"
-        android:background="@drawable/grey_shape"
+        android:background="#00FFFFFF"
         android:textColor="@color/borrowerPrimary"
         android:textSize="18sp" />
 

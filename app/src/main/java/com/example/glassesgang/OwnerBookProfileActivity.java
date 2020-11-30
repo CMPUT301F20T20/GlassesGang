@@ -1,6 +1,7 @@
 package com.example.glassesgang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
@@ -149,6 +150,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
      * just set each TextViews text with the appropriate text
      */
     private void updateTextViews() {
+        setButtonColor();
         titleTextView.setText(title);
         authorTextView.setText(author);
         isbnTextView.setText(isbn);
@@ -286,6 +288,27 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
             }
         } else {
             bookImageView.setImageBitmap(null);
+        }
+    }
+
+    public void setButtonColor () {
+        switch(status) {
+            case REQUESTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.orange_shape));
+                break;
+            case AVAILABLE:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.yellow_shape));
+                break;
+            case BORROWED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.blue_shape));
+                break;
+            case ACCEPTED:
+                statusButton.setBackground(ContextCompat.getDrawable(getBaseContext(),
+                        R.drawable.green_shape));
+                break;
         }
     }
 
