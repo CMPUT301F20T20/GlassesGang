@@ -88,7 +88,6 @@ public class OwnerLibraryTest {
      * manually signs in the mock user
      */
     public void signInMockUser() {
-        assertTrue(solo.waitForActivity(SignInActivity.class));
         solo.enterText((EditText) solo.getView(R.id.email), email);
         solo.enterText((EditText) solo.getView(R.id.password), password);
         solo.clickOnButton("SIGN IN");
