@@ -149,7 +149,10 @@ public class EditBookActivity extends AppCompatActivity {
         if (requestCode == CAMERA_PHOTO_TAKEN) {
             Bitmap bookImage = CameraActivity.getBookImage();
             bookImageView.setImageBitmap(bookImage);
-            uploadPictureToStorage(bookImage);
+
+            if (bookImage != null) {
+                uploadPictureToStorage(bookImage);
+            }
         }
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
@@ -204,6 +207,10 @@ public class EditBookActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Upload picture taken from user's camera to Firebase Storage
+     * @param bitmap object contains picture to upload
+     */
     private void uploadPictureToStorage(Bitmap bitmap) {
         // save image
         String path = "bookImages/" + UUID.randomUUID() + ".jpg";
@@ -245,7 +252,11 @@ public class EditBookActivity extends AppCompatActivity {
         });
     }
 
-    private void setBookImage(Book book, ImageView bookImage) {
+    /**
+     * Sets the image for a book
+     * @param book object that contains necessary image url
+     */
+    private void setBookImage(Book book) {
         bookImageUrl = book.getImageUrl();
         if (bookImageUrl != null && bookImageUrl != "") {
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -265,7 +276,7 @@ public class EditBookActivity extends AppCompatActivity {
 
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    bookImage.setImageBitmap(bmp);
+                    bookImageView.setImageBitmap(bmp);
                 } catch (IOException e) {
                     Toast.makeText(
                             this,
@@ -277,15 +288,22 @@ public class EditBookActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates the book image url with the one passed in the parameter
+     * @param newBookImageUrl contains new book image url to set
+     */
     private void setBookImageUrl(String newBookImageUrl) {
         bookImageUrl = newBookImageUrl;
     }
 
+    /**
+     * just set each TextViews text with the appropriate text
+     */
     private void setTextViews(Book selectedBook) {
         titleEditText.setText(selectedBook.getTitle());
         authorEditText.setText(selectedBook.getAuthor());
         isbnEditText.setText(selectedBook.getISBN());
-        setBookImage(selectedBook, bookImageView);
+        setBookImage(selectedBook);
     }
 
     /**

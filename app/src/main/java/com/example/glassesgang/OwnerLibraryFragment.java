@@ -129,10 +129,11 @@ public class OwnerLibraryFragment extends Fragment {
                 startActivity(bookProfileIntent);
             }
         });
-        
-
     }
 
+    /**
+     * Updates the list view with real-time updates
+     */
     private void updateListView() {
         // get a reference for the books collection
         CollectionReference booksRef = db.collection("books");
@@ -161,6 +162,11 @@ public class OwnerLibraryFragment extends Fragment {
         });
     }
 
+    /**
+     * Set up filter for book statuses
+     * @param view corresponding view where widget elements are located
+     * @param adapter object to updates the fragment
+     */
     private void setUpFilter(View view, CustomBookList adapter) {
         // setting up the buttons
         availableTogButton = view.findViewById(R.id.availableToggleButton);
