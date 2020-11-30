@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="@+id/transaction_fragment_container" />
 
     <TextView
-        android:id="@+id/email_label"
+        android:id="@+id/email_textview"
         android:layout_width="351dp"
         android:layout_height="32dp"
         android:layout_marginStart="30dp"
@@ -28,7 +28,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:fontFamily="@font/source_sans_pro_semibold"
-        android:text="TextView"
+        android:text="Borrower or Owner email"
         android:textColor="@color/borrowerText"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/email_textview"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/email_textview"
+        android:id="@+id/info_textview"
         android:layout_width="351dp"
         android:layout_height="32dp"
         android:layout_marginStart="30dp"
@@ -46,14 +46,14 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:fontFamily="@font/source_sans_pro_semibold"
-        android:text="TextView"
-        android:textColor="@color/borrowerText"
+        android:text="Please specify a pick-up location"
+        android:textColor="@color/green"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/transaction_fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_label" />
+        app:layout_constraintTop_toBottomOf="@+id/email_textview" />
 
     <FrameLayout
         android:id="@+id/transaction_fragment_container"

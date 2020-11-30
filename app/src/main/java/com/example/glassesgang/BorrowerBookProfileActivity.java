@@ -175,13 +175,13 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
         //inflate requestList fragment inside framelayout fragment container
         db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            public void onSuccess(DocumentSnapshot req) {
                 Bundle bundle = new Bundle();
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", ownerEmail);
                 bundle.putString("userType", "b");
-                Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
-                bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
+                Map<String, Double> locationHashMap = (Map<String, Double>) req.get("location");
+                if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();
                 transactionFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.borrower_book_profile_fragment_container, transactionFragment).commit();
