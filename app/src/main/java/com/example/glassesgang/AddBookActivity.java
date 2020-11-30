@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,6 +32,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.UUID;
@@ -137,9 +142,22 @@ public class AddBookActivity extends AppCompatActivity {
         }
         if (requestCode == SCAN_TAKEN){
             if (data != null) {
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
                 ISBN = data.getStringExtra("ISBN");  // data returned from scanner activity
-                // TODO implment google books API here
-                isbnEditText.setText(ISBN);
+                // TODO implement google books API here
+                //GoogleBooksAPIRequest apiRequest = new GoogleBooksAPIRequest(titleEditText,
+                // authorEditText, isbnEditText);
+                if (networkInfo != null && networkInfo.isConnected() && ISBN.length()!=0) {
+                    new GoogleBooksAPIRequest(titleEditText, authorEditText, isbnEditText).execute(ISBN);
+                }
+                // Otherwise update the TextView to tell the user there is no connection or no search term.
+                else {
+                    Toast.makeText(AddBookActivity.this, "Problem reading ISBN",
+                            Toast.LENGTH_SHORT).show();
+                    }
             }
         }
     }

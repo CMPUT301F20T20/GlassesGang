@@ -173,9 +173,10 @@ public class DatabaseManager {
                     if (document.exists()) {
                         Log.d(TAG, "User already exist: " + document.getData());
                     } else {
-                        Map<String, ArrayList<String>> userCatalogue = new HashMap<>();
+                        Map<String, Object> userCatalogue = new HashMap<>();
                         userCatalogue.put("ownerCatalogue", new ArrayList<String>());
                         userCatalogue.put("notificationCatalogue", new ArrayList<String>());
+                        userCatalogue.put("phoneNumber", "");
                         //userCatalogue.put("email", new String());
                         // adding the user
                         usersDatabase.document(user.getEmail())
@@ -216,6 +217,27 @@ public class DatabaseManager {
                     }
                 });
     }
+
+    public static void editPhoneNumber(String email, String phoneNumber) {
+        DocumentReference userRef = db.collection("users").document(email);
+        HashMap<String, Object> contactInfoHash = new HashMap<>();
+        contactInfoHash.put("phoneNumber", phoneNumber);
+
+        userRef.update(contactInfoHash)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
 
     /**
      * Remove all the books that a user owns

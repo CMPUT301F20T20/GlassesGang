@@ -20,9 +20,8 @@
                 android:id="@+id/borrowerBook_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:background="@color/borrowerSecondary"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:background="@drawable/profile_placeholder"
+                android:scaleType="centerCrop" />
 
             <include layout="@layout/book_profile" />
 
