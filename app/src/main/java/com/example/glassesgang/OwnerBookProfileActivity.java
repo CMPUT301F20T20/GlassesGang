@@ -247,6 +247,7 @@ public class OwnerBookProfileActivity extends AppCompatActivity implements Delet
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", borrowerEmail);
                 bundle.putString("userType", "o");
+                bundle.putString("bookStatus", book.getStatus().toString());
                 Map<String, Double> locationHashMap = (Map<String, Double>) documentSnapshot.get("location");
                 if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();

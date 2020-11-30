@@ -189,6 +189,7 @@ public class BorrowerBookProfileActivity extends AppCompatActivity implements Tr
                 bundle.putString("requestId", requestId); //store bin for later use in request handling
                 bundle.putString("userEmail", ownerEmail);
                 bundle.putString("userType", "b");
+                bundle.putString("bookStatus", book.getStatus().toString());
                 Map<String, Double> locationHashMap = (Map<String, Double>) req.get("location");
                 if (locationHashMap != null) bundle.putParcelable("givenLocation", new LatLng(locationHashMap.get("latitude"), locationHashMap.get("longitude")));
                 Fragment transactionFragment = new TransactionFragment();

@@ -525,30 +525,4 @@ public class DatabaseManager {
             deleteRequest(userId, bookId);
         }
     }
-
-    public static int checkTransactionStatus(String requestId) {
-        //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
-        //4 = ", 5 = ", 6 = ", 7 = ", codes for returns
-        final int[] resultCode = {0};
-        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot req) {
-                boolean borrowerOk = (boolean) req.get("borrowerAction");
-                boolean ownerOk = (boolean) req.get("ownerAction");
-                if (borrowerOk && ownerOk) resultCode[0] = 3;
-                else if (borrowerOk && !ownerOk) resultCode[0] = 1;
-                else if (!borrowerOk && ownerOk) resultCode[0] = 2;
-                else resultCode[0] = 0;
-                String bookId = req.get("bookId").toString();
-                db.collection("books").document(bookId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        Status bookStatus = statusString(value.get("status").toString());
-                        if (bookStatus == Status.BORROWED) resultCode[0] += 4;
-                    }
-                });
-            }
-        });
-        return resultCode[0];
-    }
 }

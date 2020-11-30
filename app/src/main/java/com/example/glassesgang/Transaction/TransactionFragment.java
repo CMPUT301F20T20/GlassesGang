@@ -1,6 +1,5 @@
 package com.example.glassesgang.Transaction;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,8 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +17,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.glassesgang.Book;
 import com.example.glassesgang.BookStatus;
-import com.example.glassesgang.DatabaseManager;
 import com.example.glassesgang.Helpers.OverrideBackPressed;
-import com.example.glassesgang.OwnerBookProfileActivity;
 import com.example.glassesgang.R;
 import com.example.glassesgang.ViewUserActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
-import static com.example.glassesgang.BookStatus.statusString;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A fragment representing a list of Items.
@@ -49,6 +42,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
     private String requestId;
     private String userEmail;
     private String userType;
+    private String bookStatus;
     private LatLng givenLocation;
     private int resultCode;
     final String TAG = "TransactionFragment";
@@ -88,12 +82,22 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
         db = FirebaseFirestore.getInstance();
 
         //get requestId, borrower or owner email, and userType from bundle
+        bookStatus = getArguments().getString("bookStatus");
         requestId = getArguments().getString("requestId");
         userEmail = getArguments().getString("userEmail");
         userType = getArguments().getString("userType");
         if (getArguments().getParcelable("givenLocation") != null){
             com.google.android.gms.maps.model.LatLng location = getArguments().getParcelable("givenLocation");
             givenLocation = new LatLng(location);
+        }
+
+        //generate a result code for the transaction
+        try {
+            getResultCode(requestId);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -116,9 +120,6 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //generate a result code for the transaction
-        getResultCode(requestId);
 
         //get email displayed based on userType
         emailTextView = view.findViewById(R.id.email_textview);
@@ -253,26 +254,28 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             }
         });
     }
-    private void getResultCode(String requestId)
-    {   //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
+    private void getResultCode(String requestId) throws ExecutionException, InterruptedException {   //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
         //4 = ", 5 = ", 6 = ", 7 = ", codes for returns
-        db.collection("requests").document(requestId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        DocumentReference reqRef = db.collection("requests").document(requestId);
+        db.runTransaction(new Transaction.Function<Void>(){
             @Override
-            public void onSuccess(DocumentSnapshot req) {
-                boolean borrowerOk = (boolean) req.get("borrowerAction");
-                boolean ownerOk = (boolean) req.get("ownerAction");
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot req = transaction.get(reqRef);
+                Object borrowerOkObj = req.get("borrowerAction");
+                Object ownerOkObj =  req.get("ownerAction");
+                boolean borrowerOk = false;
+                boolean ownerOk = false;
+                if (borrowerOkObj != null && (boolean) borrowerOkObj) borrowerOk = true;
+                if (ownerOkObj != null && (boolean) ownerOkObj) ownerOk = true;
                 if (borrowerOk && ownerOk) resultCode = 3;
                 else if (borrowerOk && !ownerOk) resultCode = 1;
                 else if (!borrowerOk && ownerOk) resultCode = 2;
                 else resultCode = 0;
-                String bookId = req.get("bookId").toString();
-                db.collection("books").document(bookId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        BookStatus.Status bookStatus = statusString(value.get("status").toString());
-                        if (bookStatus == BookStatus.Status.BORROWED) resultCode += 4;
-                    }
-                });
+
+                if (bookStatus == BookStatus.Status.BORROWED.toString())  resultCode += 4;
+
+                //success
+                return null;
             }
         });
     }
