@@ -54,7 +54,9 @@
             <FrameLayout
                 android:id="@+id/borrower_book_profile_fragment_container"
                 android:layout_width="match_parent"
-                android:layout_height="350dp">
+                android:layout_height="600dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="50dp">
 
             </FrameLayout>
 
