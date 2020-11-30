@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
-        <ToggleButton
-            android:id="@+id/requestedToggleButton"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="ToggleButton"
-            android:textOff="REQUESTED"
-            android:textOn="REQUESTED"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/acceptedToggleButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ToggleButton
-            android:id="@+id/acceptedToggleButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="ToggleButton"
-            android:textOff="ACCEPTED"
-            android:textOn="ACCEPTED"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/requestedToggleButton"
-            app:layout_constraintEnd_toStartOf="@id/borrowedToggleButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ToggleButton
+                android:id="@+id/requestedToggleButton"
+                android:layout_width="137dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/requested_selector"
+                android:checked="true"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="ToggleButton"
+                android:textColor="@color/borrowerPrimary"
+                android:textOff="REQUESTED"
+                android:textOn="REQUESTED"
+                android:textSize="18sp" />
 
-        <ToggleButton
-            android:id="@+id/borrowedToggleButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="ToggleButton"
-            android:textOff="BORROWED"
-            android:textOn="BORROWED"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/acceptedToggleButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ToggleButton
+                android:id="@+id/acceptedToggleButton"
+                android:layout_width="137dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/accepted_selector"
+                android:checked="true"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="ToggleButton"
+                android:textColor="@color/borrowerPrimary"
+                android:textOff="ACCEPTED"
+                android:textOn="ACCEPTED"
+                android:textSize="18sp" />
+
+            <ToggleButton
+                android:id="@+id/borrowedToggleButton"
+                android:layout_width="137dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/borrowed_selector"
+                android:checked="true"
+                android:fontFamily="@font/source_sans_pro_semibold"
+                android:text="ToggleButton"
+                android:textColor="@color/borrowerPrimary"
+                android:textOff="BORROWED"
+                android:textOn="BORROWED"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <ListView
         android:id="@+id/library_list_view"
