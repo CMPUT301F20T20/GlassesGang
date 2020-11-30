@@ -84,6 +84,7 @@ public class OwnerHomeActivityTest {
 
     @Test
     public void checkOwnerHomeActivity() {
+        solo.waitForActivity(OwnerHomeActivity.class);
         solo.assertCurrentActivity("Wrong Activity", OwnerHomeActivity.class);
 
         // switch to Library fragment
