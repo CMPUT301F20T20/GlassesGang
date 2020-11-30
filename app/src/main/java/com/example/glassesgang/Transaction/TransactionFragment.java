@@ -94,9 +94,7 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
         //generate a result code for the transaction
         try {
             getResultCode(requestId);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -254,7 +252,8 @@ public class TransactionFragment extends Fragment implements OverrideBackPressed
             }
         });
     }
-    private void getResultCode(String requestId) throws ExecutionException, InterruptedException {   //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
+    private void getResultCode(String requestId) {
+        //0 = both missing, 1 = borrower ok, owner missing, 2 = owner ok, borrower missing, 3 = both ok. these are resultCodes for request
         //4 = ", 5 = ", 6 = ", 7 = ", codes for returns
         DocumentReference reqRef = db.collection("requests").document(requestId);
         db.runTransaction(new Transaction.Function<Void>(){
