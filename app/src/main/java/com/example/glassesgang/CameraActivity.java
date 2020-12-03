@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat;
  * (request camera permissions, open camera, and save picture taken)
  */
 public class CameraActivity extends AppCompatActivity {
-    public ImageView bookImageView;
     private static Bitmap bitmap;
     private final int CAMERA_PERM_CODE = 101;
     private final int CAMERA_REQ_CODE = 100;
@@ -33,7 +32,6 @@ public class CameraActivity extends AppCompatActivity {
 
         final LayoutInflater factory = getLayoutInflater();
         final View view = factory.inflate(R.layout.add_edit_book, null);
-        bookImageView = view.findViewById(R.id.login_book_image_view);
 
         requestCameraPermission();
     }
